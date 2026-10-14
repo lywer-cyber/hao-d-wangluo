@@ -5,7 +5,7 @@
   "full_dataset_included": false,
   "model_weights_included": false,
   "file_count_excluding_this_manifest": 457,
-  "total_bytes_excluding_this_manifest": 134538601,
+  "total_bytes_excluding_this_manifest": 134538675,
   "files": {
     ".gitattributes": {
       "bytes": 482,
@@ -1024,8 +1024,8 @@
       "sha256": "c610ee37a0ebb1f70aa0e710f54acd3ce4fba9e883e532bad29204ee81954beb"
     },
     "docs/全息超分-项目交接文件-20261013.md": {
-      "bytes": 32844,
-      "sha256": "91af5481e1aed94447b606a69dc515368396377178984020d12237059592b0b8"
+      "bytes": 32918,
+      "sha256": "b2aadc5c20626537a82c3d319152f78e7216d73bd15c90a2194bf151e80afd36"
     },
     "environment/requirements-paper.txt": {
       "bytes": 60,
