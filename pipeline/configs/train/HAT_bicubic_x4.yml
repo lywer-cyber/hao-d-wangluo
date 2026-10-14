@@ -1,0 +1,99 @@
+# 由 gen_configs.py 自动生成 —— 不要手改，改脚本后重新生成
+# 模型: HAT   协议: bicubic   倍数: X4
+# 通用 Transformer SOTA，但重（~20M），训练慢
+# arch 来源: github.com/XPixelGroup/HAT -> basicsr/archs/hat_arch.py
+name: train_HAT_bicubic_x4
+model_type: SRModel
+scale: 4
+num_gpu: auto
+manual_seed: 10
+
+datasets:
+  train:
+    task: SR
+    name: holo_bicubic_x4
+    type: PairedImageDataset
+    dataroot_gt: /home/zero/holo-sr/data/holo/HR/train
+    dataroot_lq: /home/zero/holo-sr/data/holo/LR_bicubic/X4/train
+    filename_tmpl: '{}'
+    io_backend:
+      type: disk
+    gt_size: 256
+    use_hflip: true
+    use_rot: true
+    use_shuffle: true
+    num_worker_per_gpu: 8
+    batch_size_per_gpu: 8
+    dataset_enlarge_ratio: 1
+    prefetch_mode: ~
+
+  val:
+    task: SR
+    name: holo_bicubic_x4_val
+    type: PairedImageDataset
+    dataroot_gt: /home/zero/holo-sr/data/holo/HR/val
+    dataroot_lq: /home/zero/holo-sr/data/holo/LR_bicubic/X4/val
+    filename_tmpl: '{}'
+    io_backend:
+      type: disk
+
+network_g:
+  type: HAT
+  upscale: 4
+  img_size: 64
+  in_chans: 1
+  img_range: 1.0
+  embed_dim: 180
+  depths: [6, 6, 6, 6, 6, 6]
+  num_heads: [6, 6, 6, 6, 6, 6]
+  window_size: 16
+  mlp_ratio: 2
+  upsampler: 'pixelshuffle'
+  resi_connection: '1conv'
+
+path:
+  pretrain_network_g: ~
+  strict_load_g: false
+  resume_state: ~
+
+train:
+  optim_g:
+    type: Adam
+    lr: !!float 0.0001
+    weight_decay: 0
+    betas: [0.9, 0.99]
+  scheduler:
+    type: MultiStepLR
+    milestones: [125000, 200000, 225000, 237500]
+    gamma: 0.5
+  total_iter: 250000
+  warmup_iter: -1
+  pixel_opt:
+    type: L1Loss
+    loss_weight: 1.0
+    reduction: mean
+
+val:
+  val_freq: !!float 5000
+  save_img: false
+  metrics:
+    psnr:
+      type: calculate_psnr
+      crop_border: 4
+      test_y_channel: false      # 灰度强度图，不做 RGB->Y 转换
+    ssim:
+      type: calculate_ssim
+      crop_border: 4
+      test_y_channel: false
+
+logger:
+  print_freq: 200
+  save_checkpoint_freq: !!float 5000
+  use_tb_logger: true
+  wandb:
+    project: ~
+    resume_id: ~
+
+dist_params:
+  backend: nccl
+  port: 29500

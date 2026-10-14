@@ -1,0 +1,295 @@
+# =============================================================================
+# 数字全息超分 · 实验总配置（唯一事实来源 / single source of truth）
+#
+# 所有实验 —— 你的方法、消融实验、对比实验 —— 都必须读这个文件。
+# 禁止在别处硬编码数据划分、退化参数或训练超参；要改就改这里。
+#
+# -----------------------------------------------------------------------------
+# 【可移植性】本文件不绑定任何一台机器
+#
+#   所有路径都是**相对路径**，相对于 project_root 解析；
+#   需要机器相关的值，用 ${环境变量:-默认值} 覆盖，不要在文件里写死绝对路径。
+#
+#   project_root 的解析顺序：
+#     1. 环境变量 $HOLO_PROJECT_ROOT
+#     2. 本配置文件所在目录
+#     3. 当前工作目录
+#
+#   拿到新服务器上只需要三步：
+#     git clone <你的代码>  && 把本文件放到项目根目录（或设 $HOLO_EXP_CONFIG）
+#     export HOLO_HR_ROOT=/path/to/HR    # 数据在哪
+#     export BASICSR_ROOT=/path/to/DAT   # BasicSR 骨架在哪
+#
+# -----------------------------------------------------------------------------
+#   校验：    python3 scripts/exp_config.py --check
+#   生成：    python3 scripts/gen_configs.py
+# =============================================================================
+
+meta:
+  name: holo-sr-x4
+  version: 5
+  date: '2026-10-11'
+  description: 数字全息重建强度图，LR x4 -> HR
+  # 本文件被修改时请递增 version，并在论文附录里引用 version + date
+
+runtime:
+  # These values are checked at process startup on AutoDL.  The driver is
+  # recorded for reference only and is not a startup gate.
+  validate_on_startup: true
+  python_version: '3.8'
+  pytorch_version: '2.0.0'
+  pytorch_cuda_build: cu118
+  cuda_runtime_version: '11.8'
+  nvidia_driver_version: not_checked
+  validate_nvidia_driver: false
+  torchvision_version: '0.15.1'
+  scikit_image_version: '0.19.3'
+  lpips_version: '0.1.4'
+  numpy_version: '1.24.4'
+  opencv_python_version: '4.8.1.78'
+  einops_version: '0.6.1'
+  pyyaml_version: '6.0.1'
+  lpips_weights_relpath: weights/v0.1/alex.pth
+  lpips_weights_sha256: DF73285E35B22355A2DF87CDB6B70B343713B667EDDBDA73E1977E0C860835C0
+  strict_lpips_weights_check: true
+
+determinism:
+  enabled: true
+  cudnn_deterministic: true
+  cudnn_benchmark: false
+  use_deterministic_algorithms: true
+  data_order: fixed_sampler_seed_plus_epoch
+  worker_seed_formula: base_seed_plus_rank_times_num_workers_plus_worker_id
+
+# -----------------------------------------------------------------------------
+# 数据集：5000 张，固定划分
+# -----------------------------------------------------------------------------
+dataset:
+  name: holo5000
+  # HR 图根目录。相对 project_root；用 $HOLO_HR_ROOT 覆盖即可换机器。
+  hr_root: ${HOLO_HR_ROOT:-data/HR}
+  total: 5000
+  split:
+    train: 4000
+    val: 500
+    test: 500
+  split_seed: 42                  # 划分随机种子，一旦定下不要再改
+  # 组划分正则：文件名形如 S012_img03.png 时按 S012 分组，避免同源泄漏。
+  # 每张图独立来源时设为 null。
+  group_regex: '^(S\d+)'
+  # 说明：val 只用于选超参/早停，不参与最终报数；test 只跑一次
+
+# -----------------------------------------------------------------------------
+# 退化协议：两套，所有模型共用同一套 LR（字节级相同）
+# -----------------------------------------------------------------------------
+degradation:
+  protocols:
+    - bicubic       # 经典 SR 协议，与文献可比
+    - physical      # 物理退化：衍射受限 + 抗混叠 + 散斑 + 探测器噪声
+  scale: [4]
+  bit_depth: 8      # LR 保存位深；>8 用 16bit PNG
+
+  # --- val / test 用：参数与种子完全固定，保证所有模型面对相同退化 ---
+  fixed:
+    diffraction_kernel: circle
+    diffraction_cutoff: 1.0
+    aa_sigma: 0.50
+    speckle_enable: true
+    speckle_contrast: 0.60
+    speckle_corr: 4.0
+    poisson_gain: 2000.0
+    read_std: 0.005
+    bit_depth: 8
+
+  # --- train 用：逐样本随机抖动，提升泛化 ---
+  randomize_ranges:
+    diffraction_cutoff: [0.85, 1.00]
+    aa_sigma: [0.30, 0.70]
+    speckle_contrast: [0.30, 0.80]
+    speckle_corr: [3.0, 6.0]
+    poisson_gain: [800.0, 4000.0]
+    read_std: [0.003, 0.010]
+
+# -----------------------------------------------------------------------------
+# 训练超参：所有模型完全一致（这是公平性的前提）
+# -----------------------------------------------------------------------------
+training:
+  gt_size: 256                 # 训练 patch 尺寸
+  batch_size_per_gpu: 8
+  num_worker_per_gpu: 8
+  dataset_enlarge_ratio: 1
+  prefetch_mode: null
+  pin_memory: false
+  persistent_workers: false
+  gradient_clip_enabled: false
+  gradient_clip_norm: none
+
+  optimizer:
+    type: Adam
+    lr: 1.0e-4
+    betas: [0.9, 0.99]
+    weight_decay: 0
+
+  scheduler:
+    type: MultiStepLR
+    milestones: [125000, 200000, 225000, 237500]
+    gamma: 0.5
+
+  total_iter: 250000
+  warmup_iter: -1
+  val_freq: 5000
+  save_checkpoint_freq: 5000
+
+  validation_protocol:
+    batch_size_per_gpu: 1
+    num_workers: 0
+    pin_memory: false
+    persistent_workers: false
+    prefetch_mode: null
+    whole_image: true
+    resize: false
+    padding: false
+    preserve_native_resolution: true
+    compute_lpips: false
+
+  loss:
+    type: L1Loss
+    loss_weight: 1.0
+    reduction: mean
+
+  augmentation:
+    use_hflip: false
+    use_rot: false
+    # OOM policy is shared across all models: lower only micro-batch and keep
+    # effective batch fixed with gradient accumulation.
+    effective_batch_size_per_gpu: 8
+    micro_batch_size_per_gpu: 8
+    gradient_accumulation_steps: 1
+    amp_enabled: true
+    amp_dtype: float16
+    oom_policy: reduce_micro_batch_preserve_effective_batch
+    loss_divide_by_accumulation_steps: true
+    amp_grad_scaler: true
+    amp_init_scale: 65536
+    amp_growth_factor: 2.0
+    amp_backoff_factor: 0.5
+    amp_growth_interval: 2000
+
+  # 每个模型至少跑这几个种子，报均值 ± 标准差（本域数据少、方差大）
+  seeds: [10, 20, 30]
+
+# -----------------------------------------------------------------------------
+# 评估
+# -----------------------------------------------------------------------------
+evaluation:
+  metrics: [psnr, ssim, lpips, rmse, mae]
+  crop_border: 4               # = scale
+  test_y_channel: false        # 灰度强度图，不做 RGB->Y 转换
+  metric_pixel_range: 0_1
+  psnr_data_range: 1.0
+  ssim_data_range: 1.0
+  ssim_window_size: 11
+  ssim_sigma: 1.5
+  ssim_gaussian_weights: true
+  ssim_use_sample_covariance: false
+  ssim_channel_axis: 2
+  ssim_channel_reduction: mean
+  ssim_library: scikit-image
+  ssim_library_version: '0.19.3'
+  lpips_network: alex
+  lpips_input_range: -1_1
+  lpips_crop_border: 4
+  lpips_spatial: false
+  metric_implementation_version: 2
+  test_batch_size_per_gpu: 1
+  test_num_workers: 0
+  test_pin_memory: false
+  test_persistent_workers: false
+  test_prefetch_mode: null
+  test_whole_image: true
+  test_resize: false
+  test_padding: false
+  test_preserve_native_resolution: true
+  test_compute_lpips: true
+  checkpoint_selection_metric: psnr
+  checkpoint_selection_tie_breaker: ssim
+  checkpoint_selection_split: val
+  save_img: false
+  # 只用 test 集报最终数字；val 集结果不能出现在论文表格里
+  report_on: test
+
+visual_output:
+  format: BMP
+  compression: none
+  save_count: 10
+  save_list: data/splits/visual_samples.txt
+  export_after_all_comparison_runs_complete: true
+  export_split: test
+  checkpoint_source: best_checkpoint_selected_on_val
+  visual_only: true
+  compute_metrics: false
+  save_lr: true
+  save_sr: true
+  save_hr: true
+  save_comparison_image: false
+
+# -----------------------------------------------------------------------------
+# 模型清单：所有模型读同一份数据/退化/超参，唯一变量是网络结构
+# -----------------------------------------------------------------------------
+models:
+  # 对照模型：原封不动跑，这是对比表的内容
+  comparison:
+    - SRResNet      # BasicSR 自带
+    - EDSR          # BasicSR 自带
+    - RCAN          # BasicSR 自带；域内基准研究用的就是它
+    - RRDBNet       # BasicSR 自带
+    - SwinIR        # BasicSR 自带；域内已被多次使用，必比
+    - NAFNet        # 需接入 arch
+    - HAT           # 需接入 arch
+    - MambaIR       # 需接入 arch + mamba-ssm
+  # 消融对照：不进主对比表，进消融表
+  ablation:
+    - DAT           # 全息领域检索不到应用，用来证明"直接搬通用 SOTA"不够
+  # 你的方法
+  ours:
+    - HoloRestormer
+
+# -----------------------------------------------------------------------------
+# 公平性规则（投稿时按这些逐条自查）
+# -----------------------------------------------------------------------------
+fairness_rules:
+  - 所有模型使用本文件定义的同一份 train/val/test LR（字节级相同）
+  - 所有模型使用相同的 total_iter、lr、scheduler、patch、batch size
+  - 所有模型用相同 loss 训练（你的方法可额外加物理一致性项，但必须在消融表里单独列出）
+  - 不用 ImageNet 预训练（HoloPASWIN 实测无收益，会引入自然图先验）
+  - 每个模型至少跑 3 个种子（见 training.seeds），报均值 ± 标准差
+  - 通用对照模型必须自己重训，不得引用原论文数字
+  - 最终数字只用 test 集，val 集只用于选超参
+  - 报参数量与 FLOPs
+  - iteration 定义为一次 optimizer update；OOM 时统一使用 AMP 与梯度累积保持 effective batch 不变
+  - checkpoint 只按 val 最高 PSNR 选择，PSNR 并列时按 SSIM 破平，test 不参与选择
+  - 所有模型统一关闭梯度裁剪；val/test batch=1、整图、原生尺寸、无 resize/padding
+  - DataLoader 固定 pin_memory=false、persistent_workers=false、prefetch_mode=null
+  - val 只计算 PSNR/SSIM/RMSE/MAE，LPIPS 仅用于最终 test
+  - 后续接入 SwinIR、HAT 等对比网络时，必须统一使用 basicsr、HoloPairedDataset、holo_protocol、holo_metrics，以及相同数据划分、训练参数、AMP、梯度累积和评估协议；唯一变量是网络结构
+  - NVIDIA 驱动版本仅作运行记录，不作为实验启动阻断条件
+  - 所有图/表引用本文件的 version + date
+
+# -----------------------------------------------------------------------------
+# 路径
+#
+# 全部用相对路径，相对于 project_root 解析。
+# 需要机器相关的值就用环境变量覆盖（见文件顶部的可移植性说明）。
+# -----------------------------------------------------------------------------
+paths:
+  # '.' = 本配置文件所在目录。放到项目根即可；也可用 $HOLO_PROJECT_ROOT 覆盖
+  project_root: ${HOLO_PROJECT_ROOT:-.}
+  # BasicSR 骨架（DAT 仓库自带，或上游 BasicSR）。可用 $BASICSR_ROOT 覆盖
+  basicsr_root: ${BASICSR_ROOT:-../refs/DAT}
+  # 以下均相对 project_root
+  data: data/holo
+  splits: data/splits
+  configs: configs
+  logs: logs
+  results_table: results_table.md
+  checkpoints: experiments

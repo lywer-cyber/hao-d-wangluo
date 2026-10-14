@@ -1,0 +1,44 @@
+# 由 gen_configs.py 自动生成
+name: test_NAFNet_physical_x4
+model_type: SRModel
+scale: 4
+num_gpu: 1
+manual_seed: 10
+
+datasets:
+  test_1:
+    task: SR
+    name: holo_physical_x4_test
+    type: PairedImageDataset
+    dataroot_gt: /home/zero/holo-sr/data/holo/HR/test
+    dataroot_lq: /home/zero/holo-sr/data/holo/LR_physical/X4/test
+    filename_tmpl: '{}'
+    io_backend:
+      type: disk
+
+network_g:
+  type: NAFNet
+  img_channel: 1
+  width: 32
+  middle_blk_num: 12
+  enc_blk_nums: [2, 2, 4, 8]
+  dec_blk_nums: [2, 2, 2, 2]
+  upscale: 4
+
+path:
+  pretrain_network_g: experiments/NAFNet_physical_x4/models/net_g_250000.pth
+  strict_load_g: true
+  param_key: params
+
+val:
+  save_img: true
+  suffix: ~
+  metrics:
+    psnr:
+      type: calculate_psnr
+      crop_border: 4
+      test_y_channel: false
+    ssim:
+      type: calculate_ssim
+      crop_border: 4
+      test_y_channel: false

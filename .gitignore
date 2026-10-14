@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+
+# 编辑器 / 作业目录
+.ipynb_checkpoints/
+.vscode/
+.idea/
+
+# 备份文件（改动前的存档，不入库）
+*.bak
+*.bak_*
+*_backup_before_fix/
+
+# 训练中间产物（体积大，不入库）
+experiments/*/models/
+experiments/*/training_states/
+experiments/*/results/*.bmp
+wandb/
+tb_logger/
+*.pth
+*.pth.tar
+
+# 数据集与本地产物
+HR/
+LR4/
+*.7z
+*.zip

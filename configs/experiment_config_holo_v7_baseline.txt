@@ -1,0 +1,338 @@
+# 数字全息超分实验总配置
+# 唯一事实来源：除 network_name、network_type 和 network_params 外，所有实验必须遵守本文件。
+# AutoDL 使用环境变量替换机器相关路径，不要写死服务器绝对路径。
+# 为保证所有实验公平，必须严格遵守本文件配置。
+[project]
+name=holo-sr-x4
+config_version=7
+project_root=${HOLO_PROJECT_ROOT}
+
+[dataset]
+hr_dir=${HOLO_DATA_ROOT}/HR
+lr_dir=${HOLO_DATA_ROOT}/LR4
+hr_filename_pattern={number}.bmp
+lr_filename_pattern={number}.bmp
+total_images=5000
+image_numbers=1..5000
+scale=4
+image_channels=3
+input_channels=3
+output_channels=3
+hr_lr_one_to_one=true
+online_degradation=false
+use_precomputed_lr=true
+source_format=BMP
+degrade_params=${HOLO_DATA_ROOT}/LR4/degrade_params.json
+meta_interface_enabled=false
+
+[split]
+method=explicit_ranges
+split_seed=42
+train_count=4000
+val_count=500
+test_count=500
+train_ratio=0.8
+val_ratio=0.1
+test_ratio=0.1
+train_ranges=501..4500
+val_ranges=1..250,4751..5000
+test_ranges=251..500,4501..4750
+split_dir=data/splits
+split_manifest=data/splits/split_seed42.json
+visual_sample_count=10
+visual_sample_seed=42
+visual_sample_manifest=data/splits/visual_samples.txt
+all_models_use_identical_split=true
+all_models_use_identical_visual_samples=true
+
+[degradation]
+# LR4 是预生成数据；训练、验证、测试阶段均禁止在线退化。
+mode=precomputed
+generator=five/generate_lr4_from_hr.py
+seed=42
+scale=4
+order=diffraction_cutoff,aa_sigma,downsample,speckle,poisson,read_noise
+downsample_method=lanczos
+speckle_enabled=true
+output_format=BMP
+output_bit_depth=8
+output_channels=3
+train_diffraction_cutoff=0.85,1.00
+train_aa_sigma=0.30,0.70
+train_speckle_contrast=0.30,0.80
+train_speckle_corr=3.0,6.0
+train_poisson_gain=800,4000
+train_read_std=0.003,0.010
+val_diffraction_cutoff=1.0
+val_aa_sigma=0.50
+val_speckle_contrast=0.60
+val_speckle_corr=4.0
+val_poisson_gain=2000
+val_read_std=0.005
+test_diffraction_cutoff=1.0
+test_aa_sigma=0.50
+test_speckle_contrast=0.60
+test_speckle_corr=4.0
+test_poisson_gain=2000
+test_read_std=0.005
+
+[runtime]
+# NVIDIA 驱动版本仅作运行记录，不作为实验启动阻断条件。
+validate_on_startup=true
+python_version=3.8
+pytorch_version=2.0.0
+pytorch_cuda_build=cu118
+cuda_runtime_version=11.8
+nvidia_driver_version=not_checked
+validate_nvidia_driver=false
+torchvision_version=0.15.1
+scikit_image_version=0.19.3
+lpips_version=0.1.4
+numpy_version=1.24.4
+opencv_python_version=4.8.1.78
+einops_version=0.6.1
+pyyaml_version=6.0.1
+lpips_weights_relpath=weights/v0.1/alex.pth
+# Official lpips v0.1 AlexNet linear weights (alex.pth).
+lpips_weights_sha256=DF73285E35B22355A2DF87CDB6B70B343713B667EDDBDA73E1977E0C860835C0
+strict_lpips_weights_check=true
+
+[determinism]
+enabled=true
+cudnn_deterministic=true
+cudnn_benchmark=false
+use_deterministic_algorithms=true
+data_order=fixed_sampler_seed_plus_epoch
+worker_seed_formula=base_seed_plus_rank_times_num_workers_plus_worker_id
+
+[training]
+patch_size=256
+batch_size_per_gpu=8
+# Effective batch per GPU is fixed across models. If OOM occurs, lower the
+# micro batch in the generated run config and increase accumulation so this
+# effective batch remains 8.
+effective_batch_size_per_gpu=8
+micro_batch_size_per_gpu=2
+gradient_accumulation_steps=4
+amp_enabled=true
+amp_dtype=float16
+oom_policy=reduce_micro_batch_preserve_effective_batch
+optimizer=Adam
+learning_rate=0.0001
+optimizer_betas=0.9,0.99
+weight_decay=0
+loss=L1+GFL+HF
+loss_weight=1.0
+loss_l1_weight=1.0
+loss_gfl_weight=0.1
+loss_hf_weight=0.2
+gfl_ramp_iterations=30000
+gfl_radius_ref=0.125
+hf_sigma_px=1.8006
+loss_reduction=mean
+total_iterations=60000
+warmup_iterations=2000
+dataset_enlarge_ratio=1
+num_workers_per_gpu=8
+prefetch_mode=null
+use_hflip=false
+use_rot=false
+train_seeds=10,20,30
+all_models_use_identical_training_settings=true
+loss_divide_by_accumulation_steps=true
+amp_grad_scaler=true
+amp_init_scale=65536
+amp_growth_factor=2.0
+amp_backoff_factor=0.5
+amp_growth_interval=2000
+# All networks use the same clipping policy: disabled.  Do not enable this
+# for an individual architecture; it would change the optimization trajectory.
+gradient_clip_enabled=false
+gradient_clip_norm=none
+pin_memory=false
+persistent_workers=false
+ema_enabled=true
+ema_decay=0.999
+ema_warmup_iters=2000
+
+[scheduler]
+type=MultiStepLR
+milestones=30000,48000,54000,57000
+gamma=0.5
+
+[validation]
+frequency_iterations=5000
+save_checkpoint_frequency_iterations=5000
+use_for_early_stopping=false
+include_in_final_paper_table=false
+save_img=false
+save_images_on_every_validation=false
+checkpoint_selection_metric=PSNR
+checkpoint_selection_mode=max
+checkpoint_selection_tie_breaker=SSIM
+checkpoint_selection_tie_tolerance=1e-12
+checkpoint_selection_split=val
+test_never_used_for_checkpoint_selection=true
+# Validation is full-resolution, one image at a time, with no geometry change.
+batch_size_per_gpu=1
+num_workers=0
+pin_memory=false
+persistent_workers=false
+prefetch_mode=null
+whole_image=true
+resize=false
+padding=false
+preserve_native_resolution=true
+compute_lpips=false
+
+[evaluation]
+metrics=PSNR,SSIM,LPIPS,RMSE,MAE
+test_only_for_final_report=true
+test_y_channel=false
+rgb_to_y=false
+crop_border=4
+save_metrics=true
+save_sr_images=true
+metric_pixel_range=0_1
+metric_aggregation=mean_over_images
+seed_aggregation=mean_plus_minus_std
+psnr_data_range=1.0
+psnr_input_range=0_1
+psnr_crop_border=4
+ssim_data_range=1.0
+ssim_window_size=11
+ssim_sigma=1.5
+ssim_gaussian_weights=true
+ssim_use_sample_covariance=false
+ssim_channel_axis=2
+ssim_channel_reduction=mean
+lpips_network=alex
+lpips_input_range=-1_1
+lpips_crop_border=4
+lpips_spatial=false
+metric_implementation_version=2
+ssim_library=scikit-image
+ssim_library_version=0.19.3
+# Final test uses exactly the same full-image geometry protocol as validation.
+test_batch_size_per_gpu=1
+test_num_workers=0
+test_pin_memory=false
+test_persistent_workers=false
+test_prefetch_mode=null
+test_whole_image=true
+test_resize=false
+test_padding=false
+test_preserve_native_resolution=true
+test_compute_lpips=true
+clamp_sr_to_01=true
+self_ensemble=d4_8transforms
+self_ensemble_required=true
+aggregate_cross_check_tolerance=1e-6
+
+[visual_output]
+format=BMP
+compression=none
+save_count=10
+save_list=data/splits/visual_samples.txt
+output_root=experiments/{network_name}/results
+lr_filename={number}_LR.bmp
+sr_filename={number}_SR.bmp
+hr_filename={number}_HR.bmp
+save_lr=true
+save_sr=true
+save_hr=true
+save_comparison_image=false
+export_after_all_comparison_runs_complete=true
+export_split=test
+checkpoint_source=best_checkpoint_selected_on_val
+visual_only=true
+compute_metrics=false
+paper_figures=true
+figure_seed=10
+figures_dir=10.11/figures
+roi_manifest=data/splits/roi.json
+roi_kinds=flat,detail
+per_sample_metrics=true
+per_sample_metrics_file=per_sample_metrics.json
+lr_upsample_interpolation=bicubic
+error_map_colormap=viridis
+error_map_global_colorbar=true
+error_map_vmax_percentile=99
+spectrum_normalize_to=lr_nyquist
+spectrum_show_cutoff_line=true
+curve_shading=mean_plus_minus_std
+figure_export_formats=pdf,png_600dpi
+figure_font_family=Arial
+figure_colorblind_safe=true
+figure_sensitive_degradation=speckle_contrast,diffraction_cutoff,poisson_gain,read_std
+figure_sample_stratify_by=baseline_psnr
+anchor_metadata_files=per_sample_metrics.json,roi.json,degrade_params.json
+figure_data_panels_script_only=true
+figure_manual_cosmetic_edits=allowed_if_documented
+
+[fairness]
+network_is_only_experimental_variable=true
+same_hr_lr_split=true
+same_visual_sample_list=true
+same_training_iterations=true
+same_optimizer=true
+same_scheduler=true
+same_loss=true
+same_augmentation=true
+same_random_seeds=true
+same_evaluation_protocol=true
+same_effective_batch_size=true
+same_amp_mode=true
+same_oom_policy=true
+pretrained_weights=false
+report_mean_plus_minus_std=true
+required_final_seeds=10,20,30
+
+[network]
+# 每次实验只修改以下字段；不要修改本文件其它字段。
+network_name=HoloRestormer
+network_type=HoloRestormer
+network_params={"scale":4,"inp_channels":3,"out_channels":3,"dim":48,"num_blocks":[4,6,6,8],"num_refinement_blocks":4,"heads":[1,2,4,8],"ffn_expansion_factor":2.66,"bias":false,"LayerNorm_type":"WithBias"}
+
+[paths]
+# AutoDL 示例：
+# export HOLO_PROJECT_ROOT=/root/autodl-tmp/your_project
+# export HOLO_DATA_ROOT=/root/autodl-tmp/your_dataset
+# export BASICSR_ROOT=/root/autodl-tmp/DAT
+experiments_dir=experiments/{network_name}
+results_dir=experiments/{network_name}/results
+logs_dir=experiments/{network_name}/logs
+checkpoints_dir=experiments/{network_name}/checkpoints
+
+[rules]
+1=所有网络必须读取本文件。
+2=除 network_name、network_type、network_params 外禁止修改配置。
+3=LR4 为预生成数据，禁止训练时在线生成退化图。
+4=HR 与 LR4 文件名按数字一一对应。
+5=所有模型使用相同的 train、val、test 清单。
+6=所有模型使用相同的 10 张 visual_samples 清单。
+7=训练旋转增强关闭，因为数据已包含旋转扩展。
+8=测试分别保存 LR、SR、HR 未压缩 BMP。
+9=最终结果报告测试集 PSNR、SSIM、LPIPS、RMSE、MAE。
+10=最终报告使用种子 10、20、30 的均值和标准差。
+11=Checkpoint 只根据 val 的最高 PSNR 选择；PSNR 并列时用 SSIM 破平，禁止使用 test 选 checkpoint。
+12=PSNR/SSIM 使用 RGB、[0,1]、crop_border=4；SSIM 固定 11x11、高斯 sigma=1.5、data_range=1.0。
+13=LPIPS 固定 AlexNet、RGB [-1,1]、crop_border=4、spatial=false，并固定实现版本。
+14=OOM 时只降低 micro batch，并用梯度累积保持 effective batch=8；所有模型统一启用 AMP float16。
+15=iteration 定义为一次 optimizer update，不是一次 micro-batch 前向。
+16=LPIPS 必须校验 lpips==0.1.4 与 alex.pth SHA256；未通过校验禁止最终评估。
+17=SSIM 必须使用 scikit-image==0.19.3、channel_axis=2，并逐 RGB 通道计算后取 mean。
+18=loss 必须除以 gradient_accumulation_steps；GradScaler 只在 optimizer update 时 step/update。
+19=Python/NumPy/PyTorch/CUDA/worker/data order 与 cuDNN 确定性开关必须启动时校验。
+20=val 与 test 共用 basicsr.metrics.holo_metrics.calculate_holo_metrics 及同一参数。
+21=全息实验统一 use_hflip=false；除非另有物理验证，不得启用镜像增强。
+22=所有网络统一关闭梯度裁剪（gradient_clip_enabled=false、gradient_clip_norm=none）。
+23=val/test 固定 batch=1、整图、无 resize、无 padding，保持 HR/LR 原生尺寸；尺寸不符直接报错。
+24=DataLoader 固定 pin_memory=false、persistent_workers=false、prefetch_mode=null；val/test num_workers=0。
+25=val 只计算 PSNR、SSIM、RMSE、MAE，不计算 LPIPS；LPIPS 仅用于最终 test 报告。
+26=val/test 均使用 RGB、[0,1]、crop_border=4 及同一 holo_metrics 实现；SSIM 逐 RGB 通道取均值。
+27=后续接入 SwinIR、HAT 等对比网络时，必须统一使用 basicsr、HoloPairedDataset、holo_protocol、holo_metrics，以及相同数据划分、训练参数、AMP、梯度累积和评估协议；唯一变量是网络结构。
+28=nvidia_driver_version 仅作运行环境记录；validate_nvidia_driver=false，不因驱动版本缺失或不同阻断实验启动。
+29=训练期间及每次验证均禁止保存验证图片（val.save_img=false），避免每轮重复导出整套验证集。
+30=所有对比实验完成后，每个模型使用其按验证集 PSNR（并列按 SSIM）选出的最佳 checkpoint，仅对固定 visual_samples 清单中的 10 张 test 样本做一次视觉导出。
+31=视觉导出只保存未压缩 BMP 的 LR/SR/HR，不计算或汇报测试指标；正式 test 指标评估仍按独立最终评估流程执行。

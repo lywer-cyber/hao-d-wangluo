@@ -1,0 +1,46 @@
+# 由 gen_configs.py 自动生成
+name: test_MambaIR_physical_x4
+model_type: SRModel
+scale: 4
+num_gpu: 1
+manual_seed: 10
+
+datasets:
+  test_1:
+    task: SR
+    name: holo_physical_x4_test
+    type: PairedImageDataset
+    dataroot_gt: /home/zero/holo-sr/data/holo/HR/test
+    dataroot_lq: /home/zero/holo-sr/data/holo/LR_physical/X4/test
+    filename_tmpl: '{}'
+    io_backend:
+      type: disk
+
+network_g:
+  type: MambaIR
+  upscale: 4
+  img_size: 64
+  in_chans: 1
+  img_range: 1.0
+  embed_dim: 180
+  d_state: 16
+  depths: [6, 6, 6, 6, 6, 6]
+  img_size_2: 64
+
+path:
+  pretrain_network_g: experiments/MambaIR_physical_x4/models/net_g_250000.pth
+  strict_load_g: true
+  param_key: params
+
+val:
+  save_img: true
+  suffix: ~
+  metrics:
+    psnr:
+      type: calculate_psnr
+      crop_border: 4
+      test_y_channel: false
+    ssim:
+      type: calculate_ssim
+      crop_border: 4
+      test_y_channel: false

@@ -1,0 +1,45 @@
+# 由 gen_configs.py 自动生成
+name: test_RCAN_bicubic_x4
+model_type: SRModel
+scale: 4
+num_gpu: 1
+manual_seed: 10
+
+datasets:
+  test_1:
+    task: SR
+    name: holo_bicubic_x4_test
+    type: PairedImageDataset
+    dataroot_gt: /home/zero/holo-sr/data/holo/HR/test
+    dataroot_lq: /home/zero/holo-sr/data/holo/LR_bicubic/X4/test
+    filename_tmpl: '{}'
+    io_backend:
+      type: disk
+
+network_g:
+  type: RCAN
+  num_in_ch: 1
+  num_out_ch: 1
+  num_feat: 64
+  num_group: 10
+  num_block: 20
+  squeeze_factor: 16
+  upscale: 4
+
+path:
+  pretrain_network_g: experiments/RCAN_bicubic_x4/models/net_g_250000.pth
+  strict_load_g: true
+  param_key: params
+
+val:
+  save_img: true
+  suffix: ~
+  metrics:
+    psnr:
+      type: calculate_psnr
+      crop_border: 4
+      test_y_channel: false
+    ssim:
+      type: calculate_ssim
+      crop_border: 4
+      test_y_channel: false
