@@ -1,6 +1,8 @@
 """Evaluate a trained HoloRestormer checkpoint on the fixed test split.
 
-The evaluator writes uncompressed BMP LR/SR/HR triplets and mean metrics.
+The evaluator writes BMP triplets, aggregate metrics, and floating-point
+per-sample JSON/CSV records. Serialization additions do not change predictions
+or metric calculations used by the archived server evaluator.
 LPIPS is mandatory for the final test report.  The evaluator validates the
 package version and the pinned AlexNet weight hash before inference.
 """
@@ -9,6 +11,7 @@ from __future__ import annotations
 
 import argparse
 import configparser
+import csv
 import json
 from pathlib import Path
 
@@ -154,6 +157,9 @@ def main():
     out_root = root / "experiments" / option["name"] / "results" / a.split
     out_root.mkdir(parents=True, exist_ok=True)
     accum = {"PSNR": [], "SSIM": [], "RMSE": [], "MAE": [], "LPIPS": []}
+    per_sample = {}
+    visual_samples_saved = 0
+    visual_files_saved = 0
     with torch.no_grad():
         for name in names:
             hr_bgr = cv2.imread(str(hr_dir / name), cv2.IMREAD_COLOR)
@@ -185,6 +191,9 @@ def main():
                 x = torch.from_numpy(sr_lp.transpose(2, 0, 1)).unsqueeze(0).to(device) * 2 - 1
                 y = torch.from_numpy(hr_lp.transpose(2, 0, 1)).unsqueeze(0).to(device) * 2 - 1
                 accum["LPIPS"].append(float(lpips_fn(x, y).mean().item()))
+            if not a.visual_only:
+                per_sample[name] = dict(values)
+                per_sample[name]["LPIPS"] = accum["LPIPS"][-1] if lpips_fn is not None else None
             if a.split == "test" and name in visual["save_names"]:
                 base = out_root / Path(name).stem
                 lr_u8 = np.clip(cv2.cvtColor(lr, cv2.COLOR_RGB2BGR) * 255.0, 0, 255).astype(np.uint8)
@@ -195,17 +204,40 @@ def main():
                     ("save_sr", base.with_name(base.name + "_SR.bmp"), sr_u8),
                     ("save_hr", base.with_name(base.name + "_HR.bmp"), hr_u8),
                 )
+                saved_this_sample = False
                 for enabled_key, output_path, image in outputs:
                     if str(visual.get(enabled_key, "true")).lower() == "true":
                         if not cv2.imwrite(str(output_path), image):
                             raise IOError(f"Could not save visual output: {output_path}")
+                        visual_files_saved += 1
+                        saved_this_sample = True
+                visual_samples_saved += int(saved_this_sample)
 
     summary = {k: (float(np.mean(v)) if v else None) for k, v in accum.items()}
     summary["count"] = len(names)
-    summary["visual_images_saved"] = len(names) if a.split == "test" else 0
+    summary["visual_images_saved"] = visual_samples_saved
+    summary["visual_files_saved"] = visual_files_saved
     summary["visual_only"] = bool(a.visual_only)
     summary_name = "visual_export.json" if a.visual_only else "metrics.json"
     (out_root / summary_name).write_text(json.dumps(summary, indent=2), encoding="utf-8")
+    if not a.visual_only:
+        record = {
+            "schema_version": 1,
+            "metric_source": "clamped_float_prediction_before_BMP_quantization",
+            "run": option["name"], "seed": int(option.get("manual_seed", 0)),
+            "split": a.split, "checkpoint": str(a.checkpoint.resolve()),
+            "weight_selection": which, "count": len(per_sample),
+            "evaluation": evaluation, "samples": per_sample,
+        }
+        (out_root / "per_sample_metrics.json").write_text(
+            json.dumps(record, indent=2, sort_keys=True), encoding="utf-8")
+        with (out_root / "per_sample_metrics.csv").open(
+                "w", encoding="utf-8", newline="") as handle:
+            fields = ["filename", "PSNR", "SSIM", "LPIPS", "RMSE", "MAE"]
+            writer = csv.DictWriter(handle, fieldnames=fields)
+            writer.writeheader()
+            for name, values in per_sample.items():
+                writer.writerow({"filename": name, **values})
     print(json.dumps(summary, indent=2))
 
 

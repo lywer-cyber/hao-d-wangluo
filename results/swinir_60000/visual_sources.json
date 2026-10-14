@@ -1,0 +1,5 @@
+{
+  "shared_hr_lr_directory": "results/restormer_stockhead_60000/visual",
+  "sr_directory": "results/swinir_60000/visual",
+  "note": "HR/LR references were verified SHA256-identical on the two servers. Only SR images are duplicated per model."
+}

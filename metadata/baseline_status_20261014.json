@@ -1,0 +1,45 @@
+{
+  "A": {
+    "captured_at": "2026-10-14T20:54:18.748001+08:00",
+    "runs": {
+      "restormer": {
+        "run": "holo_restormer_mdta_stockhead_60000_seed10_mb2",
+        "status": "completed_test",
+        "last_iteration": 60000,
+        "test_metrics_present": true,
+        "traceback_present": false
+      }
+    }
+  },
+  "B": {
+    "captured_at": "2026-10-14T20:54:18.783778+08:00",
+    "runs": {
+      "rcan": {
+        "run": "holo_rcan_60000_seed10_mb2",
+        "status": "training",
+        "last_iteration": 1900,
+        "test_metrics_present": false,
+        "traceback_present": false
+      },
+      "rrdbnet": {
+        "run": "holo_rrdbnet_60000_seed10_mb2",
+        "status": "not_started",
+        "last_iteration": null,
+        "test_metrics_present": false
+      },
+      "edsr": {
+        "run": "holo_edsr_60000_seed10_mb2",
+        "status": "not_started",
+        "last_iteration": null,
+        "test_metrics_present": false
+      },
+      "swinir": {
+        "run": "holo_swinir_60000_seed10_mb2_retry",
+        "status": "completed_test",
+        "last_iteration": 60000,
+        "test_metrics_present": true,
+        "traceback_present": false
+      }
+    }
+  }
+}

@@ -1,260 +1,169 @@
-# 数字全息重建强度图 ×4 超分
+# 数字全息重建强度图 ×4 超分：基线复现与论文素材
 
-数字全息重建所得**强度图**的单图超分：LR（256×320，3 通道 8 bit BMP）→ HR（1024×1280）。
+本仓库提供**实际运行过的基线代码、原始配置、固定划分、训练日志、结果数据和少量可视化样本**。
+完整5000对HR/LR数据及模型权重不入库；复现训练请使用你已有的同一份RGB BMP数据。
 
-本仓库是论文的**实验复现包**：训练/评估代码、全部实验配置、数据生成管线、出图脚本、
-以及已经跑出的结果与图片。
+> **范围与时间：**2026-10-14基线快照。Restormer-SR、SwinIR已完成训练与测试；RCAN正在训练，RRDBNet、EDSR尚未启动。状态会随实验推进改变，详见`metadata/baseline_status_20261014.json`。未完成实验不填造结果，未定型主方法不列入主表。
 
----
+## 1. 已完成结果
 
-## 1 任务定义
+所有下列数字来自保存的`metrics.json`，在浮点SR预测上计算；均为**单个训练种子10**、500张测试图的均值，不是三种子统计。
 
-| 项 | 值 |
-|---|---|
-| 输入 | LR 强度图，3 通道 BMP，8 bit，256×320 |
-| 输出 | HR 强度图，3 通道，×4，1024×1280 |
-| 数据 | 5000 对（HR / LR4），**预生成**；禁止训练时在线退化 |
-| 评价 | PSNR / SSIM / LPIPS / RMSE / MAE（RGB、[0,1]、`crop_border=4`） |
-| 数据划分 | train 501–4500（4000）／val 1–250+4751–5000（500）／test 251–500+4501–4750（500），三方零重叠 |
-| 划分种子 | 42（显式区间，不随机） |
-| 唯一自由变量 | **网络结构**（`network_name` / `network_type` / `network_params`） |
+| 基线（实际配置） | 参数量 | PSNR↑ | SSIM↑ | LPIPS↓ | RMSE↓ | MAE↓ |
+|---|---:|---:|---:|---:|---:|---:|
+| Restormer-SR：主干＋×4重建头 | 26,165,524 | 35.2892 | 0.9367 | 0.18609 | 0.01854 | 0.01108 |
+| SwinIR：embed_dim=96，4组，每组6层 | 3,487,347 | 31.9922 | 0.9201 | 0.20823 | 0.02590 | 0.01399 |
 
-**核心物理前提**：退化被 `r̂ = 1`（LR 的 Nyquist，`f_LR = 1/(2·scale) = 0.125` cycles/px）
-切成两个性质不同的子问题 —— **带内（r̂<1）= 复原**（信息还在），**带外（r̂>1）= 外推**（信息已丢）。
+待完成基线：RCAN（64通道、10组×20块）、RRDBNet（23块）、EDSR（64通道、16块）。
+RRDBNet在这里使用统一重建损失，**不是完整ESRGAN对抗训练**。
+Restormer-SR是本项目的超分适配版，不称为官方原生×4架构。
 
-### 退化链
+## 2. 仓库内容
 
-```
-圆孔径衍射低通 → 抗混叠高斯 → 面积平均 ×4 → 乘性散斑 → 泊松散粒 + 读出噪声 → 8bit 量化
-```
-
-训练集逐样本抖动退化参数；**val 与 test 使用同一组固定值**，保证所有模型面对完全相同的退化。
-
----
-
-## 2 仓库结构
-
-```
-.
-├── docs/                  协议、设计、交接、出图规范（唯一规范来源）
-├── pipeline/              数据生成管线 + 候选基线配置
-│   ├── scripts/           切分 / 生成 LR / 校验 / 退化算子
-│   └── configs/           各候选基线（train + test）
-├── code/
-│   ├── holo_v7_baseline/  Restormer 基线代码树（BasicSR）
-│   └── holo_project/      SwinIR 基线代码树（BasicSR）
-├── configs/
-│   ├── holo_v7_baseline/  该机跑过的全部 options.yml
-│   └── holo_project/      该机跑过的全部 options.yml
-├── splits/                两台机器的 train/val/test 清单与 visual_samples
-├── figures/scripts/       出图脚本（14 个）
-├── logs/                  训练日志（含 v6/v7 早期原始日志）
-└── results/               已跑出的结果、图片、指标
+```text
+code/                       两台机器对应的训练/评估代码，保留上游来源
+configs/baseline_catalog.json  五个基线的精确配置、代码树、状态、结果路径索引
+configs/holo_*/             服务器原始options.yml；保留原绝对路径，作为审计快照
+splits/holo_*/              train/val/test清单、冻结划分和10张可视化清单
+results/restormer_stockhead_60000/  指标、最佳点记录、完整日志、30张LR/SR/HR BMP
+results/swinir_60000/       指标、最佳点记录、完整日志、10张SR BMP
+results/sensitivity/        Restormer的27个单参数扫描点和扫描清单
+metadata/                  逐图退化参数、文件清单、哈希和服务器导出快照
+paper/                     可直接用于整理稿件的CSV、PNG、PDF及来源哈希
+scripts/                   可移植配置生成、论文素材重建、发布包校验
+reproducibility/            历史评估脚本原件及评估行为回归测试
+environment/               运行环境快照与安装依赖
+figures/scripts/           原完整论文出图工具；部分输入需后续正式评估补齐
+docs/                      复现说明、限制、历史实验协议与设计文档
+LICENSES/                  上游许可证
 ```
 
-### 两份代码树的关系
+SwinIR使用与Restormer**SHA256完全相同**的10组HR/LR参考图，因此只另存SR，避免重复；映射在`results/swinir_60000/visual_sources.json`。
+这里仅含论文展示的10张参考样本，**不是完整数据集，也不足以代替训练数据**。
 
-`code/holo_v7_baseline` 与 `code/holo_project` 是**同源但各自演进过的两份 BasicSR 树**，
-不是同一份拷贝（`basicsr/models/archs/holo_restormer_arch.py` 两者 sha256 不同）。
-差异集中在：
+## 3. 环境准备
 
-| | holo_v7_baseline | holo_project |
-|---|---|---|
-| 网络 | `HoloRestormer`（Restormer 基线） | `HoloSwinIR`（SwinIR 基线） |
-| `archs/` 独有 | — | `swinir_holo_arch.py` |
-| 备注 | 含 `use_staged_head` 开关 | 无 |
-
-两者的 `basicsr/metrics/holo_metrics.py`、`basicsr/utils/holo_protocol.py`、
-数据集与损失实现按协议必须一致，改动请同步。
-
----
-
-## 3 环境
-
-训练与评估实测环境（与 `configs/*/options.yml` 的 `runtime:` 段一致）：
-
-```
-Python            3.8
-PyTorch           2.0.0+cu118
-TorchVision       0.15.1+cu118
-CUDA runtime      11.8
-NumPy             1.24.4
-OpenCV            4.8.1.78
-scikit-image      0.19.3
-lpips             0.1.4
-einops            0.6.1
-PyYAML            6.0.1
-```
-
-硬件：单卡 RTX 4090 24G。60000 iter / micro-batch 2 × accum 4 约 17.5 小时。
-
----
-
-## 4 数据
-
-### 4.1 数据集不在本仓库
-
-原始数据集共 **13.2 G**（HR 12 G + LR4 1.2 G），超出仓库容量，**未随仓库分发**。
-两种获取方式：
-
-1. 向作者索取原图；
-2. 用 `pipeline/scripts/` 从 HR 原图重新生成 LR（见 4.3）。
-
-### 4.2 目录约定
-
-```
-<DATA_ROOT>/
-├── HR/    5000 张 1024×1280 3 通道 8 bit BMP，命名 <序号>.bmp
-└── LR4/   5000 张 256×320  3 通道 8 bit BMP，命名 <序号>.bmp
-          + degrade_params.json（每张的退化参数，1.25 MB）
-```
-
-代码通过环境变量定位数据：
+推荐Linux、Python **3.8**、CUDA 11.8兼容GPU环境。不要用Python 3.12启动正式训练，协议会检查版本。
 
 ```bash
-export HOLO_PROJECT_ROOT=<项目根>
-export HOLO_DATA_ROOT=<DATA_ROOT>          # 里面有 HR/ 与 LR4/
+conda create -n holo-repro python=3.8 -y
+conda activate holo-repro
+
+# REPO是你克隆后的绝对目录
+export REPO=/absolute/path/to/hao-d-wangluo
+python -m pip install torch==2.0.0+cu118 torchvision==0.15.1+cu118 \
+  --index-url https://download.pytorch.org/whl/cu118
+python -m pip install -r "$REPO/environment/requirements-reproduce.txt"
 ```
 
-### 4.3 重新生成数据
+本仓库通过`PYTHONPATH`使用随附的BasicSR树；不要另外安装其他版本BasicSR来替换它。
+本地同名`timm`安装可能改变SwinIR使用的辅助函数；记录的服务器环境没有timm，代码使用自带兼容实现。
+完整包版本记录见`environment/server_A_packages.txt`和`server_B_packages.txt`。
+
+首次LPIPS计算还需要torchvision的AlexNet预训练骨干缓存，可能触发下载；离线机器请提前准备PyTorch模型缓存。
+LPIPS线性校准权重由`lpips==0.1.4`包提供，并由现有代码核对SHA256；它们都不是SR模型的预训练权重。
+
+## 4. 使用已有数据生成可移植配置
+
+数据目录应为：
+
+```text
+/absolute/path/to/data/
+  HR/1.bmp ... 5000.bmp
+  LR4/1.bmp ... 5000.bmp
+```
+
+生成配置不会复制数据，也不会启动训练：
 
 ```bash
-cd pipeline/scripts
-python 01_split_dataset.py     # 按 seed 42 的显式区间切分
-python 02_generate_lr.py       # 跑退化链生成 LR4/ 与 degrade_params.json
-python 03_verify_dataset.py    # 校验 5000 对齐全、尺寸/位深正确
+python "$REPO/scripts/prepare_reproduction.py" \
+  --model restormer \
+  --data-root /absolute/path/to/data \
+  --work-root /absolute/path/to/reproduction_runs
 ```
 
-> ⚠️ `holo_degrade.py` 里 **rng 的调用顺序一旦改变，LR 图就会变，全部已跑实验作废**。
-> 复现请勿修改该文件的随机数调用顺序。
+`--model`可选`restormer`、`swinir`、`rcan`、`rrdbnet`、`edsr`。
+脚本会复制划分清单、重定位路径，生成`launch_train.sh`、`evaluate.sh`和`reproduction_manifest.json`。
+默认保留原始seed和所有训练超参；`--seed 20`/`--seed 30`只在需要重复实验时显式使用。
+已有输出配置内容不同则拒绝覆盖，避免误混实验。
 
-### 4.4 划分清单
+**不要直接把原始配置中的`/root/autodl-tmp/...`当作自己机器的目录。** 环境变量本身不会自动改写原始YAML里的全部路径，使用上述脚本重定位。
 
-`splits/` 下每个项目各有一份，两者**集合完全相同**，仅换行符不同（CRLF vs LF）：
-
-- `train_meta.txt` / `val_meta.txt` / `test_meta.txt`
-- `split_seed42.json`（划分的冻结记录）
-- `visual_samples.txt`（10 张定性对比样本，来自测试集，seed 42）
-
-> ⚠️ `visual_samples.txt` 的条目必须**带 `.bmp` 后缀**。评估脚本用
-> `name in visual["save_names"]` 与测试集清单（`251.bmp` 形式）比对，
-> 写成裸数字会**静默一张图都导不出来**。
-
----
-
-## 5 复现步骤
-
-### 5.1 训练
+## 5. 训练与评估
 
 ```bash
-cd code/holo_v7_baseline/restormer          # 或 code/holo_project/restormer
-export HOLO_PROJECT_ROOT=<项目根>
-export HOLO_DATA_ROOT=<DATA_ROOT>
-export PYTHONPATH=$PWD
+# 例：Restormer
+bash /absolute/path/to/reproduction_runs/restormer/launch_train.sh
 
-python -u basicsr/train.py \
-  -opt <项目根>/configs/<对应目录>/<run名>_options.yml --launcher none
+# 训练后查看best_checkpoint.json，使用验证集选择出的最佳点
+bash /absolute/path/to/reproduction_runs/restormer/evaluate.sh \
+  /absolute/path/to/reproduction_runs/restormer/experiments/RUN_NAME/models/net_g_best_ITER.pth
 ```
 
-- 验证每 5000 iter，500 张整图；**checkpoint 按 val PSNR 选**（并列用 SSIM 破平）。
-- EMA decay 0.999（warmup 2000）；**验证与选点一律用 EMA 权重**。
-- 同名重启会自动归档旧目录（`..._archived_<时间戳>`），不会覆盖。
+- 60,000次优化器更新；micro-batch 2 × accumulation 4，有效batch 8。
+- 相同L1＋0.1 GFL＋0.2 HF损失、EMA与评价口径。
+- 每5000步验证，按验证集PSNR选最佳checkpoint；不按测试结果选点。
+- 使用RGB、[0,1]、crop_border=4，保持原生尺寸。
+- **历史差异保留：SwinIR的warmup_init_ratio=0.01，其他基线为0.0。** 为复现已有数字，不将它静默改成统一值。
+- OOM不会由训练器自动改变batch；归档中有部分模型的mb1配置。如需要换配置，应明确记录，不能覆盖原run冒充同一次训练。
 
-### 5.2 评估（测试集）
+完整数据和权重不在Git中。权重文件名、大小及哈希见各结果目录的`checkpoint_manifest.json`；可以使用自己已有的匹配权重，或从头训练。
+
+### 评估导出改进
+
+本次发布的评估器在不改变预测、指标数值表达式的前提下，额外保存：
+
+- `metrics.json`：聚合指标；
+- `per_sample_metrics.json` / `.csv`：**量化前浮点预测**的逐图指标；
+- 固定10组LR/SR/HR BMP；
+- 实际保存的样本/文件数量。
+
+服务器历史评估器原件在`reproducibility/evaluate_holo_server_snapshot.py`。
+历史两组已完成结果只留有聚合指标，**本次没有重跑GPU评估，也没有伪造其500张逐图指标**。
+新导出功能仅在本仓库代码中，未覆盖正在训练的服务器代码。
+
+## 6. 论文用图和表格
+
+已生成：
+
+- `paper/tables/baseline_test_results.csv`：两组完成基线的原始精度指标；
+- `paper/tables/*_validation_curve.csv`：每组12个正常训练期验证点；
+- `paper/tables/restormer_sensitivity.csv`：27个扫描点；
+- `paper/figures/baseline_validation_curves.png/.pdf`；
+- `paper/figures/baseline_test_summary.png/.pdf`；
+- `paper/figures/restormer_sensitivity.png/.pdf`；
+- `paper/figures/fixed_samples_overview.png`：固定10张全图预览。
+
+这些是**基线阶段素材**，不是包含最终主方法的完整论文主图。
 
 ```bash
-cd code/<项目>/restormer
-export HOLO_PROJECT_ROOT=<项目根> HOLO_DATA_ROOT=<DATA_ROOT> PYTHONPATH=$PWD
-
-python evaluate_holo.py \
-  --option     <项目根>/configs/<目录>/<run名>_options.yml \
-  --checkpoint <项目根>/experiments/<run名>/models/net_g_best_<iter>.pth \
-  --split test --require-lpips
+python -m pip install -r "$REPO/environment/requirements-paper.txt"
+python "$REPO/scripts/build_paper_assets.py"
 ```
 
-产物：`experiments/<run名>/results/test/`
-- `<序号>_LR.bmp` / `_SR.bmp` / `_HR.bmp`（10 张可视样本，归档母版，不可修改）
-- `metrics.json`（聚合指标）
+重建现有图表不需要GPU、完整数据或模型权重。
+数值取自保存的浮点指标，**不从8bit BMP重新计算后替换原表格**。图片预览经过显示缩放，原始BMP仍保留。
+27点扫描每点仅50张固定图，不能与500张主测试均值混为一谈。
+图表源文件及哈希见`paper/provenance.json`。
 
-> 脚本会打印 `[eval] 网络类型=... 载入权重=...`，请核对载入的是 **EMA** 权重。
+## 7. 复现边界
 
-### 5.3 出图
+- 本仓库支持在你已有的同一份HR/LR4数据上复现训练与评估；没有数据和权重时只能复核公开结果与重建已有图表。
+- `pipeline/scripts/02_generate_lr.py`等早期管线含灰度/PNG路径，**不能无验证地用来替换已训练实验的RGB BMP输入**。优先使用你保留的原数据；逐图退化元数据已归档，但它不等于完整原始数据。
+- `docs/`内有历史方案与进度快照；当前执行入口以本README和`baseline_catalog.json`为准。不能把旧方案里的预测增益当作已完成结果。
+- 原HoloRestormerV3研究模块仍随主干代码保留，但不代表这些模块已用于本次基线。已发现旧MSDW在关闭频带支路时不被调用，不能用其短跑差异宣称模块收益。
+- 当前两组结果只有seed10，不提供伪造的均值±种子标准差或显著性结论。
 
-见 `figures/scripts/README.md` 与 `docs/全息超分-出图运行手册-20261013.md`。
+更多说明见`docs/REPRODUCTION_NOTES.md`、`paper/README.md`和`THIRD_PARTY_NOTICES.md`。
 
----
+## 8. 校验发布包
 
-## 6 已跑出的结果
-
-### 6.1 Restormer 基线（`holo_v7_baseline`）
-
-run：`holo_restormer_mdta_stockhead_60000_seed10_mb2`
-网络：`HoloRestormer`（8 个重构开关全关 + 官方 Restormer SR 重建头），**26,165,524** 参数
-训练：60000 iter，seed 10，17 h 45 m
-
-| iter | 5000 | 10000 | 20000 | 30000 | 40000 | 50000 | 60000 |
-|---|---|---|---|---|---|---|---|
-| val PSNR | 30.2174 | 31.3383 | 32.5506 | 33.9286 | 34.4757 | 34.8053 | **34.9497** |
-| val SSIM | 0.9006 | 0.9166 | 0.9263 | 0.9320 | 0.9340 | 0.9351 | **0.9355** |
-
-**测试集（500 张，EMA 权重）：**
-
-| PSNR | SSIM | LPIPS | RMSE | MAE |
-|---|---|---|---|---|
-| **35.2892** | **0.9367** | **0.18609** | 0.01854 | 0.01108 |
-
-产物在 `results/restormer_stockhead_60000/`（含 `metrics.json`、`val_metrics.csv`、
-10 张可视样本的 LR/SR/HR BMP）。
-
-### 6.2 SwinIR 基线（`holo_project`）
-
-run：`holo_swinir_60000_seed10_mb2_retry`，`HoloSwinIR`，**3,487,347** 参数。
-训练中（撰写时约 55000/60000 iter），结果稍后补入本仓库。
-
-### 6.3 历史 run（作废，结论仍有效）
-
-`logs/v6_v7_raw/` 保留 v6 时代三次与 v7 早期两次的原始日志。
-
-v6 三次 run 的 `total_iter=25500` 与 LR 调度不匹配（milestones 一个都没触发，
-lr 全程恒为 `1.000e-04`），模型停在未收敛点，**数字不可用**；但其中一条结论仍成立：
-**同等 iter 下 Restormer 明显强于 SwinIR**，本仓库 6.1/6.2 的新数据再次证实。
-
----
-
-## 7 论文口径：能写与不能写
-
-依据**源码**核对，不依据设计文档。
-
-```python
-class HoloRestormerV3(nn.Module):       # 研究版：8 个开关【默认全开】→ 88.7 M 参数
-class HoloRestormer(HoloRestormerV3):   # 基线版：8 个开关【强制全关】
+```bash
+python "$REPO/scripts/verify_package.py"
+python -m unittest discover -s "$REPO/tests/reproduction" -v
+# 安装复现环境后可选运行；仅CPU，不启动训练：
+python "$REPO/scripts/smoke_baselines.py"
+python "$REPO/reproducibility/test_evaluator_exports.py"
 ```
 
-| 想写的东西 | 能否成立 |
-|---|---|
-| "基线：官方 Restormer" | ✅ 成立（`..._stockhead_...` run，26,165,524） |
-| "基线：Restormer + 两级重建头（变体）" | ✅ 也可，指 `use_staged_head: true` 的 run |
-| "本文方法 = 条纹尺度 × 频带、带内复原 / 带外外推" | ❌ **暂不能** —— 这些模块在已训练的网络里全是关的 |
-| "HoloBandSplit 按物理截止频率分带" | ❌ 基线版里不参与计算，是纯装饰 |
-| "本文做了 D4 自集成" | ❌ 代码里未实现（配置里的 `self_ensemble` 是死字段） |
-
-**方法本体 `HoloRestormerV3`（默认全开）至今没有跑过**，对比表里 "Ours" 那一列是空的。
-开跑前需先定两件事：**参数量公平性**（全开 88.7 M vs 基线 26 M）、
-**P3 物理展开是否启用**（`HoloForwardDet` / `HoloUnroll` 的数值校验尚未做过）。
-
----
-
-## 8 已知问题
-
-| 现象 | 说明 |
-|---|---|
-| 评估（浮点）与出图（8bit BMP）口径差 | `evaluate_holo.py` 的指标算在浮点 SR 上；BMP 是 8bit 量化后另存，PSNR 差约 0.007 dB。**论文数字用 `metrics.json`，出图用 BMP**，出图链路需加 `--no-check` |
-| `visual_images_saved` 字段 | `metrics.json` 里该字段在 test 时恒为 500（全测试集张数），实际只导出 10 张。**元数据误报，不影响指标数值** |
-| `use_dirconv` 参数臃肿 | 实测 +53.1 M 参数（+203%）。实现是把方向卷积**包在** `dwconv` 外面（`self.dirconv(self.dwconv(x))`），而非设计文档所称的"替换"。做消融前需先改成参数中性版本 |
-| 两台机器无 git 历史 | 代码从工作区直接收进本仓库，`run_manifest.json` 的 `code_git_commit` 无法填写 |
-
----
-
-## 9 引用与联系
-
-（待补：论文标题、作者、联系方式）
+评估器回归测试使用合成小图、简单插值网络和确定性LPIPS测试替身，验证导出行为不改原指标/图片；它不是新性能结果，也不替代真实LPIPS模型核验。

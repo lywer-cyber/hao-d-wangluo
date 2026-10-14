@@ -1,0 +1,225 @@
+# Generated from experiment_config.txt; do not edit by hand.
+name: holo_restormer_pm56_60000_seed10_mb2
+model_type: ImageCleanModel
+scale: 4
+num_gpu: 1
+manual_seed: 10
+holo_protocol: true
+
+runtime:
+  validate_on_startup: true
+  python_version: '3.8'
+  pytorch_version: '2.0.0'
+  pytorch_cuda_build: cu118
+  cuda_runtime_version: '11.8'
+  nvidia_driver_version: not_checked
+  validate_nvidia_driver: false
+  torchvision_version: '0.15.1'
+  scikit_image_version: '0.19.3'
+  lpips_version: '0.1.4'
+  numpy_version: '1.24.4'
+  opencv_python_version: '4.8.1.78'
+  einops_version: '0.6.1'
+  pyyaml_version: '6.0.1'
+  lpips_weights_relpath: weights/v0.1/alex.pth
+  lpips_weights_sha256: DF73285E35B22355A2DF87CDB6B70B343713B667EDDBDA73E1977E0C860835C0
+  strict_lpips_weights_check: true
+
+determinism:
+  enabled: true
+  cudnn_deterministic: true
+  cudnn_benchmark: false
+  use_deterministic_algorithms: true
+  data_order: fixed_sampler_seed_plus_epoch
+  worker_seed_formula: base_seed_plus_rank_times_num_workers_plus_worker_id
+
+datasets:
+  train:
+    name: HoloTrain
+    type: HoloPairedDataset
+    dataroot_gt: /root/autodl-tmp/HR
+    dataroot_lq: /root/autodl-tmp/LR4
+    meta_info_file: /root/autodl-tmp/holo_v7_baseline/data/splits/train_meta.txt
+    io_backend: {type: disk}
+    batch_size_per_gpu: 2
+    num_worker_per_gpu: 8
+    gt_size: 256
+    use_hflip: false
+    use_rot: false
+    dataset_enlarge_ratio: 1
+    prefetch_mode: null
+    pin_memory: false
+    persistent_workers: false
+  val:
+    name: HoloVal
+    type: HoloPairedDataset
+    dataroot_gt: /root/autodl-tmp/HR
+    dataroot_lq: /root/autodl-tmp/LR4
+    meta_info_file: /root/autodl-tmp/holo_v7_baseline/data/splits/val_meta.txt
+    io_backend: {type: disk}
+    batch_size_per_gpu: 1
+    num_worker_per_gpu: 0
+    use_hflip: false
+    use_rot: false
+    pin_memory: false
+    persistent_workers: false
+    prefetch_mode: null
+    whole_image: true
+    resize: false
+    padding: false
+    preserve_native_resolution: true
+    compute_lpips: false
+
+network_g:
+  type: HoloRestormer
+  inp_channels: 3
+  out_channels: 3
+  scale: 4
+  dim: 56
+  num_blocks: [4, 6, 6, 8]
+  num_refinement_blocks: 4
+  heads: [1, 2, 4, 8]
+  ffn_expansion_factor: 2.66
+  bias: false
+  LayerNorm_type: WithBias
+  attention_mode: mdta
+  use_staged_head: false
+  n_bands: 6
+
+path:
+  pretrain_network_g: null
+  strict_load_g: true
+  resume_state: null
+  root: /root/autodl-tmp/holo_v7_baseline
+
+train:
+  total_iter: 60000
+  warmup_iter: 2000
+  warmup_init_ratio: 0.0
+  use_grad_clip: false
+  gradient_clip_enabled: false
+  gradient_clip_norm: none
+  gradient_accumulation_steps: 4
+  effective_batch_size_per_gpu: 8
+  amp_enabled: true
+  amp_dtype: float16
+  oom_policy: reduce_micro_batch_preserve_effective_batch
+  loss_divide_by_accumulation_steps: true
+  amp_grad_scaler: true
+  amp_init_scale: 65536
+  amp_growth_factor: 2.0
+  amp_backoff_factor: 0.5
+  amp_growth_interval: 2000
+  ema_enabled: true
+  ema_decay: 0.999
+  ema_warmup_iters: 2000
+  loss_l1_weight: 1.0
+  loss_gfl_weight: 0.1
+  loss_hf_weight: 0.2
+  gfl_ramp_iterations: 30000
+  gfl_radius_ref: 0.125
+  hf_sigma_px: 1.8006
+  mixing_augs: {mixup: false, use_identity: true}
+  scheduler:
+    type: MultiStepLR
+    milestones: [30000, 48000, 54000, 57000]
+    gamma: 0.5
+  optim_g:
+    type: Adam
+    lr: 0.0001
+    weight_decay: 0
+    betas: [0.9, 0.99]
+  pixel_opt:
+    type: L1Loss
+    loss_weight: 1.0
+    reduction: mean
+
+val:
+  val_freq: 5000
+  save_img: false
+  rgb2bgr: false
+  use_image: false
+  metrics:
+    psnr:
+      type: calculate_holo_psnr
+      crop_border: 4
+      test_y_channel: false
+      data_range: 1.0
+    ssim:
+      type: calculate_holo_ssim
+      crop_border: 4
+      test_y_channel: false
+      data_range: 1.0
+      win_size: 11
+      sigma: 1.5
+      gaussian_weights: true
+      use_sample_covariance: false
+      channel_axis: 2
+      channel_reduction: mean
+    rmse:
+      type: calculate_holo_rmse
+      crop_border: 4
+      data_range: 1.0
+    mae:
+      type: calculate_holo_mae
+      crop_border: 4
+      data_range: 1.0
+  checkpoint_selection_metric: PSNR
+  checkpoint_selection_mode: max
+  checkpoint_selection_tie_breaker: SSIM
+  checkpoint_selection_tie_tolerance: 1e-12
+  checkpoint_selection_split: val
+
+logger:
+  print_freq: 100
+  save_checkpoint_freq: 5000
+  use_tb_logger: false
+  wandb: {project: null, resume_id: null}
+
+evaluation:
+  metrics: [PSNR, SSIM, LPIPS, RMSE, MAE]
+  crop_border: 4
+  test_y_channel: false
+  rgb_to_y: false
+  metric_pixel_range: '0_1'
+  psnr_data_range: 1.0
+  ssim_data_range: 1.0
+  ssim_window_size: 11
+  ssim_sigma: 1.5
+  ssim_gaussian_weights: true
+  ssim_use_sample_covariance: false
+  ssim_channel_axis: 2
+  ssim_channel_reduction: mean
+  ssim_library: scikit-image
+  ssim_library_version: '0.19.3'
+  lpips_network: alex
+  lpips_input_range: '-1_1'
+  lpips_crop_border: 4
+  lpips_spatial: false
+  metric_implementation_version: 2
+  val_compute_lpips: false
+  test_batch_size_per_gpu: 1
+  test_num_workers: 0
+  test_pin_memory: false
+  test_persistent_workers: false
+  test_prefetch_mode: null
+  test_whole_image: true
+  test_resize: false
+  test_padding: false
+  test_preserve_native_resolution: true
+  test_compute_lpips: true
+
+visual_output:
+  format: BMP
+  compression: none
+  save_count: 10
+  save_list: /root/autodl-tmp/holo_v7_baseline/data/splits/visual_samples.txt
+  export_after_all_comparison_runs_complete: true
+  export_split: test
+  checkpoint_source: best_checkpoint_selected_on_val
+  visual_only: true
+  compute_metrics: false
+  save_lr: true
+  save_sr: true
+  save_hr: true
+  save_comparison_image: false

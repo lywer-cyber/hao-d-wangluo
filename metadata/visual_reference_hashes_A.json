@@ -1,0 +1,102 @@
+[
+  {
+    "filename": "263_HR.bmp",
+    "bytes": 3932214,
+    "sha256": "cc4f6745a5f185020a8bb0a09f11a6f5346f49486e5180466de4243068c3821e"
+  },
+  {
+    "filename": "263_LR.bmp",
+    "bytes": 245814,
+    "sha256": "1ec19ea64ca0e9f5a86ae5de03650bffb518a55420ceda9bee26a698c6e12837"
+  },
+  {
+    "filename": "303_HR.bmp",
+    "bytes": 3932214,
+    "sha256": "cc4f6745a5f185020a8bb0a09f11a6f5346f49486e5180466de4243068c3821e"
+  },
+  {
+    "filename": "303_LR.bmp",
+    "bytes": 245814,
+    "sha256": "efc0cdedd0fc63f6c29dd0e5f1a6e36ee20eaf1da243af49f71a7359b1ea9421"
+  },
+  {
+    "filename": "308_HR.bmp",
+    "bytes": 3932214,
+    "sha256": "639608af125a080e77b39ba21672bba531d54dae4d94ee99007283b94bff8974"
+  },
+  {
+    "filename": "308_LR.bmp",
+    "bytes": 245814,
+    "sha256": "85f7f6004176fd624735bcd29ccfe69c3a8ced444ee78b275d2d6abbbf6976d8"
+  },
+  {
+    "filename": "322_HR.bmp",
+    "bytes": 3932214,
+    "sha256": "b84f67c842e5fc416c8045e36dacbc601568d0e0e3e2bd543e421343e1239878"
+  },
+  {
+    "filename": "322_LR.bmp",
+    "bytes": 245814,
+    "sha256": "71c18fc2253613896290a7c8e18c281a6ac2617f60af9022f8b39b1fa299c372"
+  },
+  {
+    "filename": "365_HR.bmp",
+    "bytes": 3932214,
+    "sha256": "8913d8950eb6123ad9564d200d1d226b9e19bfbb2a388184cdb5456fcf6e82a7"
+  },
+  {
+    "filename": "365_LR.bmp",
+    "bytes": 245814,
+    "sha256": "83723a38465521386cd200a6e595b3e4935e07115fc1f0f38c910748598a4ebb"
+  },
+  {
+    "filename": "376_HR.bmp",
+    "bytes": 3932214,
+    "sha256": "639608af125a080e77b39ba21672bba531d54dae4d94ee99007283b94bff8974"
+  },
+  {
+    "filename": "376_LR.bmp",
+    "bytes": 245814,
+    "sha256": "5d7397d1006a0c370a3c18213e9f1a7a90ad4b5c133acc5176e4383b13f2e616"
+  },
+  {
+    "filename": "391_HR.bmp",
+    "bytes": 3932214,
+    "sha256": "cc4f6745a5f185020a8bb0a09f11a6f5346f49486e5180466de4243068c3821e"
+  },
+  {
+    "filename": "391_LR.bmp",
+    "bytes": 245814,
+    "sha256": "0984b887622dc0911a3d973c094f28d161c45bddcbb6bee6afa85e7cec804f5c"
+  },
+  {
+    "filename": "4578_HR.bmp",
+    "bytes": 3932214,
+    "sha256": "a3d040760f3c36446b6b24c3481986b990e0985d93f270a200638fc6b33be040"
+  },
+  {
+    "filename": "4578_LR.bmp",
+    "bytes": 245814,
+    "sha256": "91e78d1d2a6a68e23606cfb4295ca447010be528e4c9ec2bc7a77c7c9050ace9"
+  },
+  {
+    "filename": "4628_HR.bmp",
+    "bytes": 3932214,
+    "sha256": "d220b6cb938dc0cfc8c412dc0f503fb1c126f61b0b49fe8b78091855dccee913"
+  },
+  {
+    "filename": "4628_LR.bmp",
+    "bytes": 245814,
+    "sha256": "3f2bac05fa33f56923191eb91e1a6eafe5508ec3e45187120d01b83813768c0d"
+  },
+  {
+    "filename": "4630_HR.bmp",
+    "bytes": 3932214,
+    "sha256": "3c56da5e24e432c9192abcdc00763cf6e250178ea5fd9a6a87e302a8a55c233a"
+  },
+  {
+    "filename": "4630_LR.bmp",
+    "bytes": 245814,
+    "sha256": "50c2b5f81798fdaad7d3f86cb34b3ff7a494b8d01391ba14188a525550bff416"
+  }
+]

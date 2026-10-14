@@ -1,0 +1,6 @@
+model,label,status,parameters,config
+restormer,Restormer-SR (adapted),completed_test,26165524,configs/holo_v7_baseline/holo_restormer_mdta_stockhead_60000_seed10_mb2_options.yml
+swinir,"SwinIR (96 channels, 4 groups)",completed_test,3487347,configs/holo_project/holo_swinir_60000_seed10_mb2_retry_options.yml
+rcan,"RCAN (64 channels, 10 groups, 20 blocks)",training,15592355,configs/holo_project/holo_rcan_60000_seed10_mb2_options.yml
+rrdbnet,"RRDBNet (23 blocks, reconstruction loss)",not_started,16697987,configs/holo_project/holo_rrdbnet_60000_seed10_mb2_options.yml
+edsr,"EDSR (64 channels, 16 blocks)",not_started,1517571,configs/holo_project/holo_edsr_60000_seed10_mb2_options.yml

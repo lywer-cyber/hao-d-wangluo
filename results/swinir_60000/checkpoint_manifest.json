@@ -1,0 +1,70 @@
+{
+  "included_in_git": false,
+  "selection": {
+    "iter": 60000,
+    "PSNR": 31.658882737081772,
+    "SSIM": 0.9190804187388312
+  },
+  "files": [
+    {
+      "filename": "net_g_best_5000.pth",
+      "bytes": 54930881,
+      "sha256": "5c2cee5f908065c19f2fc788e7484e7036071905d6f8004b6a6a220674fe9dc4"
+    },
+    {
+      "filename": "net_g_best_10000.pth",
+      "bytes": 54931627,
+      "sha256": "0e2890810fdce7423da60d4a0c7af47060346385236be0132a241f45eafdea6c"
+    },
+    {
+      "filename": "net_g_best_15000.pth",
+      "bytes": 54931627,
+      "sha256": "1c60e55022ff54c5e3f58f0c1b3d0bb7b2564422a90ba711cbd17e0f2809a661"
+    },
+    {
+      "filename": "net_g_best_20000.pth",
+      "bytes": 54931627,
+      "sha256": "ca151d6da0d5c1063ee48c8f3fd1b42aa1b48d4da5163a0598237760fa57f620"
+    },
+    {
+      "filename": "net_g_best_25000.pth",
+      "bytes": 54931627,
+      "sha256": "8abc1645ec2091f3dfb14a01eac5694eb7b12c8bc55d9aee84d9869b45592b11"
+    },
+    {
+      "filename": "net_g_best_30000.pth",
+      "bytes": 54931627,
+      "sha256": "05883f687746e11bc0af12ea76108b0fd4e9be4e7f13dfe814e611f0888dd3cf"
+    },
+    {
+      "filename": "net_g_best_35000.pth",
+      "bytes": 54931627,
+      "sha256": "aba7d6905f65061aa3903ed4d7c1eb56ff6248cc2d687945ae51a10a62556680"
+    },
+    {
+      "filename": "net_g_best_40000.pth",
+      "bytes": 54931627,
+      "sha256": "3b1750637131559fb13d34323920639f3706552ce775164ea9202d5c3aa840ec"
+    },
+    {
+      "filename": "net_g_best_45000.pth",
+      "bytes": 54931627,
+      "sha256": "b480f1cfca2e3d24b2274d7303853578a534814fcbd15be20c9a20dff970dae4"
+    },
+    {
+      "filename": "net_g_best_50000.pth",
+      "bytes": 54931627,
+      "sha256": "810778d95fc491e881bb3ae79fdee0b8364a13eb009cb1aad55155d08a6132ae"
+    },
+    {
+      "filename": "net_g_best_55000.pth",
+      "bytes": 54931627,
+      "sha256": "a0f9ffe5a614cec20d08171caab1a5081752fa5962e0c1b7a7ad30e2430550ae"
+    },
+    {
+      "filename": "net_g_best_60000.pth",
+      "bytes": 54931627,
+      "sha256": "22fa4c011d17343288fbffafcfccbebe9a05b15d786d9857f3fcec1c8366fee1"
+    }
+  ]
+}

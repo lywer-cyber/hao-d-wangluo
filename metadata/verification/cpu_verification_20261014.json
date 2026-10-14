@@ -1,0 +1,132 @@
+{
+  "checked_at": "2026-10-14T21:11:13.840470+08:00",
+  "device": "cpu",
+  "gpu_used": false,
+  "results": [
+    {
+      "test": "package_integrity",
+      "returncode": 0,
+      "stdout_tail": "{\n  \"passed\": true,\n  \"tracked_files\": 456,\n  \"total_bytes\": 134609081,\n  \"errors\": []\n}\n",
+      "stderr_tail": ""
+    },
+    {
+      "test": "portable_configs_and_assets",
+      "returncode": 0,
+      "stdout_tail": "",
+      "stderr_tail": "test_all_baseline_configs_relocate_without_training_changes (test_package.ReproductionPackage) ... ok\ntest_completed_metrics_and_images (test_package.ReproductionPackage) ... ok\ntest_config_overwrite_is_rejected (test_package.ReproductionPackage) ... ok\ntest_missing_data_is_rejected (test_package.ReproductionPackage) ... ok\ntest_paper_provenance (test_package.ReproductionPackage) ... ok\ntest_seed_override_is_explicit_and_preserves_training (test_package.ReproductionPackage) ... ok\ntest_splits_and_shared_visuals (test_package.ReproductionPackage) ... ok\n\n----------------------------------------------------------------------\nRan 7 tests in 1.046s\n\nOK\n"
+    },
+    {
+      "test": "baseline_cpu_forward",
+      "returncode": 0,
+      "stdout_tail": "{\n  \"passed\": true,\n  \"gpu_used\": false,\n  \"models\": [\n    {\n      \"model\": \"restormer\",\n      \"parameters\": 26165524,\n      \"output_shape\": [\n        1,\n        3,\n        64,\n        64\n      ],\n      \"finite\": true,\n      \"device\": \"cpu\",\n      \"training_started\": false\n    },\n    {\n      \"model\": \"swinir\",\n      \"parameters\": 3487347,\n      \"output_shape\": [\n        1,\n        3,\n        64,\n        64\n      ],\n      \"finite\": true,\n      \"device\": \"cpu\",\n      \"training_started\": false\n    },\n    {\n      \"model\": \"rcan\",\n      \"parameters\": 15592355,\n      \"output_shape\": [\n        1,\n        3,\n        64,\n        64\n      ],\n      \"finite\": true,\n      \"device\": \"cpu\",\n      \"training_started\": false\n    },\n    {\n      \"model\": \"rrdbnet\",\n      \"parameters\": 16697987,\n      \"output_shape\": [\n        1,\n        3,\n        64,\n        64\n      ],\n      \"finite\": true,\n      \"device\": \"cpu\",\n      \"training_started\": false\n    },\n    {\n      \"model\": \"edsr\",\n      \"parameters\": 1517571,\n      \"output_shape\": [\n        1,\n        3,\n        64,\n        64\n      ],\n      \"finite\": true,\n      \"device\": \"cpu\",\n      \"training_started\": false\n    }\n  ]\n}\n",
+      "stderr_tail": ""
+    },
+    {
+      "test": "evaluator_export_regression",
+      "returncode": 0,
+      "stdout_tail": "[eval] 网络类型=TinySR  载入权重=params_ema (EMA)\n{\n  \"PSNR\": 8.561673853717998,\n  \"SSIM\": -0.004379283937805279,\n  \"RMSE\": 0.3731835027675258,\n  \"MAE\": 0.3057050840121115,\n  \"LPIPS\": 0.5570794343948364,\n  \"count\": 2,\n  \"visual_images_saved\": 2,\n  \"visual_only\": false\n}\n[eval] 网络类型=TinySR  载入权重=params_ema (EMA)\n{\n  \"PSNR\": 8.561673853717998,\n  \"SSIM\": -0.004379283937805279,\n  \"RMSE\": 0.3731835027675258,\n  \"MAE\": 0.3057050840121115,\n  \"LPIPS\": 0.5570794343948364,\n  \"count\": 2,\n  \"visual_images_saved\": 1,\n  \"visual_files_saved\": 3,\n  \"visual_only\": false\n}\n[eval] 网络类型=TinySR  载入权重=params_ema (EMA)\n{\n  \"PSNR\": 8.561673853717998,\n  \"SSIM\": -0.004379283937805279,\n  \"RMSE\": 0.3731835027675258,\n  \"MAE\": 0.3057050840121115,\n  \"LPIPS\": null,\n  \"count\": 2,\n  \"visual_images_saved\": 0,\n  \"visual_only\": false\n}\n[eval] 网络类型=TinySR  载入权重=params_ema (EMA)\n{\n  \"PSNR\": 8.561673853717998,\n  \"SSIM\": -0.004379283937805279,\n  \"RMSE\": 0.3731835027675258,\n  \"MAE\": 0.3057050840121115,\n  \"LPIPS\": null,\n  \"count\": 2,\n  \"visual_images_saved\": 0,\n  \"visual_files_saved\": 0,\n  \"visual_only\": false\n}\n[eval] 网络类型=TinySR  载入权重=params_ema (EMA)\n{\n  \"PSNR\": null,\n  \"SSIM\": null,\n  \"RMSE\": null,\n  \"MAE\": null,\n  \"LPIPS\": null,\n  \"count\": 1,\n  \"visual_images_saved\": 1,\n  \"visual_only\": true\n}\n[eval] 网络类型=TinySR  载入权重=params_ema (EMA)\n{\n  \"PSNR\": null,\n  \"SSIM\": null,\n  \"RMSE\": null,\n  \"MAE\": null,\n  \"LPIPS\": null,\n  \"count\": 1,\n  \"visual_images_saved\": 1,\n  \"visual_files_saved\": 3,\n  \"visual_only\": true\n}\nEXPORT_TEST_JSON={\"passed\": true, \"device\": \"cpu\", \"uses_test_doubles\": true, \"not_a_new_benchmark\": true, \"cases\": [{\"mode\": \"test\", \"aggregate_metrics_unchanged\": true, \"bmp_bytes_unchanged\": true, \"new_exports_verified\": true}, {\"mode\": \"val\", \"aggregate_metrics_unchanged\": true, \"bmp_bytes_unchanged\": true, \"new_exports_verified\": true}, {\"mode\": \"visual_only\", \"aggregate_metrics_unchanged\": true, \"bmp_bytes_unchanged\": true, \"new_exports_verified\": true}]}\n",
+      "stderr_tail": ""
+    }
+  ],
+  "passed": true,
+  "baseline_cpu_forward.json": {
+    "passed": true,
+    "gpu_used": false,
+    "models": [
+      {
+        "model": "restormer",
+        "parameters": 26165524,
+        "output_shape": [
+          1,
+          3,
+          64,
+          64
+        ],
+        "finite": true,
+        "device": "cpu",
+        "training_started": false
+      },
+      {
+        "model": "swinir",
+        "parameters": 3487347,
+        "output_shape": [
+          1,
+          3,
+          64,
+          64
+        ],
+        "finite": true,
+        "device": "cpu",
+        "training_started": false
+      },
+      {
+        "model": "rcan",
+        "parameters": 15592355,
+        "output_shape": [
+          1,
+          3,
+          64,
+          64
+        ],
+        "finite": true,
+        "device": "cpu",
+        "training_started": false
+      },
+      {
+        "model": "rrdbnet",
+        "parameters": 16697987,
+        "output_shape": [
+          1,
+          3,
+          64,
+          64
+        ],
+        "finite": true,
+        "device": "cpu",
+        "training_started": false
+      },
+      {
+        "model": "edsr",
+        "parameters": 1517571,
+        "output_shape": [
+          1,
+          3,
+          64,
+          64
+        ],
+        "finite": true,
+        "device": "cpu",
+        "training_started": false
+      }
+    ]
+  },
+  "evaluator_export_regression.json": {
+    "passed": true,
+    "device": "cpu",
+    "uses_test_doubles": true,
+    "not_a_new_benchmark": true,
+    "cases": [
+      {
+        "mode": "test",
+        "aggregate_metrics_unchanged": true,
+        "bmp_bytes_unchanged": true,
+        "new_exports_verified": true
+      },
+      {
+        "mode": "val",
+        "aggregate_metrics_unchanged": true,
+        "bmp_bytes_unchanged": true,
+        "new_exports_verified": true
+      },
+      {
+        "mode": "visual_only",
+        "aggregate_metrics_unchanged": true,
+        "bmp_bytes_unchanged": true,
+        "new_exports_verified": true
+      }
+    ]
+  },
+  "fixture_note": "The regression fixture explicitly uses the archived determinism settings; production evaluation math was not changed.",
+  "regression_fixture_sha256": "3183b205d05174d746cca232713de625c32fa24692cf8592eeffd43a589163b4",
+  "finalized_at": "2026-10-14T21:14:57.081209+08:00"
+}

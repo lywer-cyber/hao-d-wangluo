@@ -1,0 +1,912 @@
+{
+  "captured_at": "2026-10-14T20:07:14.412147",
+  "server_label": "A",
+  "manifest": [
+    {
+      "path": "metadata/degrade_params.json",
+      "source_path": "/root/autodl-tmp/LR4/degrade_params.json",
+      "bytes": 1247200,
+      "sha256": "e9b75ad74d6d412999e77f9c8f81d1a87ce628fe47ec4d4fded5f0255542b3e2"
+    },
+    {
+      "path": "results/sensitivity/raw/aa_sigma=0.2/metrics.json",
+      "source_path": "/root/autodl-tmp/holo_sweep/aa_sigma=0.2/Restormer/results/test/metrics.json",
+      "bytes": 195,
+      "sha256": "7c2da15e879ef9a79ef77682fc404ad092a395770d924eeb01e796adb2632947"
+    },
+    {
+      "path": "results/sensitivity/raw/aa_sigma=0.35/metrics.json",
+      "source_path": "/root/autodl-tmp/holo_sweep/aa_sigma=0.35/Restormer/results/test/metrics.json",
+      "bytes": 195,
+      "sha256": "ba365e7a24601528d575ed19de338d7ae10485d3b44fcc502bf64a434d313763"
+    },
+    {
+      "path": "results/sensitivity/raw/aa_sigma=0.5/metrics.json",
+      "source_path": "/root/autodl-tmp/holo_sweep/aa_sigma=0.5/Restormer/results/test/metrics.json",
+      "bytes": 194,
+      "sha256": "5222bfc082d7bb8f3e47ddecb2bb40ec837b48a1f492e9450e60fe42d602591c"
+    },
+    {
+      "path": "results/sensitivity/raw/aa_sigma=0.7/metrics.json",
+      "source_path": "/root/autodl-tmp/holo_sweep/aa_sigma=0.7/Restormer/results/test/metrics.json",
+      "bytes": 191,
+      "sha256": "b136a8a03aec8e94e4e705ebd06959878193ccf305c3f5084e866c61b98d3e10"
+    },
+    {
+      "path": "results/sensitivity/raw/aa_sigma=0.9/metrics.json",
+      "source_path": "/root/autodl-tmp/holo_sweep/aa_sigma=0.9/Restormer/results/test/metrics.json",
+      "bytes": 194,
+      "sha256": "29a8856c1a29c9f201f870a1dc22119e06e583bdce1b78daa08f73ec3e3a52b1"
+    },
+    {
+      "path": "results/sensitivity/raw/diffraction_cutoff=0.4/metrics.json",
+      "source_path": "/root/autodl-tmp/holo_sweep/diffraction_cutoff=0.4/Restormer/results/test/metrics.json",
+      "bytes": 204,
+      "sha256": "a79756e602889c58fad305415c344269982d4b36968186e310cd7f45f94d8b3f"
+    },
+    {
+      "path": "results/sensitivity/raw/diffraction_cutoff=0.6/metrics.json",
+      "source_path": "/root/autodl-tmp/holo_sweep/diffraction_cutoff=0.6/Restormer/results/test/metrics.json",
+      "bytes": 204,
+      "sha256": "900839ede1f5ae4524323aeacb59ed74e000dcf2859293ce8e7b4d6c546dd504"
+    },
+    {
+      "path": "results/sensitivity/raw/diffraction_cutoff=0.8/metrics.json",
+      "source_path": "/root/autodl-tmp/holo_sweep/diffraction_cutoff=0.8/Restormer/results/test/metrics.json",
+      "bytes": 204,
+      "sha256": "05467dece06b06ecc85525f889b1702ff0c43e1db9f882a2635397f6fd22634e"
+    },
+    {
+      "path": "results/sensitivity/raw/diffraction_cutoff=1.2/metrics.json",
+      "source_path": "/root/autodl-tmp/holo_sweep/diffraction_cutoff=1.2/Restormer/results/test/metrics.json",
+      "bytes": 205,
+      "sha256": "811baede4468a987beabb7f3c55925d3607def86ad0979ca2c13147935db7f8f"
+    },
+    {
+      "path": "results/sensitivity/raw/diffraction_cutoff=1/metrics.json",
+      "source_path": "/root/autodl-tmp/holo_sweep/diffraction_cutoff=1/Restormer/results/test/metrics.json",
+      "bytes": 202,
+      "sha256": "8e5fa08ab83afba4354a96b8854770af64f6e086e4f4d52ec74b8c47f4216506"
+    },
+    {
+      "path": "results/sensitivity/raw/poisson_gain=1000/metrics.json",
+      "source_path": "/root/autodl-tmp/holo_sweep/poisson_gain=1000/Restormer/results/test/metrics.json",
+      "bytes": 198,
+      "sha256": "d30e227a89ea39bc0f8b9eae7f44c50118054dc0d878db7948c622056bf7d14a"
+    },
+    {
+      "path": "results/sensitivity/raw/poisson_gain=200/metrics.json",
+      "source_path": "/root/autodl-tmp/holo_sweep/poisson_gain=200/Restormer/results/test/metrics.json",
+      "bytes": 199,
+      "sha256": "43a5c28a566037816e2d8fac37a3bc6d0d1d89b9a1a2cec22bff3659c0a930eb"
+    },
+    {
+      "path": "results/sensitivity/raw/poisson_gain=2000/metrics.json",
+      "source_path": "/root/autodl-tmp/holo_sweep/poisson_gain=2000/Restormer/results/test/metrics.json",
+      "bytes": 199,
+      "sha256": "88c6f179c1d1e9205dc658203d018ac4e44df84a5c5c7856d3eb35670ed0ed1d"
+    },
+    {
+      "path": "results/sensitivity/raw/poisson_gain=4000/metrics.json",
+      "source_path": "/root/autodl-tmp/holo_sweep/poisson_gain=4000/Restormer/results/test/metrics.json",
+      "bytes": 199,
+      "sha256": "a2322f45af945561033affc02c21c644682e7824bced4691e9f153d41b1060f3"
+    },
+    {
+      "path": "results/sensitivity/raw/poisson_gain=500/metrics.json",
+      "source_path": "/root/autodl-tmp/holo_sweep/poisson_gain=500/Restormer/results/test/metrics.json",
+      "bytes": 197,
+      "sha256": "5a67b78db69559a4d0ad920c70d9c9a5efac73a2c682342abb47482233812e4a"
+    },
+    {
+      "path": "results/sensitivity/raw/poisson_gain=8000/metrics.json",
+      "source_path": "/root/autodl-tmp/holo_sweep/poisson_gain=8000/Restormer/results/test/metrics.json",
+      "bytes": 199,
+      "sha256": "39e645a59e5f7447ddcdc598b431c6ea9a6c16ea31174203b8d3027e98e779b4"
+    },
+    {
+      "path": "results/sensitivity/raw/read_std=0.005/metrics.json",
+      "source_path": "/root/autodl-tmp/holo_sweep/read_std=0.005/Restormer/results/test/metrics.json",
+      "bytes": 196,
+      "sha256": "e2fd53dd22cdf8b2a78f5ff839636e2fd8d939059617e8e85222f7637e0322be"
+    },
+    {
+      "path": "results/sensitivity/raw/read_std=0.01/metrics.json",
+      "source_path": "/root/autodl-tmp/holo_sweep/read_std=0.01/Restormer/results/test/metrics.json",
+      "bytes": 196,
+      "sha256": "8c5791fb18c94c230571ecda695e4d08c83a89e9a72db443f3bce6ee2f322f9a"
+    },
+    {
+      "path": "results/sensitivity/raw/read_std=0.02/metrics.json",
+      "source_path": "/root/autodl-tmp/holo_sweep/read_std=0.02/Restormer/results/test/metrics.json",
+      "bytes": 195,
+      "sha256": "18aa6645dc1fd85f6fcbd26221b2086a1d71c7ac8bc64080da3cce5081105df6"
+    },
+    {
+      "path": "results/sensitivity/raw/read_std=0.04/metrics.json",
+      "source_path": "/root/autodl-tmp/holo_sweep/read_std=0.04/Restormer/results/test/metrics.json",
+      "bytes": 195,
+      "sha256": "b0d1955a84693ca11280851767004745fe78c906875a16d3745592354bbe69d5"
+    },
+    {
+      "path": "results/sensitivity/raw/read_std=0/metrics.json",
+      "source_path": "/root/autodl-tmp/holo_sweep/read_std=0/Restormer/results/test/metrics.json",
+      "bytes": 192,
+      "sha256": "037276420d5019863cad7cb8d91c45bca3255c50fa8b4e1eae32a391409c0992"
+    },
+    {
+      "path": "results/sensitivity/raw/speckle_contrast=0.2/metrics.json",
+      "source_path": "/root/autodl-tmp/holo_sweep/speckle_contrast=0.2/Restormer/results/test/metrics.json",
+      "bytes": 201,
+      "sha256": "b24bc5bbfe07e8c4d9c45a3d11a8890f5ca764eb8ea7186e8a1f17ce4c236c26"
+    },
+    {
+      "path": "results/sensitivity/raw/speckle_contrast=0.4/metrics.json",
+      "source_path": "/root/autodl-tmp/holo_sweep/speckle_contrast=0.4/Restormer/results/test/metrics.json",
+      "bytes": 202,
+      "sha256": "197d188b409fd74e187934fa40038a93b2b7c31de10eb7bc67e53eef7266ac13"
+    },
+    {
+      "path": "results/sensitivity/raw/speckle_contrast=0.6/metrics.json",
+      "source_path": "/root/autodl-tmp/holo_sweep/speckle_contrast=0.6/Restormer/results/test/metrics.json",
+      "bytes": 202,
+      "sha256": "567464d01f9fe3f18f6df54ed9a2985b07594ca7c8415be381f17dc90fba6de5"
+    },
+    {
+      "path": "results/sensitivity/raw/speckle_contrast=0.8/metrics.json",
+      "source_path": "/root/autodl-tmp/holo_sweep/speckle_contrast=0.8/Restormer/results/test/metrics.json",
+      "bytes": 201,
+      "sha256": "3c70e277f573a9b4c4c159b73e0d23b9f884bf23cd4bd28347349be7f449908c"
+    },
+    {
+      "path": "results/sensitivity/raw/speckle_contrast=0/metrics.json",
+      "source_path": "/root/autodl-tmp/holo_sweep/speckle_contrast=0/Restormer/results/test/metrics.json",
+      "bytes": 199,
+      "sha256": "c6878e8f97c5f6d9cfcda3efa6e132d61e825bf3d0416d63daa758c4fd1cb71e"
+    },
+    {
+      "path": "results/sensitivity/raw/speckle_contrast=1/metrics.json",
+      "source_path": "/root/autodl-tmp/holo_sweep/speckle_contrast=1/Restormer/results/test/metrics.json",
+      "bytes": 200,
+      "sha256": "bc96f812181f1bf1753e72f8a42b251d93cfb1e10c64a3b8a52ebc89fa23ae23"
+    },
+    {
+      "path": "results/sensitivity/sweep_manifest.json",
+      "source_path": "/root/autodl-tmp/holo_sweep/sweep_manifest.json",
+      "bytes": 1367,
+      "sha256": "4aad910de0369cba11acad04e0a5bc235458f24625615d182a3544df6416278f"
+    },
+    {
+      "path": "splits/holo_v7_baseline/split_seed42.json",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/data/splits/split_seed42.json",
+      "bytes": 53965,
+      "sha256": "7e07a5b50f20c1ea7ebd7e09e5a232d415e2984186292a145ea98fabdf7858b8"
+    },
+    {
+      "path": "splits/holo_v7_baseline/test_meta.txt",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/data/splits/test_meta.txt",
+      "bytes": 4750,
+      "sha256": "971f453556af8bd233ab3d2681a3ee41fa5433a314f287d83535f029f245fcb8"
+    },
+    {
+      "path": "splits/holo_v7_baseline/train_meta.txt",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/data/splits/train_meta.txt",
+      "bytes": 39501,
+      "sha256": "2f8822682a808f155163af1fa1f80e4a57d6728233d5c57c55d15f4fa3836862"
+    },
+    {
+      "path": "splits/holo_v7_baseline/val_meta.txt",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/data/splits/val_meta.txt",
+      "bytes": 4642,
+      "sha256": "90bfc703aa37ed2a8e836a08b07305e7963c1458e1754e98f7a8ca211db0f1fe"
+    },
+    {
+      "path": "splits/holo_v7_baseline/visual_samples.txt",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/data/splits/visual_samples.txt",
+      "bytes": 83,
+      "sha256": "b8a8cad57c3b98300379d33e3b52004945889b0ebdb320bbf319d130eeec1f1e"
+    },
+    {
+      "path": "configs/experiment_holo_v7_baseline.yaml",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/experiment.yaml",
+      "bytes": 11180,
+      "sha256": "d46e8ffc4da1f2bd633b1432c5a79626bdad87a6ae4a94c1e3183544d421106c"
+    },
+    {
+      "path": "configs/experiment_holo_v7_baseline.txt",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/experiment_config.txt",
+      "bytes": 11613,
+      "sha256": "c85f8af9efbab0eae4a1c72c82fccbedd2d05b47f134ef8f1ed2ffbbc413a9d9"
+    },
+    {
+      "path": "results/restormer_stockhead_60000/best_checkpoint.json",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/experiments/holo_restormer_mdta_stockhead_60000_seed10_mb2/best_checkpoint.json",
+      "bytes": 78,
+      "sha256": "d63aa84c6e3cd29fa2977b02f0acfc3bb513d86c641cfa494aa58d90c98a4db8"
+    },
+    {
+      "path": "results/restormer_stockhead_60000/visual/263_HR.bmp",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/experiments/holo_restormer_mdta_stockhead_60000_seed10_mb2/results/test/263_HR.bmp",
+      "bytes": 3932214,
+      "sha256": "cc4f6745a5f185020a8bb0a09f11a6f5346f49486e5180466de4243068c3821e"
+    },
+    {
+      "path": "results/restormer_stockhead_60000/visual/263_LR.bmp",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/experiments/holo_restormer_mdta_stockhead_60000_seed10_mb2/results/test/263_LR.bmp",
+      "bytes": 245814,
+      "sha256": "1ec19ea64ca0e9f5a86ae5de03650bffb518a55420ceda9bee26a698c6e12837"
+    },
+    {
+      "path": "results/restormer_stockhead_60000/visual/263_SR.bmp",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/experiments/holo_restormer_mdta_stockhead_60000_seed10_mb2/results/test/263_SR.bmp",
+      "bytes": 3932214,
+      "sha256": "d18d18f1988e0998e49826a496104e992369f8414dd76d4adfb7b053422137dd"
+    },
+    {
+      "path": "results/restormer_stockhead_60000/visual/303_HR.bmp",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/experiments/holo_restormer_mdta_stockhead_60000_seed10_mb2/results/test/303_HR.bmp",
+      "bytes": 3932214,
+      "sha256": "cc4f6745a5f185020a8bb0a09f11a6f5346f49486e5180466de4243068c3821e"
+    },
+    {
+      "path": "results/restormer_stockhead_60000/visual/303_LR.bmp",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/experiments/holo_restormer_mdta_stockhead_60000_seed10_mb2/results/test/303_LR.bmp",
+      "bytes": 245814,
+      "sha256": "efc0cdedd0fc63f6c29dd0e5f1a6e36ee20eaf1da243af49f71a7359b1ea9421"
+    },
+    {
+      "path": "results/restormer_stockhead_60000/visual/303_SR.bmp",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/experiments/holo_restormer_mdta_stockhead_60000_seed10_mb2/results/test/303_SR.bmp",
+      "bytes": 3932214,
+      "sha256": "3baa1329d0b1f56b2495a049a126dc193259c3f6f4f5226c89b0edbbc0ef1cba"
+    },
+    {
+      "path": "results/restormer_stockhead_60000/visual/308_HR.bmp",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/experiments/holo_restormer_mdta_stockhead_60000_seed10_mb2/results/test/308_HR.bmp",
+      "bytes": 3932214,
+      "sha256": "639608af125a080e77b39ba21672bba531d54dae4d94ee99007283b94bff8974"
+    },
+    {
+      "path": "results/restormer_stockhead_60000/visual/308_LR.bmp",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/experiments/holo_restormer_mdta_stockhead_60000_seed10_mb2/results/test/308_LR.bmp",
+      "bytes": 245814,
+      "sha256": "85f7f6004176fd624735bcd29ccfe69c3a8ced444ee78b275d2d6abbbf6976d8"
+    },
+    {
+      "path": "results/restormer_stockhead_60000/visual/308_SR.bmp",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/experiments/holo_restormer_mdta_stockhead_60000_seed10_mb2/results/test/308_SR.bmp",
+      "bytes": 3932214,
+      "sha256": "748141456208ede6c892b92969787361ae6258d3522e9f290d04e6e6a2a52589"
+    },
+    {
+      "path": "results/restormer_stockhead_60000/visual/322_HR.bmp",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/experiments/holo_restormer_mdta_stockhead_60000_seed10_mb2/results/test/322_HR.bmp",
+      "bytes": 3932214,
+      "sha256": "b84f67c842e5fc416c8045e36dacbc601568d0e0e3e2bd543e421343e1239878"
+    },
+    {
+      "path": "results/restormer_stockhead_60000/visual/322_LR.bmp",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/experiments/holo_restormer_mdta_stockhead_60000_seed10_mb2/results/test/322_LR.bmp",
+      "bytes": 245814,
+      "sha256": "71c18fc2253613896290a7c8e18c281a6ac2617f60af9022f8b39b1fa299c372"
+    },
+    {
+      "path": "results/restormer_stockhead_60000/visual/322_SR.bmp",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/experiments/holo_restormer_mdta_stockhead_60000_seed10_mb2/results/test/322_SR.bmp",
+      "bytes": 3932214,
+      "sha256": "f5018f84cc21657ae894324289e294ef589af36fbb2e7822817391a1bb89fb13"
+    },
+    {
+      "path": "results/restormer_stockhead_60000/visual/365_HR.bmp",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/experiments/holo_restormer_mdta_stockhead_60000_seed10_mb2/results/test/365_HR.bmp",
+      "bytes": 3932214,
+      "sha256": "8913d8950eb6123ad9564d200d1d226b9e19bfbb2a388184cdb5456fcf6e82a7"
+    },
+    {
+      "path": "results/restormer_stockhead_60000/visual/365_LR.bmp",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/experiments/holo_restormer_mdta_stockhead_60000_seed10_mb2/results/test/365_LR.bmp",
+      "bytes": 245814,
+      "sha256": "83723a38465521386cd200a6e595b3e4935e07115fc1f0f38c910748598a4ebb"
+    },
+    {
+      "path": "results/restormer_stockhead_60000/visual/365_SR.bmp",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/experiments/holo_restormer_mdta_stockhead_60000_seed10_mb2/results/test/365_SR.bmp",
+      "bytes": 3932214,
+      "sha256": "6ea5ad653a5766de886061445960797355396996be8aa71f70743fcbf3b6ca59"
+    },
+    {
+      "path": "results/restormer_stockhead_60000/visual/376_HR.bmp",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/experiments/holo_restormer_mdta_stockhead_60000_seed10_mb2/results/test/376_HR.bmp",
+      "bytes": 3932214,
+      "sha256": "639608af125a080e77b39ba21672bba531d54dae4d94ee99007283b94bff8974"
+    },
+    {
+      "path": "results/restormer_stockhead_60000/visual/376_LR.bmp",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/experiments/holo_restormer_mdta_stockhead_60000_seed10_mb2/results/test/376_LR.bmp",
+      "bytes": 245814,
+      "sha256": "5d7397d1006a0c370a3c18213e9f1a7a90ad4b5c133acc5176e4383b13f2e616"
+    },
+    {
+      "path": "results/restormer_stockhead_60000/visual/376_SR.bmp",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/experiments/holo_restormer_mdta_stockhead_60000_seed10_mb2/results/test/376_SR.bmp",
+      "bytes": 3932214,
+      "sha256": "02744b021148f0f71e0b4d211eb1b3db7021965a6bd4af38ab90ff16d2d09a9e"
+    },
+    {
+      "path": "results/restormer_stockhead_60000/visual/391_HR.bmp",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/experiments/holo_restormer_mdta_stockhead_60000_seed10_mb2/results/test/391_HR.bmp",
+      "bytes": 3932214,
+      "sha256": "cc4f6745a5f185020a8bb0a09f11a6f5346f49486e5180466de4243068c3821e"
+    },
+    {
+      "path": "results/restormer_stockhead_60000/visual/391_LR.bmp",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/experiments/holo_restormer_mdta_stockhead_60000_seed10_mb2/results/test/391_LR.bmp",
+      "bytes": 245814,
+      "sha256": "0984b887622dc0911a3d973c094f28d161c45bddcbb6bee6afa85e7cec804f5c"
+    },
+    {
+      "path": "results/restormer_stockhead_60000/visual/391_SR.bmp",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/experiments/holo_restormer_mdta_stockhead_60000_seed10_mb2/results/test/391_SR.bmp",
+      "bytes": 3932214,
+      "sha256": "13b977c4b2f953a3456a374750cb5289208ba3f3866bc2a9a478423bb2b99ed6"
+    },
+    {
+      "path": "results/restormer_stockhead_60000/visual/4578_HR.bmp",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/experiments/holo_restormer_mdta_stockhead_60000_seed10_mb2/results/test/4578_HR.bmp",
+      "bytes": 3932214,
+      "sha256": "a3d040760f3c36446b6b24c3481986b990e0985d93f270a200638fc6b33be040"
+    },
+    {
+      "path": "results/restormer_stockhead_60000/visual/4578_LR.bmp",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/experiments/holo_restormer_mdta_stockhead_60000_seed10_mb2/results/test/4578_LR.bmp",
+      "bytes": 245814,
+      "sha256": "91e78d1d2a6a68e23606cfb4295ca447010be528e4c9ec2bc7a77c7c9050ace9"
+    },
+    {
+      "path": "results/restormer_stockhead_60000/visual/4578_SR.bmp",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/experiments/holo_restormer_mdta_stockhead_60000_seed10_mb2/results/test/4578_SR.bmp",
+      "bytes": 3932214,
+      "sha256": "855ef438ad4fdbeaa4fe7d0a28313b9ee933092349b35c598af2ae038e97fb17"
+    },
+    {
+      "path": "results/restormer_stockhead_60000/visual/4628_HR.bmp",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/experiments/holo_restormer_mdta_stockhead_60000_seed10_mb2/results/test/4628_HR.bmp",
+      "bytes": 3932214,
+      "sha256": "d220b6cb938dc0cfc8c412dc0f503fb1c126f61b0b49fe8b78091855dccee913"
+    },
+    {
+      "path": "results/restormer_stockhead_60000/visual/4628_LR.bmp",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/experiments/holo_restormer_mdta_stockhead_60000_seed10_mb2/results/test/4628_LR.bmp",
+      "bytes": 245814,
+      "sha256": "3f2bac05fa33f56923191eb91e1a6eafe5508ec3e45187120d01b83813768c0d"
+    },
+    {
+      "path": "results/restormer_stockhead_60000/visual/4628_SR.bmp",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/experiments/holo_restormer_mdta_stockhead_60000_seed10_mb2/results/test/4628_SR.bmp",
+      "bytes": 3932214,
+      "sha256": "b4ac33771056333b3e86a20970d487087ea5175e86e09852463fd21fe8916615"
+    },
+    {
+      "path": "results/restormer_stockhead_60000/visual/4630_HR.bmp",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/experiments/holo_restormer_mdta_stockhead_60000_seed10_mb2/results/test/4630_HR.bmp",
+      "bytes": 3932214,
+      "sha256": "3c56da5e24e432c9192abcdc00763cf6e250178ea5fd9a6a87e302a8a55c233a"
+    },
+    {
+      "path": "results/restormer_stockhead_60000/visual/4630_LR.bmp",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/experiments/holo_restormer_mdta_stockhead_60000_seed10_mb2/results/test/4630_LR.bmp",
+      "bytes": 245814,
+      "sha256": "50c2b5f81798fdaad7d3f86cb34b3ff7a494b8d01391ba14188a525550bff416"
+    },
+    {
+      "path": "results/restormer_stockhead_60000/visual/4630_SR.bmp",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/experiments/holo_restormer_mdta_stockhead_60000_seed10_mb2/results/test/4630_SR.bmp",
+      "bytes": 3932214,
+      "sha256": "a16b34accb0fc3b55eb92bf68e873beabfd4544a2aa864eb2e71e22887ce1b69"
+    },
+    {
+      "path": "results/restormer_stockhead_60000/metrics.json",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/experiments/holo_restormer_mdta_stockhead_60000_seed10_mb2/results/test/metrics.json",
+      "bytes": 225,
+      "sha256": "f2835468d9e166e6892fd99b423e3c64d7b700ab3dd91467ce8e153e33badfc1"
+    },
+    {
+      "path": "results/restormer_stockhead_60000/logs/training.log",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/experiments/holo_restormer_mdta_stockhead_60000_seed10_mb2/train_holo_restormer_mdta_stockhead_60000_seed10_mb2_20261013_100615.log",
+      "bytes": 174031,
+      "sha256": "ff45ab7bc48e8c5603ccdaea095005ad2a02277815397bef0111ec0bee2cda08"
+    },
+    {
+      "path": "configs/holo_v7_baseline/holo_restormer_mdta_stockhead_60000_seed10_mb2_options.yml",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/experiments/holo_restormer_mdta_stockhead_60000_seed10_mb2_options.yml",
+      "bytes": 5610,
+      "sha256": "b941005b99badf1ffc52656e6e04921612be725f972b35be11ab98a340ed5689"
+    },
+    {
+      "path": "configs/holo_v7_baseline/holo_restormer_pm56_60000_seed10_mb2_options.yml",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/experiments/holo_restormer_pm56_60000_seed10_mb2_options.yml",
+      "bytes": 5600,
+      "sha256": "0df3fad907522391ad047a1accdb84bc77c8174f3c71a0c25d3553c2bb757467"
+    },
+    {
+      "path": "code/holo_v7_baseline/restormer/VERSION",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/restormer/VERSION",
+      "bytes": 7,
+      "sha256": "a64708b010e2bcf628154ddc205ed49688a6347ef93a66a42492430f63f021b1"
+    },
+    {
+      "path": "code/holo_v7_baseline/restormer/basicsr/data/__init__.py",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/restormer/basicsr/data/__init__.py",
+      "bytes": 6009,
+      "sha256": "b5b235651c93f380191ec58e2ec8b5bb7278ad63890e2f66559107ef2dc93ced"
+    },
+    {
+      "path": "code/holo_v7_baseline/restormer/basicsr/data/data_sampler.py",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/restormer/basicsr/data/data_sampler.py",
+      "bytes": 1752,
+      "sha256": "7ea6600d0b2bee7919036841880613d9ad22c927d199377b070f6cf185208f0c"
+    },
+    {
+      "path": "code/holo_v7_baseline/restormer/basicsr/data/data_util.py",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/restormer/basicsr/data/data_util.py",
+      "bytes": 14944,
+      "sha256": "97ee0f5d549244a8c6720337239be755537aaa8c749b029fb20f5f3f328670e2"
+    },
+    {
+      "path": "code/holo_v7_baseline/restormer/basicsr/data/ffhq_dataset.py",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/restormer/basicsr/data/ffhq_dataset.py",
+      "bytes": 2434,
+      "sha256": "e73bcba9ac023700d25267a17063770f75026a9022f62be0edb999398588af13"
+    },
+    {
+      "path": "code/holo_v7_baseline/restormer/basicsr/data/holo_paired_dataset.py",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/restormer/basicsr/data/holo_paired_dataset.py",
+      "bytes": 4662,
+      "sha256": "a9f845bad55418601e4a7718a98e0ad42a5fac47d17d996fb5f07d1e5e7a1a76"
+    },
+    {
+      "path": "code/holo_v7_baseline/restormer/basicsr/data/meta_info/meta_info_DIV2K800sub_GT.txt",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/restormer/basicsr/data/meta_info/meta_info_DIV2K800sub_GT.txt",
+      "bytes": 879984,
+      "sha256": "18070524b1ceaf6414f66febd4aad797244c931fd62f7f0422241c483e4c4e69"
+    },
+    {
+      "path": "code/holo_v7_baseline/restormer/basicsr/data/meta_info/meta_info_REDS4_test_GT.txt",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/restormer/basicsr/data/meta_info/meta_info_REDS4_test_GT.txt",
+      "bytes": 88,
+      "sha256": "4dbe73bd9570b8347dc361d280caa7d999163d1aaaafedf36171481e0404188a"
+    },
+    {
+      "path": "code/holo_v7_baseline/restormer/basicsr/data/meta_info/meta_info_REDS_GT.txt",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/restormer/basicsr/data/meta_info/meta_info_REDS_GT.txt",
+      "bytes": 5940,
+      "sha256": "2f68d9ee583316b7829f3fdbee6f5e41017c594d269d1b146589fcdf954b11b0"
+    },
+    {
+      "path": "code/holo_v7_baseline/restormer/basicsr/data/meta_info/meta_info_REDSofficial4_test_GT.txt",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/restormer/basicsr/data/meta_info/meta_info_REDSofficial4_test_GT.txt",
+      "bytes": 88,
+      "sha256": "3f7174dcc5a5ea7b34ce97532268170ca083411c3ba391bc647e10b1379002c4"
+    },
+    {
+      "path": "code/holo_v7_baseline/restormer/basicsr/data/meta_info/meta_info_REDSval_official_test_GT.txt",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/restormer/basicsr/data/meta_info/meta_info_REDSval_official_test_GT.txt",
+      "bytes": 660,
+      "sha256": "7fb2b4f88d6c08332e09faf1e600c6c06785e66c91aee05586f447193e5ab9ca"
+    },
+    {
+      "path": "code/holo_v7_baseline/restormer/basicsr/data/meta_info/meta_info_Vimeo90K_test_GT.txt",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/restormer/basicsr/data/meta_info/meta_info_Vimeo90K_test_GT.txt",
+      "bytes": 203424,
+      "sha256": "f571b0c065d0bdf2c7c7c270b6eb243ae894688e3994c21ea1290b75c522988f"
+    },
+    {
+      "path": "code/holo_v7_baseline/restormer/basicsr/data/meta_info/meta_info_Vimeo90K_test_fast_GT.txt",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/restormer/basicsr/data/meta_info/meta_info_Vimeo90K_test_fast_GT.txt",
+      "bytes": 31850,
+      "sha256": "b9ce63f83b22910c87bcb5fc449a158866724ca5142ad510a20a7ad78ba7e652"
+    },
+    {
+      "path": "code/holo_v7_baseline/restormer/basicsr/data/meta_info/meta_info_Vimeo90K_test_medium_GT.txt",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/restormer/basicsr/data/meta_info/meta_info_Vimeo90K_test_medium_GT.txt",
+      "bytes": 129402,
+      "sha256": "3967cb3bfb0311b14980880a21598218dfec8cbbe7cbbd2e738991299673cbc4"
+    },
+    {
+      "path": "code/holo_v7_baseline/restormer/basicsr/data/meta_info/meta_info_Vimeo90K_test_slow_GT.txt",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/restormer/basicsr/data/meta_info/meta_info_Vimeo90K_test_slow_GT.txt",
+      "bytes": 41938,
+      "sha256": "c26a838d88b8cedffb7ff99fc93984d8564d8707615adfad1431aa15258f1387"
+    },
+    {
+      "path": "code/holo_v7_baseline/restormer/basicsr/data/meta_info/meta_info_Vimeo90K_train_GT.txt",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/restormer/basicsr/data/meta_info/meta_info_Vimeo90K_train_GT.txt",
+      "bytes": 1679912,
+      "sha256": "75d4f93d2f6f0238405c3bc576f3baaea66dfff7d57d136a0dc649736afc0c69"
+    },
+    {
+      "path": "code/holo_v7_baseline/restormer/basicsr/data/paired_image_dataset.py",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/restormer/basicsr/data/paired_image_dataset.py",
+      "bytes": 14585,
+      "sha256": "7982c15c19feb4b254239a39541ca0eb580407f5344af5eaf2cced21c88f8170"
+    },
+    {
+      "path": "code/holo_v7_baseline/restormer/basicsr/data/prefetch_dataloader.py",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/restormer/basicsr/data/prefetch_dataloader.py",
+      "bytes": 3282,
+      "sha256": "a3e9eed5cf4f80601877a3195a6a71f561b3f3e847c7fa1a07fa96abd3a19687"
+    },
+    {
+      "path": "code/holo_v7_baseline/restormer/basicsr/data/reds_dataset.py",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/restormer/basicsr/data/reds_dataset.py",
+      "bytes": 10047,
+      "sha256": "7fbc1b605eff9214c4ce4b423cb8cb953c31edd2d717a5590899ac6fc3157502"
+    },
+    {
+      "path": "code/holo_v7_baseline/restormer/basicsr/data/single_image_dataset.py",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/restormer/basicsr/data/single_image_dataset.py",
+      "bytes": 2621,
+      "sha256": "a262bd129fa848b2a3efcfef872bd390ecaee038beae5ae058ab39e775e5aeec"
+    },
+    {
+      "path": "code/holo_v7_baseline/restormer/basicsr/data/transforms.py",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/restormer/basicsr/data/transforms.py",
+      "bytes": 9219,
+      "sha256": "17e7ca8a989388c4b80fe6be72e91662e95fa7503932416480c268f3876b0fa2"
+    },
+    {
+      "path": "code/holo_v7_baseline/restormer/basicsr/data/video_test_dataset.py",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/restormer/basicsr/data/video_test_dataset.py",
+      "bytes": 13008,
+      "sha256": "caf63112c908b13acc881970a641d2e3429e104b6e8bc3ddb2b4e47774affc84"
+    },
+    {
+      "path": "code/holo_v7_baseline/restormer/basicsr/data/vimeo90k_dataset.py",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/restormer/basicsr/data/vimeo90k_dataset.py",
+      "bytes": 4741,
+      "sha256": "b3ad194586d66eea84cbe66e19a1325d7268cb5407658c48c385ebf36c2ce18d"
+    },
+    {
+      "path": "code/holo_v7_baseline/restormer/basicsr/metrics/__init__.py",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/restormer/basicsr/metrics/__init__.py",
+      "bytes": 501,
+      "sha256": "ef067d804d0d3512e1226feb22301fb0253a1d05fb50d7e833744b275989704e"
+    },
+    {
+      "path": "code/holo_v7_baseline/restormer/basicsr/metrics/fid.py",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/restormer/basicsr/metrics/fid.py",
+      "bytes": 3599,
+      "sha256": "962675a4e5257f1ecd9689c2549873a127ce57ec4d790044f1f0a7b102a9d198"
+    },
+    {
+      "path": "code/holo_v7_baseline/restormer/basicsr/metrics/holo_metrics.py",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/restormer/basicsr/metrics/holo_metrics.py",
+      "bytes": 4685,
+      "sha256": "a89f05bc3cbdd1ac87b7e0deb7f1dbd37a881885702261dba4f0036b1b975f22"
+    },
+    {
+      "path": "code/holo_v7_baseline/restormer/basicsr/metrics/metric_util.py",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/restormer/basicsr/metrics/metric_util.py",
+      "bytes": 1360,
+      "sha256": "78dee685e31491dde36a69e2c2c7af44e5fdd115e29523b0716232dd666d4015"
+    },
+    {
+      "path": "code/holo_v7_baseline/restormer/basicsr/metrics/niqe.py",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/restormer/basicsr/metrics/niqe.py",
+      "bytes": 8530,
+      "sha256": "4d0b89da5483ddf2c5e4c9ed90cd683eab1f4ee27f10047036e0baa9aa4e9df2"
+    },
+    {
+      "path": "code/holo_v7_baseline/restormer/basicsr/metrics/psnr_ssim.py",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/restormer/basicsr/metrics/psnr_ssim.py",
+      "bytes": 10680,
+      "sha256": "ac5cc62870d702fecae1558729215d7f980bb12a960d90ecb950311c5489e6b7"
+    },
+    {
+      "path": "code/holo_v7_baseline/restormer/basicsr/models/__init__.py",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/restormer/basicsr/models/__init__.py",
+      "bytes": 1187,
+      "sha256": "fbe555bd31db9ef53d0b8ffafcbffa0d0087be13df6f1ba6c72a0fcfdba15b86"
+    },
+    {
+      "path": "code/holo_v7_baseline/restormer/basicsr/models/archs/__init__.py",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/restormer/basicsr/models/archs/__init__.py",
+      "bytes": 1278,
+      "sha256": "9821c89885ac69b2266de74fac2287fc1efcef7f1523e908323b83593de9300f"
+    },
+    {
+      "path": "code/holo_v7_baseline/restormer/basicsr/models/archs/arch_util.py",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/restormer/basicsr/models/archs/arch_util.py",
+      "bytes": 9079,
+      "sha256": "8c49ce684ab0d1f09ec2cabb91d15a729661b49e01932b86e4ca4a010f90cb20"
+    },
+    {
+      "path": "code/holo_v7_baseline/restormer/basicsr/models/archs/edsr_arch.py",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/restormer/basicsr/models/archs/edsr_arch.py",
+      "bytes": 2169,
+      "sha256": "950b6024267c8b2b718dfb14edb580beaab3b760ef7a7a6169c4c23406107312"
+    },
+    {
+      "path": "code/holo_v7_baseline/restormer/basicsr/models/archs/holo_restormer_arch.py",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/restormer/basicsr/models/archs/holo_restormer_arch.py",
+      "bytes": 25897,
+      "sha256": "cd9ca65f7f6b03359583a9a6ec656f0a629b67f5a71fc56e3eac69b0d27f775a"
+    },
+    {
+      "path": "code/holo_v7_baseline/restormer/basicsr/models/archs/rcan_arch.py",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/restormer/basicsr/models/archs/rcan_arch.py",
+      "bytes": 4587,
+      "sha256": "653261a441c0d10c3386106a5f850a222b8f9b673cb66081eaa929f8ecada844"
+    },
+    {
+      "path": "code/holo_v7_baseline/restormer/basicsr/models/archs/restormer_arch.py",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/restormer/basicsr/models/archs/restormer_arch.py",
+      "bytes": 11713,
+      "sha256": "2b67adde08678e846edc5aa97f56561f4c0fa0a1052b548bccd329632b509598"
+    },
+    {
+      "path": "code/holo_v7_baseline/restormer/basicsr/models/archs/rrdbnet_arch.py",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/restormer/basicsr/models/archs/rrdbnet_arch.py",
+      "bytes": 4621,
+      "sha256": "6aa8eb3f77e918b90eeff4ebfaf8745abe0c40eb8fcc03abbc1928693d70ab58"
+    },
+    {
+      "path": "code/holo_v7_baseline/restormer/basicsr/models/archs/srresnet_arch.py",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/restormer/basicsr/models/archs/srresnet_arch.py",
+      "bytes": 2665,
+      "sha256": "19ff138677bad9fd9c0fb76e5bfb86763c65f2b11bd0c67f69057310ec0db2dd"
+    },
+    {
+      "path": "code/holo_v7_baseline/restormer/basicsr/models/base_model.py",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/restormer/basicsr/models/base_model.py",
+      "bytes": 15511,
+      "sha256": "7b15817fd78df6c134fb2a23ce657f1a9665ea177ff99cf85609ec67cd0f571f"
+    },
+    {
+      "path": "code/holo_v7_baseline/restormer/basicsr/models/image_restoration_model.py",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/restormer/basicsr/models/image_restoration_model.py",
+      "bytes": 24991,
+      "sha256": "9204093be0ad15baea92bd16b71af3e2be2053937c45c95557d35fef850bfcaf"
+    },
+    {
+      "path": "code/holo_v7_baseline/restormer/basicsr/models/losses/__init__.py",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/restormer/basicsr/models/losses/__init__.py",
+      "bytes": 141,
+      "sha256": "d19d8a677ec46f10c85c0559c74ba306b10cdc43729ed7ef3b1f015a067be25e"
+    },
+    {
+      "path": "code/holo_v7_baseline/restormer/basicsr/models/losses/loss_util.py",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/restormer/basicsr/models/losses/loss_util.py",
+      "bytes": 2998,
+      "sha256": "f920cb057a388307faf9d41fd9c3d5986d1ed0948d4793d9ccf89ff7c66d8960"
+    },
+    {
+      "path": "code/holo_v7_baseline/restormer/basicsr/models/losses/losses.py",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/restormer/basicsr/models/losses/losses.py",
+      "bytes": 4274,
+      "sha256": "a2276810422ff8912d29c50c796a815dc0477e0c4f8542afd4d51adea550071b"
+    },
+    {
+      "path": "code/holo_v7_baseline/restormer/basicsr/models/lr_scheduler.py",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/restormer/basicsr/models/lr_scheduler.py",
+      "bytes": 8470,
+      "sha256": "e7ffc39266c1d6a6393b192a750976a79e0f7cff6a23496453fb5d4d44e53df3"
+    },
+    {
+      "path": "code/holo_v7_baseline/restormer/basicsr/test.py",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/restormer/basicsr/test.py",
+      "bytes": 2132,
+      "sha256": "e5056e05f079713e5700ab8b4e5bc3d5751889bd31d229ee6e2b518e89e1fdda"
+    },
+    {
+      "path": "code/holo_v7_baseline/restormer/basicsr/train.py",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/restormer/basicsr/train.py",
+      "bytes": 14456,
+      "sha256": "1519f64339b1e51dfa2fe25de65db222d4c6d9fa52695fdd58efc99fbafad7f3"
+    },
+    {
+      "path": "code/holo_v7_baseline/restormer/basicsr/utils/__init__.py",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/restormer/basicsr/utils/__init__.py",
+      "bytes": 1145,
+      "sha256": "16a20ecde64ca2ff7e8d758cc7132dea27315226dccf8fa84584949f0ac4aacb"
+    },
+    {
+      "path": "code/holo_v7_baseline/restormer/basicsr/utils/bundle_submissions.py",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/restormer/basicsr/utils/bundle_submissions.py",
+      "bytes": 3696,
+      "sha256": "6524be4c533c303a663fefc65c3b2292623b5c9209c894339717b114e6259e22"
+    },
+    {
+      "path": "code/holo_v7_baseline/restormer/basicsr/utils/create_lmdb.py",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/restormer/basicsr/utils/create_lmdb.py",
+      "bytes": 5116,
+      "sha256": "f92347db9208551510e91def560038e68872bb5428513efbd7aed825bf6f180f"
+    },
+    {
+      "path": "code/holo_v7_baseline/restormer/basicsr/utils/dist_util.py",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/restormer/basicsr/utils/dist_util.py",
+      "bytes": 2700,
+      "sha256": "48a8e6d4c27bb58ad7a989e85a7f8b84ce2e0297b5f28b5750a4f5720f22a474"
+    },
+    {
+      "path": "code/holo_v7_baseline/restormer/basicsr/utils/download_util.py",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/restormer/basicsr/utils/download_util.py",
+      "bytes": 2194,
+      "sha256": "abf0b5881869dfaaae0df07b366163a9adc549397c5c0bd9dc019e39f3b65bb0"
+    },
+    {
+      "path": "code/holo_v7_baseline/restormer/basicsr/utils/face_util.py",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/restormer/basicsr/utils/face_util.py",
+      "bytes": 9807,
+      "sha256": "05961bea1f280b2f1871acbd120adf6c41bf69703ce02bb5092e78a0855aad65"
+    },
+    {
+      "path": "code/holo_v7_baseline/restormer/basicsr/utils/file_client.py",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/restormer/basicsr/utils/file_client.py",
+      "bytes": 6550,
+      "sha256": "1dcd6b72ec68546d956e65c8ea459cde9b679c4dd1daea198ec6ac5e376e8dcc"
+    },
+    {
+      "path": "code/holo_v7_baseline/restormer/basicsr/utils/flow_util.py",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/restormer/basicsr/utils/flow_util.py",
+      "bytes": 6515,
+      "sha256": "cda1aa71c20fdf8d0ce28ddbcd2d04cdf1277045f301b9256ecc3160e9352717"
+    },
+    {
+      "path": "code/holo_v7_baseline/restormer/basicsr/utils/holo_protocol.py",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/restormer/basicsr/utils/holo_protocol.py",
+      "bytes": 16706,
+      "sha256": "dab20f595b8afab7068bad49872d8d63b6d5acc858380e011b7f1446a29c0831"
+    },
+    {
+      "path": "code/holo_v7_baseline/restormer/basicsr/utils/img_util.py",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/restormer/basicsr/utils/img_util.py",
+      "bytes": 7698,
+      "sha256": "7d8181ac924f921843c6119b492e5b0a24a68a049a9f68feb6d6c4104ec19ee4"
+    },
+    {
+      "path": "code/holo_v7_baseline/restormer/basicsr/utils/lmdb_util.py",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/restormer/basicsr/utils/lmdb_util.py",
+      "bytes": 7494,
+      "sha256": "11247c27e2027f9d6c74ce39f8bd3910e215d9649bcda2b271821f9f07a49338"
+    },
+    {
+      "path": "code/holo_v7_baseline/restormer/basicsr/utils/logger.py",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/restormer/basicsr/utils/logger.py",
+      "bytes": 6438,
+      "sha256": "2e4fa60b9171b94bdf9c6f7d628b60a0325495a12933977045eacf6e6ac8ce88"
+    },
+    {
+      "path": "code/holo_v7_baseline/restormer/basicsr/utils/matlab_functions.py",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/restormer/basicsr/utils/matlab_functions.py",
+      "bytes": 14108,
+      "sha256": "cb7aec1a391835cd978802fd87c9d9ba265791c153dfe94fdfeeb51489843938"
+    },
+    {
+      "path": "code/holo_v7_baseline/restormer/basicsr/utils/misc.py",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/restormer/basicsr/utils/misc.py",
+      "bytes": 6217,
+      "sha256": "703029659954c06967254ae3ef509af3c604b85306552a62e7201c31f81ae4a8"
+    },
+    {
+      "path": "code/holo_v7_baseline/restormer/basicsr/utils/options.py",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/restormer/basicsr/utils/options.py",
+      "bytes": 4176,
+      "sha256": "397b338af71db5bea1081ca7a9bfb25c622e57ed9e5c5732dca76c786f80229c"
+    },
+    {
+      "path": "code/holo_v7_baseline/restormer/basicsr/utils/registry.py",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/restormer/basicsr/utils/registry.py",
+      "bytes": 494,
+      "sha256": "3dd3d4ca45077a1982a7cc742cade94d715b238a9b4cfee13d11d31cd81997af"
+    },
+    {
+      "path": "code/holo_v7_baseline/restormer/basicsr/version.py",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/restormer/basicsr/version.py",
+      "bytes": 142,
+      "sha256": "906ffd5de701675f060dd93973b09046568454da9ee64f296aef8a005490a0c1"
+    },
+    {
+      "path": "code/holo_v7_baseline/restormer/evaluate_holo.py",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/restormer/evaluate_holo.py",
+      "bytes": 10994,
+      "sha256": "2eea7ea05763748373c7320d94145c1e23caf899191441263db7d1d129bea23b"
+    },
+    {
+      "path": "code/holo_v7_baseline/restormer/run_holo_trials.py",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/restormer/run_holo_trials.py",
+      "bytes": 19041,
+      "sha256": "1007ecff64532e82bb85fcbcdcb33457a553cac898f817293a01b02b1df4a783"
+    },
+    {
+      "path": "code/holo_v7_baseline/restormer/setup.cfg",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/restormer/setup.cfg",
+      "bytes": 579,
+      "sha256": "f6b673578ba0500cd3aa3f342ad3472a1c4792c84651f1b511178753b795106f"
+    },
+    {
+      "path": "code/holo_v7_baseline/restormer/setup.py",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/restormer/setup.py",
+      "bytes": 5575,
+      "sha256": "ded6b43bc060f86ac745a34c2da5b73c3663318dc9f2ff8419efc49af83535cb"
+    },
+    {
+      "path": "code/holo_v7_baseline/restormer/train.sh",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/restormer/train.sh",
+      "bytes": 157,
+      "sha256": "023e6f21bf0d5a54efdf1ded88ae247eb36f2e6b0ba61604d2e2ad5fead855fa"
+    },
+    {
+      "path": "results/restormer_stockhead_60000/logs/console.log",
+      "source_path": "/root/autodl-tmp/holo_v7_baseline/train_stockhead_seed10.log",
+      "bytes": 174052,
+      "sha256": "44828bbde4c1a38475ac3e731089c225e43cabd591a0d98640b01adcbf7e8b7f"
+    },
+    {
+      "path": "pipeline/scripts/06_generate_sweep.py",
+      "source_path": "/root/hao-d-wangluo/pipeline/scripts/06_generate_sweep.py",
+      "bytes": 4801,
+      "sha256": "a5e204c92846d84229d4fdd3eafb203e65c90f7973108538b38e2bf13535b857"
+    },
+    {
+      "path": "pipeline/scripts/07_sweep_infer.py",
+      "source_path": "/root/hao-d-wangluo/pipeline/scripts/07_sweep_infer.py",
+      "bytes": 6529,
+      "sha256": "e079f88b47d484554aba58bc601f99bfeb89433ed57a3b2675b5292893f797b9"
+    },
+    {
+      "path": "pipeline/scripts/08_sweep_contract.py",
+      "source_path": "/root/hao-d-wangluo/pipeline/scripts/08_sweep_contract.py",
+      "bytes": 4116,
+      "sha256": "cab21eb95924fe571d30134e529f482aa3a3d4eb8413b2faff3db0d7effd18be"
+    },
+    {
+      "path": "tests/historical/NOTE_s5_结果_20261014.md",
+      "source_path": "/root/hao-d-wangluo/tests/NOTE_s5_结果_20261014.md",
+      "bytes": 2586,
+      "sha256": "8da45c05c6284b52bfb16a5dcb7204b6fa7dbf266fd39ba7ef01a72f01b213eb"
+    },
+    {
+      "path": "tests/historical/s5_forwarddet_consistency.py",
+      "source_path": "/root/hao-d-wangluo/tests/s5_forwarddet_consistency.py",
+      "bytes": 3046,
+      "sha256": "32aaf8aa39ce553d6d5b65aad67ed1817773e950d7cb877032a44f50d672afbe"
+    },
+    {
+      "path": "environment/server_A_packages.txt",
+      "source": "generated_metadata",
+      "bytes": 2938,
+      "sha256": "e9dcf2a603ed4c3a480693567f0437daa37bc6051a59b09fa70cbb46bc97dfc1"
+    },
+    {
+      "path": "environment/server_A_runtime.json",
+      "source": "generated_metadata",
+      "bytes": 181,
+      "sha256": "753349741ee4b3e00ed4caac368be811a81ff1fe1620134287be8d064cc13f41"
+    },
+    {
+      "path": "metadata/hr_file_manifest.json",
+      "source": "generated_metadata",
+      "bytes": 328965,
+      "sha256": "6bd590b42c31c014f80e3ae08ff12f5aec02ca8d0153f23e3451545b647aeaa9"
+    },
+    {
+      "path": "metadata/lr4_file_manifest.json",
+      "source": "generated_metadata",
+      "bytes": 323965,
+      "sha256": "ecb32217c078af0025ba1a6d1d058c680cced22d7f495fa51ebf1e18cef4cea2"
+    },
+    {
+      "path": "metadata/visual_reference_hashes_A.json",
+      "source": "generated_metadata",
+      "bytes": 2838,
+      "sha256": "fadbb862b6c52ce11ef6ebf881bb2cd64fb42d9d9565571512177819829d01bb"
+    },
+    {
+      "path": "results/restormer_stockhead_60000/checkpoint_manifest.json",
+      "source": "generated_metadata",
+      "bytes": 2117,
+      "sha256": "1783cae372c70fd23577034d2c52977e2278ec4648071dc711d3009e71e5b3a7"
+    }
+  ]
+}

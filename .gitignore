@@ -30,3 +30,34 @@ HR/
 LR4/
 *.7z
 *.zip
+
+# Reproduction outputs, full data, optimizer states and heavyweight weights
+/reproduction_runs/
+/workdir/
+/datasets/
+/checkpoints/
+/data/HR/
+/data/LR4/
+/data/holo/
+**/training_states/
+*.pt
+*.ckpt
+*.safetensors
+*.onnx
+*.tar
+*.tar.gz
+*.tgz
+*.7z
+*.rar
+
+# Credentials and machine-local files (paper metadata/CSV/JSON stay trackable)
+.env
+.env.*
+!.env.example
+**/.ssh/
+*.pem
+*.key
+id_rsa
+id_ed25519
+credentials.json
+.pytest_cache/

@@ -1,0 +1,9 @@
+{
+  "PSNR": 34.72092383890357,
+  "SSIM": 0.9484157975629195,
+  "RMSE": 0.018368427367935106,
+  "MAE": 0.006563269059844164,
+  "count": 50,
+  "model": "Restormer",
+  "sweep_dir": "diffraction_cutoff=1"
+}

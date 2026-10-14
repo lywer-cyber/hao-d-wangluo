@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "snapshot_date": "2026-10-14",
+  "models": {
+    "restormer": {
+      "label": "Restormer-SR (adapted)",
+      "project": "holo_v7_baseline",
+      "run": "holo_restormer_mdta_stockhead_60000_seed10_mb2",
+      "params": 26165524,
+      "result": "restormer_stockhead_60000",
+      "status": "completed_test",
+      "config": "configs/holo_v7_baseline/holo_restormer_mdta_stockhead_60000_seed10_mb2_options.yml",
+      "source_tree": "code/holo_v7_baseline/restormer",
+      "splits": "splits/holo_v7_baseline",
+      "result_dir": "results/restormer_stockhead_60000"
+    },
+    "swinir": {
+      "label": "SwinIR (96 channels, 4 groups)",
+      "project": "holo_project",
+      "run": "holo_swinir_60000_seed10_mb2_retry",
+      "params": 3487347,
+      "result": "swinir_60000",
+      "status": "completed_test",
+      "config": "configs/holo_project/holo_swinir_60000_seed10_mb2_retry_options.yml",
+      "source_tree": "code/holo_project/restormer",
+      "splits": "splits/holo_project",
+      "result_dir": "results/swinir_60000"
+    },
+    "rcan": {
+      "label": "RCAN (64 channels, 10 groups, 20 blocks)",
+      "project": "holo_project",
+      "run": "holo_rcan_60000_seed10_mb2",
+      "params": 15592355,
+      "result": null,
+      "status": "training",
+      "config": "configs/holo_project/holo_rcan_60000_seed10_mb2_options.yml",
+      "source_tree": "code/holo_project/restormer",
+      "splits": "splits/holo_project",
+      "result_dir": null
+    },
+    "rrdbnet": {
+      "label": "RRDBNet (23 blocks, reconstruction loss)",
+      "project": "holo_project",
+      "run": "holo_rrdbnet_60000_seed10_mb2",
+      "params": 16697987,
+      "result": null,
+      "status": "not_started",
+      "config": "configs/holo_project/holo_rrdbnet_60000_seed10_mb2_options.yml",
+      "source_tree": "code/holo_project/restormer",
+      "splits": "splits/holo_project",
+      "result_dir": null
+    },
+    "edsr": {
+      "label": "EDSR (64 channels, 16 blocks)",
+      "project": "holo_project",
+      "run": "holo_edsr_60000_seed10_mb2",
+      "params": 1517571,
+      "result": null,
+      "status": "not_started",
+      "config": "configs/holo_project/holo_edsr_60000_seed10_mb2_options.yml",
+      "source_tree": "code/holo_project/restormer",
+      "splits": "splits/holo_project",
+      "result_dir": null
+    }
+  },
+  "status_snapshot_file": "metadata/baseline_status_20261014.json"
+}

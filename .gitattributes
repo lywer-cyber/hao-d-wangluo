@@ -1,0 +1,12 @@
+# Preserve scientific snapshots byte-for-byte across operating systems.
+code/** -text
+configs/** -text whitespace=-blank-at-eol,-blank-at-eof
+splits/** -text whitespace=-blank-at-eol,-blank-at-eof
+metadata/** -text whitespace=-blank-at-eol,-blank-at-eof
+results/** -text whitespace=-blank-at-eol,-blank-at-eof
+environment/** -text
+LICENSES/** -text whitespace=-blank-at-eol,-blank-at-eof
+reproducibility/evaluate_holo_server_snapshot.py -text
+*.bmp binary
+*.png binary
+*.pdf binary

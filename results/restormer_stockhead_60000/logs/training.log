@@ -1,0 +1,1957 @@
+2026-10-13 10:06:15,496 INFO: 
+                ____                _       _____  ____
+               / __ ) ____ _ _____ (_)_____/ ___/ / __ \
+              / __  |/ __ `// ___// // ___/\__ \ / /_/ /
+             / /_/ // /_/ /(__  )/ // /__ ___/ // _, _/
+            /_____/ \__,_//____//_/ \___//____//_/ |_|
+     ______                   __   __                 __      __
+    / ____/____   ____   ____/ /  / /   __  __ _____ / /__   / /
+   / / __ / __ \ / __ \ / __  /  / /   / / / // ___// //_/  / /
+  / /_/ // /_/ // /_/ // /_/ /  / /___/ /_/ // /__ / /<    /_/
+  \____/ \____/ \____/ \____/  /_____/\____/ \___//_/|_|  (_)
+    
+Version Information: 
+	BasicSR: 1.2.0+10018c6
+	PyTorch: 2.0.0+cu118
+	TorchVision: 0.15.1+cu118
+2026-10-13 10:06:15,497 INFO: 
+  name: holo_restormer_mdta_stockhead_60000_seed10_mb2
+  model_type: ImageCleanModel
+  scale: 4
+  num_gpu: 1
+  manual_seed: 10
+  holo_protocol: True
+  runtime:[
+    validate_on_startup: True
+    python_version: 3.8
+    pytorch_version: 2.0.0
+    pytorch_cuda_build: cu118
+    cuda_runtime_version: 11.8
+    nvidia_driver_version: not_checked
+    validate_nvidia_driver: False
+    torchvision_version: 0.15.1
+    scikit_image_version: 0.19.3
+    lpips_version: 0.1.4
+    numpy_version: 1.24.4
+    opencv_python_version: 4.8.1.78
+    einops_version: 0.6.1
+    pyyaml_version: 6.0.1
+    lpips_weights_relpath: weights/v0.1/alex.pth
+    lpips_weights_sha256: DF73285E35B22355A2DF87CDB6B70B343713B667EDDBDA73E1977E0C860835C0
+    strict_lpips_weights_check: True
+  ]
+  determinism:[
+    enabled: True
+    cudnn_deterministic: True
+    cudnn_benchmark: False
+    use_deterministic_algorithms: True
+    data_order: fixed_sampler_seed_plus_epoch
+    worker_seed_formula: base_seed_plus_rank_times_num_workers_plus_worker_id
+  ]
+  datasets:[
+    train:[
+      name: HoloTrain
+      type: HoloPairedDataset
+      dataroot_gt: /root/autodl-tmp/HR
+      dataroot_lq: /root/autodl-tmp/LR4
+      meta_info_file: /root/autodl-tmp/holo_v7_baseline/data/splits/train_meta.txt
+      io_backend:[
+        type: disk
+      ]
+      batch_size_per_gpu: 2
+      num_worker_per_gpu: 8
+      gt_size: 256
+      use_hflip: False
+      use_rot: False
+      dataset_enlarge_ratio: 1
+      prefetch_mode: None
+      pin_memory: False
+      persistent_workers: False
+      phase: train
+      scale: 4
+    ]
+    val:[
+      name: HoloVal
+      type: HoloPairedDataset
+      dataroot_gt: /root/autodl-tmp/HR
+      dataroot_lq: /root/autodl-tmp/LR4
+      meta_info_file: /root/autodl-tmp/holo_v7_baseline/data/splits/val_meta.txt
+      io_backend:[
+        type: disk
+      ]
+      batch_size_per_gpu: 1
+      num_worker_per_gpu: 0
+      use_hflip: False
+      use_rot: False
+      pin_memory: False
+      persistent_workers: False
+      prefetch_mode: None
+      whole_image: True
+      resize: False
+      padding: False
+      preserve_native_resolution: True
+      compute_lpips: False
+      phase: val
+      scale: 4
+    ]
+  ]
+  network_g:[
+    type: HoloRestormer
+    inp_channels: 3
+    out_channels: 3
+    scale: 4
+    dim: 48
+    num_blocks: [4, 6, 6, 8]
+    num_refinement_blocks: 4
+    heads: [1, 2, 4, 8]
+    ffn_expansion_factor: 2.66
+    bias: False
+    LayerNorm_type: WithBias
+    attention_mode: mdta
+    use_staged_head: False
+    n_bands: 6
+  ]
+  path:[
+    pretrain_network_g: None
+    strict_load_g: True
+    resume_state: None
+    root: /root/autodl-tmp/holo_v7_baseline
+    experiments_root: /root/autodl-tmp/holo_v7_baseline/experiments/holo_restormer_mdta_stockhead_60000_seed10_mb2
+    models: /root/autodl-tmp/holo_v7_baseline/experiments/holo_restormer_mdta_stockhead_60000_seed10_mb2/models
+    training_states: /root/autodl-tmp/holo_v7_baseline/experiments/holo_restormer_mdta_stockhead_60000_seed10_mb2/training_states
+    log: /root/autodl-tmp/holo_v7_baseline/experiments/holo_restormer_mdta_stockhead_60000_seed10_mb2
+    visualization: /root/autodl-tmp/holo_v7_baseline/experiments/holo_restormer_mdta_stockhead_60000_seed10_mb2/visualization
+  ]
+  train:[
+    total_iter: 60000
+    warmup_iter: 2000
+    warmup_init_ratio: 0.0
+    use_grad_clip: False
+    gradient_clip_enabled: False
+    gradient_clip_norm: none
+    gradient_accumulation_steps: 4
+    effective_batch_size_per_gpu: 8
+    amp_enabled: True
+    amp_dtype: float16
+    oom_policy: reduce_micro_batch_preserve_effective_batch
+    loss_divide_by_accumulation_steps: True
+    amp_grad_scaler: True
+    amp_init_scale: 65536
+    amp_growth_factor: 2.0
+    amp_backoff_factor: 0.5
+    amp_growth_interval: 2000
+    ema_enabled: True
+    ema_decay: 0.999
+    ema_warmup_iters: 2000
+    loss_l1_weight: 1.0
+    loss_gfl_weight: 0.1
+    loss_hf_weight: 0.2
+    gfl_ramp_iterations: 30000
+    gfl_radius_ref: 0.125
+    hf_sigma_px: 1.8006
+    mixing_augs:[
+      mixup: False
+      use_identity: True
+    ]
+    scheduler:[
+      type: MultiStepLR
+      milestones: [30000, 48000, 54000, 57000]
+      gamma: 0.5
+    ]
+    optim_g:[
+      type: Adam
+      lr: 0.0001
+      weight_decay: 0
+      betas: [0.9, 0.99]
+    ]
+    pixel_opt:[
+      type: L1Loss
+      loss_weight: 1.0
+      reduction: mean
+    ]
+  ]
+  val:[
+    val_freq: 5000
+    save_img: False
+    rgb2bgr: False
+    use_image: False
+    metrics:[
+      psnr:[
+        type: calculate_holo_psnr
+        crop_border: 4
+        test_y_channel: False
+        data_range: 1.0
+      ]
+      ssim:[
+        type: calculate_holo_ssim
+        crop_border: 4
+        test_y_channel: False
+        data_range: 1.0
+        win_size: 11
+        sigma: 1.5
+        gaussian_weights: True
+        use_sample_covariance: False
+        channel_axis: 2
+        channel_reduction: mean
+      ]
+      rmse:[
+        type: calculate_holo_rmse
+        crop_border: 4
+        data_range: 1.0
+      ]
+      mae:[
+        type: calculate_holo_mae
+        crop_border: 4
+        data_range: 1.0
+      ]
+    ]
+    checkpoint_selection_metric: PSNR
+    checkpoint_selection_mode: max
+    checkpoint_selection_tie_breaker: SSIM
+    checkpoint_selection_tie_tolerance: 1e-12
+    checkpoint_selection_split: val
+  ]
+  logger:[
+    print_freq: 100
+    save_checkpoint_freq: 5000
+    use_tb_logger: False
+    wandb:[
+      project: None
+      resume_id: None
+    ]
+  ]
+  evaluation:[
+    metrics: ['PSNR', 'SSIM', 'LPIPS', 'RMSE', 'MAE']
+    crop_border: 4
+    test_y_channel: False
+    rgb_to_y: False
+    metric_pixel_range: 0_1
+    psnr_data_range: 1.0
+    ssim_data_range: 1.0
+    ssim_window_size: 11
+    ssim_sigma: 1.5
+    ssim_gaussian_weights: True
+    ssim_use_sample_covariance: False
+    ssim_channel_axis: 2
+    ssim_channel_reduction: mean
+    ssim_library: scikit-image
+    ssim_library_version: 0.19.3
+    lpips_network: alex
+    lpips_input_range: -1_1
+    lpips_crop_border: 4
+    lpips_spatial: False
+    metric_implementation_version: 2
+    val_compute_lpips: False
+    test_batch_size_per_gpu: 1
+    test_num_workers: 0
+    test_pin_memory: False
+    test_persistent_workers: False
+    test_prefetch_mode: None
+    test_whole_image: True
+    test_resize: False
+    test_padding: False
+    test_preserve_native_resolution: True
+    test_compute_lpips: True
+  ]
+  visual_output:[
+    format: BMP
+    compression: none
+    save_count: 10
+    save_list: /root/autodl-tmp/holo_v7_baseline/data/splits/visual_samples.txt
+    export_after_all_comparison_runs_complete: True
+    export_split: test
+    checkpoint_source: best_checkpoint_selected_on_val
+    visual_only: True
+    compute_metrics: False
+    save_lr: True
+    save_sr: True
+    save_hr: True
+    save_comparison_image: False
+  ]
+  is_train: True
+  dist: False
+  rank: 0
+  world_size: 1
+
+2026-10-13 10:06:15,588 INFO: Dataset HoloPairedDataset - HoloTrain is created.
+2026-10-13 10:06:15,589 INFO: Training statistics:
+	Number of train images: 4000
+	Dataset enlarge ratio: 1
+	Batch size per gpu: 2
+	World size (gpu number): 1
+	Require iter number per epoch: 2000
+	Total epochs: 30; iters: 60000.
+2026-10-13 10:06:15,590 INFO: Dataset HoloPairedDataset - HoloVal is created.
+2026-10-13 10:06:15,590 INFO: Number of val images/folders in HoloVal: 500
+2026-10-13 10:06:16,063 INFO: Network: HoloRestormer, with parameters: 26,165,524
+2026-10-13 10:06:16,063 INFO: HoloRestormer(
+  (patch_embed): HoloStem(
+    (proj): Conv2d(3, 48, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+  )
+  (encoder_level1): Sequential(
+    (0): HoloBlock(
+      (norm1): LayerNorm(
+        (body): WithBias_LayerNorm()
+      )
+      (attn): HoloAttention(
+        (qkv): Conv2d(48, 144, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (qkv_dwconv): Conv2d(144, 144, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=144, bias=False)
+        (project_out): Conv2d(48, 48, kernel_size=(1, 1), stride=(1, 1), bias=False)
+      )
+      (norm2): LayerNorm(
+        (body): WithBias_LayerNorm()
+      )
+      (ffn): HoloGDFN(
+        (project_in): Conv2d(48, 254, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (dwconv): Conv2d(254, 254, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=254, bias=False)
+        (project_out): Conv2d(127, 48, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (dirconv): Identity()
+      )
+      (split): HoloBandSplit()
+      (dirc): Identity()
+      (ms): Identity()
+    )
+    (1): HoloBlock(
+      (norm1): LayerNorm(
+        (body): WithBias_LayerNorm()
+      )
+      (attn): HoloAttention(
+        (qkv): Conv2d(48, 144, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (qkv_dwconv): Conv2d(144, 144, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=144, bias=False)
+        (project_out): Conv2d(48, 48, kernel_size=(1, 1), stride=(1, 1), bias=False)
+      )
+      (norm2): LayerNorm(
+        (body): WithBias_LayerNorm()
+      )
+      (ffn): HoloGDFN(
+        (project_in): Conv2d(48, 254, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (dwconv): Conv2d(254, 254, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=254, bias=False)
+        (project_out): Conv2d(127, 48, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (dirconv): Identity()
+      )
+      (split): HoloBandSplit()
+      (dirc): Identity()
+      (ms): Identity()
+    )
+    (2): HoloBlock(
+      (norm1): LayerNorm(
+        (body): WithBias_LayerNorm()
+      )
+      (attn): HoloAttention(
+        (qkv): Conv2d(48, 144, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (qkv_dwconv): Conv2d(144, 144, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=144, bias=False)
+        (project_out): Conv2d(48, 48, kernel_size=(1, 1), stride=(1, 1), bias=False)
+      )
+      (norm2): LayerNorm(
+        (body): WithBias_LayerNorm()
+      )
+      (ffn): HoloGDFN(
+        (project_in): Conv2d(48, 254, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (dwconv): Conv2d(254, 254, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=254, bias=False)
+        (project_out): Conv2d(127, 48, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (dirconv): Identity()
+      )
+      (split): HoloBandSplit()
+      (dirc): Identity()
+      (ms): Identity()
+    )
+    (3): HoloBlock(
+      (norm1): LayerNorm(
+        (body): WithBias_LayerNorm()
+      )
+      (attn): HoloAttention(
+        (qkv): Conv2d(48, 144, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (qkv_dwconv): Conv2d(144, 144, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=144, bias=False)
+        (project_out): Conv2d(48, 48, kernel_size=(1, 1), stride=(1, 1), bias=False)
+      )
+      (norm2): LayerNorm(
+        (body): WithBias_LayerNorm()
+      )
+      (ffn): HoloGDFN(
+        (project_in): Conv2d(48, 254, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (dwconv): Conv2d(254, 254, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=254, bias=False)
+        (project_out): Conv2d(127, 48, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (dirconv): Identity()
+      )
+      (split): HoloBandSplit()
+      (dirc): Identity()
+      (ms): Identity()
+    )
+  )
+  (down1_2): Downsample(
+    (body): Sequential(
+      (0): Conv2d(48, 24, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (1): PixelUnshuffle(downscale_factor=2)
+    )
+  )
+  (encoder_level2): Sequential(
+    (0): HoloBlock(
+      (norm1): LayerNorm(
+        (body): WithBias_LayerNorm()
+      )
+      (attn): HoloAttention(
+        (qkv): Conv2d(96, 288, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (qkv_dwconv): Conv2d(288, 288, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=288, bias=False)
+        (project_out): Conv2d(96, 96, kernel_size=(1, 1), stride=(1, 1), bias=False)
+      )
+      (norm2): LayerNorm(
+        (body): WithBias_LayerNorm()
+      )
+      (ffn): HoloGDFN(
+        (project_in): Conv2d(96, 510, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (dwconv): Conv2d(510, 510, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=510, bias=False)
+        (project_out): Conv2d(255, 96, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (dirconv): Identity()
+      )
+      (split): HoloBandSplit()
+      (dirc): Identity()
+      (ms): Identity()
+    )
+    (1): HoloBlock(
+      (norm1): LayerNorm(
+        (body): WithBias_LayerNorm()
+      )
+      (attn): HoloAttention(
+        (qkv): Conv2d(96, 288, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (qkv_dwconv): Conv2d(288, 288, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=288, bias=False)
+        (project_out): Conv2d(96, 96, kernel_size=(1, 1), stride=(1, 1), bias=False)
+      )
+      (norm2): LayerNorm(
+        (body): WithBias_LayerNorm()
+      )
+      (ffn): HoloGDFN(
+        (project_in): Conv2d(96, 510, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (dwconv): Conv2d(510, 510, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=510, bias=False)
+        (project_out): Conv2d(255, 96, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (dirconv): Identity()
+      )
+      (split): HoloBandSplit()
+      (dirc): Identity()
+      (ms): Identity()
+    )
+    (2): HoloBlock(
+      (norm1): LayerNorm(
+        (body): WithBias_LayerNorm()
+      )
+      (attn): HoloAttention(
+        (qkv): Conv2d(96, 288, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (qkv_dwconv): Conv2d(288, 288, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=288, bias=False)
+        (project_out): Conv2d(96, 96, kernel_size=(1, 1), stride=(1, 1), bias=False)
+      )
+      (norm2): LayerNorm(
+        (body): WithBias_LayerNorm()
+      )
+      (ffn): HoloGDFN(
+        (project_in): Conv2d(96, 510, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (dwconv): Conv2d(510, 510, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=510, bias=False)
+        (project_out): Conv2d(255, 96, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (dirconv): Identity()
+      )
+      (split): HoloBandSplit()
+      (dirc): Identity()
+      (ms): Identity()
+    )
+    (3): HoloBlock(
+      (norm1): LayerNorm(
+        (body): WithBias_LayerNorm()
+      )
+      (attn): HoloAttention(
+        (qkv): Conv2d(96, 288, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (qkv_dwconv): Conv2d(288, 288, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=288, bias=False)
+        (project_out): Conv2d(96, 96, kernel_size=(1, 1), stride=(1, 1), bias=False)
+      )
+      (norm2): LayerNorm(
+        (body): WithBias_LayerNorm()
+      )
+      (ffn): HoloGDFN(
+        (project_in): Conv2d(96, 510, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (dwconv): Conv2d(510, 510, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=510, bias=False)
+        (project_out): Conv2d(255, 96, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (dirconv): Identity()
+      )
+      (split): HoloBandSplit()
+      (dirc): Identity()
+      (ms): Identity()
+    )
+    (4): HoloBlock(
+      (norm1): LayerNorm(
+        (body): WithBias_LayerNorm()
+      )
+      (attn): HoloAttention(
+        (qkv): Conv2d(96, 288, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (qkv_dwconv): Conv2d(288, 288, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=288, bias=False)
+        (project_out): Conv2d(96, 96, kernel_size=(1, 1), stride=(1, 1), bias=False)
+      )
+      (norm2): LayerNorm(
+        (body): WithBias_LayerNorm()
+      )
+      (ffn): HoloGDFN(
+        (project_in): Conv2d(96, 510, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (dwconv): Conv2d(510, 510, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=510, bias=False)
+        (project_out): Conv2d(255, 96, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (dirconv): Identity()
+      )
+      (split): HoloBandSplit()
+      (dirc): Identity()
+      (ms): Identity()
+    )
+    (5): HoloBlock(
+      (norm1): LayerNorm(
+        (body): WithBias_LayerNorm()
+      )
+      (attn): HoloAttention(
+        (qkv): Conv2d(96, 288, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (qkv_dwconv): Conv2d(288, 288, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=288, bias=False)
+        (project_out): Conv2d(96, 96, kernel_size=(1, 1), stride=(1, 1), bias=False)
+      )
+      (norm2): LayerNorm(
+        (body): WithBias_LayerNorm()
+      )
+      (ffn): HoloGDFN(
+        (project_in): Conv2d(96, 510, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (dwconv): Conv2d(510, 510, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=510, bias=False)
+        (project_out): Conv2d(255, 96, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (dirconv): Identity()
+      )
+      (split): HoloBandSplit()
+      (dirc): Identity()
+      (ms): Identity()
+    )
+  )
+  (down2_3): Downsample(
+    (body): Sequential(
+      (0): Conv2d(96, 48, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (1): PixelUnshuffle(downscale_factor=2)
+    )
+  )
+  (encoder_level3): Sequential(
+    (0): HoloBlock(
+      (norm1): LayerNorm(
+        (body): WithBias_LayerNorm()
+      )
+      (attn): HoloAttention(
+        (qkv): Conv2d(192, 576, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (qkv_dwconv): Conv2d(576, 576, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=576, bias=False)
+        (project_out): Conv2d(192, 192, kernel_size=(1, 1), stride=(1, 1), bias=False)
+      )
+      (norm2): LayerNorm(
+        (body): WithBias_LayerNorm()
+      )
+      (ffn): HoloGDFN(
+        (project_in): Conv2d(192, 1020, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (dwconv): Conv2d(1020, 1020, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=1020, bias=False)
+        (project_out): Conv2d(510, 192, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (dirconv): Identity()
+      )
+      (split): HoloBandSplit()
+      (dirc): Identity()
+      (ms): Identity()
+    )
+    (1): HoloBlock(
+      (norm1): LayerNorm(
+        (body): WithBias_LayerNorm()
+      )
+      (attn): HoloAttention(
+        (qkv): Conv2d(192, 576, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (qkv_dwconv): Conv2d(576, 576, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=576, bias=False)
+        (project_out): Conv2d(192, 192, kernel_size=(1, 1), stride=(1, 1), bias=False)
+      )
+      (norm2): LayerNorm(
+        (body): WithBias_LayerNorm()
+      )
+      (ffn): HoloGDFN(
+        (project_in): Conv2d(192, 1020, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (dwconv): Conv2d(1020, 1020, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=1020, bias=False)
+        (project_out): Conv2d(510, 192, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (dirconv): Identity()
+      )
+      (split): HoloBandSplit()
+      (dirc): Identity()
+      (ms): Identity()
+    )
+    (2): HoloBlock(
+      (norm1): LayerNorm(
+        (body): WithBias_LayerNorm()
+      )
+      (attn): HoloAttention(
+        (qkv): Conv2d(192, 576, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (qkv_dwconv): Conv2d(576, 576, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=576, bias=False)
+        (project_out): Conv2d(192, 192, kernel_size=(1, 1), stride=(1, 1), bias=False)
+      )
+      (norm2): LayerNorm(
+        (body): WithBias_LayerNorm()
+      )
+      (ffn): HoloGDFN(
+        (project_in): Conv2d(192, 1020, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (dwconv): Conv2d(1020, 1020, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=1020, bias=False)
+        (project_out): Conv2d(510, 192, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (dirconv): Identity()
+      )
+      (split): HoloBandSplit()
+      (dirc): Identity()
+      (ms): Identity()
+    )
+    (3): HoloBlock(
+      (norm1): LayerNorm(
+        (body): WithBias_LayerNorm()
+      )
+      (attn): HoloAttention(
+        (qkv): Conv2d(192, 576, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (qkv_dwconv): Conv2d(576, 576, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=576, bias=False)
+        (project_out): Conv2d(192, 192, kernel_size=(1, 1), stride=(1, 1), bias=False)
+      )
+      (norm2): LayerNorm(
+        (body): WithBias_LayerNorm()
+      )
+      (ffn): HoloGDFN(
+        (project_in): Conv2d(192, 1020, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (dwconv): Conv2d(1020, 1020, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=1020, bias=False)
+        (project_out): Conv2d(510, 192, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (dirconv): Identity()
+      )
+      (split): HoloBandSplit()
+      (dirc): Identity()
+      (ms): Identity()
+    )
+    (4): HoloBlock(
+      (norm1): LayerNorm(
+        (body): WithBias_LayerNorm()
+      )
+      (attn): HoloAttention(
+        (qkv): Conv2d(192, 576, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (qkv_dwconv): Conv2d(576, 576, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=576, bias=False)
+        (project_out): Conv2d(192, 192, kernel_size=(1, 1), stride=(1, 1), bias=False)
+      )
+      (norm2): LayerNorm(
+        (body): WithBias_LayerNorm()
+      )
+      (ffn): HoloGDFN(
+        (project_in): Conv2d(192, 1020, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (dwconv): Conv2d(1020, 1020, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=1020, bias=False)
+        (project_out): Conv2d(510, 192, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (dirconv): Identity()
+      )
+      (split): HoloBandSplit()
+      (dirc): Identity()
+      (ms): Identity()
+    )
+    (5): HoloBlock(
+      (norm1): LayerNorm(
+        (body): WithBias_LayerNorm()
+      )
+      (attn): HoloAttention(
+        (qkv): Conv2d(192, 576, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (qkv_dwconv): Conv2d(576, 576, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=576, bias=False)
+        (project_out): Conv2d(192, 192, kernel_size=(1, 1), stride=(1, 1), bias=False)
+      )
+      (norm2): LayerNorm(
+        (body): WithBias_LayerNorm()
+      )
+      (ffn): HoloGDFN(
+        (project_in): Conv2d(192, 1020, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (dwconv): Conv2d(1020, 1020, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=1020, bias=False)
+        (project_out): Conv2d(510, 192, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (dirconv): Identity()
+      )
+      (split): HoloBandSplit()
+      (dirc): Identity()
+      (ms): Identity()
+    )
+  )
+  (down3_4): Downsample(
+    (body): Sequential(
+      (0): Conv2d(192, 96, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (1): PixelUnshuffle(downscale_factor=2)
+    )
+  )
+  (latent): Sequential(
+    (0): HoloBlock(
+      (norm1): LayerNorm(
+        (body): WithBias_LayerNorm()
+      )
+      (attn): HoloAttention(
+        (qkv): Conv2d(384, 1152, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (qkv_dwconv): Conv2d(1152, 1152, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=1152, bias=False)
+        (project_out): Conv2d(384, 384, kernel_size=(1, 1), stride=(1, 1), bias=False)
+      )
+      (norm2): LayerNorm(
+        (body): WithBias_LayerNorm()
+      )
+      (ffn): HoloGDFN(
+        (project_in): Conv2d(384, 2042, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (dwconv): Conv2d(2042, 2042, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=2042, bias=False)
+        (project_out): Conv2d(1021, 384, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (dirconv): Identity()
+      )
+      (split): HoloBandSplit()
+      (dirc): Identity()
+      (ms): Identity()
+    )
+    (1): HoloBlock(
+      (norm1): LayerNorm(
+        (body): WithBias_LayerNorm()
+      )
+      (attn): HoloAttention(
+        (qkv): Conv2d(384, 1152, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (qkv_dwconv): Conv2d(1152, 1152, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=1152, bias=False)
+        (project_out): Conv2d(384, 384, kernel_size=(1, 1), stride=(1, 1), bias=False)
+      )
+      (norm2): LayerNorm(
+        (body): WithBias_LayerNorm()
+      )
+      (ffn): HoloGDFN(
+        (project_in): Conv2d(384, 2042, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (dwconv): Conv2d(2042, 2042, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=2042, bias=False)
+        (project_out): Conv2d(1021, 384, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (dirconv): Identity()
+      )
+      (split): HoloBandSplit()
+      (dirc): Identity()
+      (ms): Identity()
+    )
+    (2): HoloBlock(
+      (norm1): LayerNorm(
+        (body): WithBias_LayerNorm()
+      )
+      (attn): HoloAttention(
+        (qkv): Conv2d(384, 1152, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (qkv_dwconv): Conv2d(1152, 1152, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=1152, bias=False)
+        (project_out): Conv2d(384, 384, kernel_size=(1, 1), stride=(1, 1), bias=False)
+      )
+      (norm2): LayerNorm(
+        (body): WithBias_LayerNorm()
+      )
+      (ffn): HoloGDFN(
+        (project_in): Conv2d(384, 2042, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (dwconv): Conv2d(2042, 2042, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=2042, bias=False)
+        (project_out): Conv2d(1021, 384, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (dirconv): Identity()
+      )
+      (split): HoloBandSplit()
+      (dirc): Identity()
+      (ms): Identity()
+    )
+    (3): HoloBlock(
+      (norm1): LayerNorm(
+        (body): WithBias_LayerNorm()
+      )
+      (attn): HoloAttention(
+        (qkv): Conv2d(384, 1152, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (qkv_dwconv): Conv2d(1152, 1152, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=1152, bias=False)
+        (project_out): Conv2d(384, 384, kernel_size=(1, 1), stride=(1, 1), bias=False)
+      )
+      (norm2): LayerNorm(
+        (body): WithBias_LayerNorm()
+      )
+      (ffn): HoloGDFN(
+        (project_in): Conv2d(384, 2042, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (dwconv): Conv2d(2042, 2042, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=2042, bias=False)
+        (project_out): Conv2d(1021, 384, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (dirconv): Identity()
+      )
+      (split): HoloBandSplit()
+      (dirc): Identity()
+      (ms): Identity()
+    )
+    (4): HoloBlock(
+      (norm1): LayerNorm(
+        (body): WithBias_LayerNorm()
+      )
+      (attn): HoloAttention(
+        (qkv): Conv2d(384, 1152, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (qkv_dwconv): Conv2d(1152, 1152, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=1152, bias=False)
+        (project_out): Conv2d(384, 384, kernel_size=(1, 1), stride=(1, 1), bias=False)
+      )
+      (norm2): LayerNorm(
+        (body): WithBias_LayerNorm()
+      )
+      (ffn): HoloGDFN(
+        (project_in): Conv2d(384, 2042, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (dwconv): Conv2d(2042, 2042, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=2042, bias=False)
+        (project_out): Conv2d(1021, 384, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (dirconv): Identity()
+      )
+      (split): HoloBandSplit()
+      (dirc): Identity()
+      (ms): Identity()
+    )
+    (5): HoloBlock(
+      (norm1): LayerNorm(
+        (body): WithBias_LayerNorm()
+      )
+      (attn): HoloAttention(
+        (qkv): Conv2d(384, 1152, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (qkv_dwconv): Conv2d(1152, 1152, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=1152, bias=False)
+        (project_out): Conv2d(384, 384, kernel_size=(1, 1), stride=(1, 1), bias=False)
+      )
+      (norm2): LayerNorm(
+        (body): WithBias_LayerNorm()
+      )
+      (ffn): HoloGDFN(
+        (project_in): Conv2d(384, 2042, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (dwconv): Conv2d(2042, 2042, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=2042, bias=False)
+        (project_out): Conv2d(1021, 384, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (dirconv): Identity()
+      )
+      (split): HoloBandSplit()
+      (dirc): Identity()
+      (ms): Identity()
+    )
+    (6): HoloBlock(
+      (norm1): LayerNorm(
+        (body): WithBias_LayerNorm()
+      )
+      (attn): HoloAttention(
+        (qkv): Conv2d(384, 1152, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (qkv_dwconv): Conv2d(1152, 1152, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=1152, bias=False)
+        (project_out): Conv2d(384, 384, kernel_size=(1, 1), stride=(1, 1), bias=False)
+      )
+      (norm2): LayerNorm(
+        (body): WithBias_LayerNorm()
+      )
+      (ffn): HoloGDFN(
+        (project_in): Conv2d(384, 2042, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (dwconv): Conv2d(2042, 2042, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=2042, bias=False)
+        (project_out): Conv2d(1021, 384, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (dirconv): Identity()
+      )
+      (split): HoloBandSplit()
+      (dirc): Identity()
+      (ms): Identity()
+    )
+    (7): HoloBlock(
+      (norm1): LayerNorm(
+        (body): WithBias_LayerNorm()
+      )
+      (attn): HoloAttention(
+        (qkv): Conv2d(384, 1152, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (qkv_dwconv): Conv2d(1152, 1152, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=1152, bias=False)
+        (project_out): Conv2d(384, 384, kernel_size=(1, 1), stride=(1, 1), bias=False)
+      )
+      (norm2): LayerNorm(
+        (body): WithBias_LayerNorm()
+      )
+      (ffn): HoloGDFN(
+        (project_in): Conv2d(384, 2042, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (dwconv): Conv2d(2042, 2042, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=2042, bias=False)
+        (project_out): Conv2d(1021, 384, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (dirconv): Identity()
+      )
+      (split): HoloBandSplit()
+      (dirc): Identity()
+      (ms): Identity()
+    )
+  )
+  (up4_3): Upsample(
+    (body): Sequential(
+      (0): Conv2d(384, 768, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (1): PixelShuffle(upscale_factor=2)
+    )
+  )
+  (reduce_chan_level3): Conv2d(384, 192, kernel_size=(1, 1), stride=(1, 1), bias=False)
+  (decoder_level3): Sequential(
+    (0): HoloBlock(
+      (norm1): LayerNorm(
+        (body): WithBias_LayerNorm()
+      )
+      (attn): HoloAttention(
+        (qkv): Conv2d(192, 576, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (qkv_dwconv): Conv2d(576, 576, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=576, bias=False)
+        (project_out): Conv2d(192, 192, kernel_size=(1, 1), stride=(1, 1), bias=False)
+      )
+      (norm2): LayerNorm(
+        (body): WithBias_LayerNorm()
+      )
+      (ffn): HoloGDFN(
+        (project_in): Conv2d(192, 1020, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (dwconv): Conv2d(1020, 1020, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=1020, bias=False)
+        (project_out): Conv2d(510, 192, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (dirconv): Identity()
+      )
+      (split): HoloBandSplit()
+      (dirc): Identity()
+      (ms): Identity()
+    )
+    (1): HoloBlock(
+      (norm1): LayerNorm(
+        (body): WithBias_LayerNorm()
+      )
+      (attn): HoloAttention(
+        (qkv): Conv2d(192, 576, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (qkv_dwconv): Conv2d(576, 576, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=576, bias=False)
+        (project_out): Conv2d(192, 192, kernel_size=(1, 1), stride=(1, 1), bias=False)
+      )
+      (norm2): LayerNorm(
+        (body): WithBias_LayerNorm()
+      )
+      (ffn): HoloGDFN(
+        (project_in): Conv2d(192, 1020, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (dwconv): Conv2d(1020, 1020, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=1020, bias=False)
+        (project_out): Conv2d(510, 192, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (dirconv): Identity()
+      )
+      (split): HoloBandSplit()
+      (dirc): Identity()
+      (ms): Identity()
+    )
+    (2): HoloBlock(
+      (norm1): LayerNorm(
+        (body): WithBias_LayerNorm()
+      )
+      (attn): HoloAttention(
+        (qkv): Conv2d(192, 576, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (qkv_dwconv): Conv2d(576, 576, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=576, bias=False)
+        (project_out): Conv2d(192, 192, kernel_size=(1, 1), stride=(1, 1), bias=False)
+      )
+      (norm2): LayerNorm(
+        (body): WithBias_LayerNorm()
+      )
+      (ffn): HoloGDFN(
+        (project_in): Conv2d(192, 1020, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (dwconv): Conv2d(1020, 1020, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=1020, bias=False)
+        (project_out): Conv2d(510, 192, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (dirconv): Identity()
+      )
+      (split): HoloBandSplit()
+      (dirc): Identity()
+      (ms): Identity()
+    )
+    (3): HoloBlock(
+      (norm1): LayerNorm(
+        (body): WithBias_LayerNorm()
+      )
+      (attn): HoloAttention(
+        (qkv): Conv2d(192, 576, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (qkv_dwconv): Conv2d(576, 576, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=576, bias=False)
+        (project_out): Conv2d(192, 192, kernel_size=(1, 1), stride=(1, 1), bias=False)
+      )
+      (norm2): LayerNorm(
+        (body): WithBias_LayerNorm()
+      )
+      (ffn): HoloGDFN(
+        (project_in): Conv2d(192, 1020, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (dwconv): Conv2d(1020, 1020, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=1020, bias=False)
+        (project_out): Conv2d(510, 192, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (dirconv): Identity()
+      )
+      (split): HoloBandSplit()
+      (dirc): Identity()
+      (ms): Identity()
+    )
+    (4): HoloBlock(
+      (norm1): LayerNorm(
+        (body): WithBias_LayerNorm()
+      )
+      (attn): HoloAttention(
+        (qkv): Conv2d(192, 576, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (qkv_dwconv): Conv2d(576, 576, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=576, bias=False)
+        (project_out): Conv2d(192, 192, kernel_size=(1, 1), stride=(1, 1), bias=False)
+      )
+      (norm2): LayerNorm(
+        (body): WithBias_LayerNorm()
+      )
+      (ffn): HoloGDFN(
+        (project_in): Conv2d(192, 1020, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (dwconv): Conv2d(1020, 1020, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=1020, bias=False)
+        (project_out): Conv2d(510, 192, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (dirconv): Identity()
+      )
+      (split): HoloBandSplit()
+      (dirc): Identity()
+      (ms): Identity()
+    )
+    (5): HoloBlock(
+      (norm1): LayerNorm(
+        (body): WithBias_LayerNorm()
+      )
+      (attn): HoloAttention(
+        (qkv): Conv2d(192, 576, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (qkv_dwconv): Conv2d(576, 576, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=576, bias=False)
+        (project_out): Conv2d(192, 192, kernel_size=(1, 1), stride=(1, 1), bias=False)
+      )
+      (norm2): LayerNorm(
+        (body): WithBias_LayerNorm()
+      )
+      (ffn): HoloGDFN(
+        (project_in): Conv2d(192, 1020, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (dwconv): Conv2d(1020, 1020, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=1020, bias=False)
+        (project_out): Conv2d(510, 192, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (dirconv): Identity()
+      )
+      (split): HoloBandSplit()
+      (dirc): Identity()
+      (ms): Identity()
+    )
+  )
+  (up3_2): Upsample(
+    (body): Sequential(
+      (0): Conv2d(192, 384, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (1): PixelShuffle(upscale_factor=2)
+    )
+  )
+  (reduce_chan_level2): Conv2d(192, 96, kernel_size=(1, 1), stride=(1, 1), bias=False)
+  (decoder_level2): Sequential(
+    (0): HoloBlock(
+      (norm1): LayerNorm(
+        (body): WithBias_LayerNorm()
+      )
+      (attn): HoloAttention(
+        (qkv): Conv2d(96, 288, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (qkv_dwconv): Conv2d(288, 288, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=288, bias=False)
+        (project_out): Conv2d(96, 96, kernel_size=(1, 1), stride=(1, 1), bias=False)
+      )
+      (norm2): LayerNorm(
+        (body): WithBias_LayerNorm()
+      )
+      (ffn): HoloGDFN(
+        (project_in): Conv2d(96, 510, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (dwconv): Conv2d(510, 510, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=510, bias=False)
+        (project_out): Conv2d(255, 96, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (dirconv): Identity()
+      )
+      (split): HoloBandSplit()
+      (dirc): Identity()
+      (ms): Identity()
+    )
+    (1): HoloBlock(
+      (norm1): LayerNorm(
+        (body): WithBias_LayerNorm()
+      )
+      (attn): HoloAttention(
+        (qkv): Conv2d(96, 288, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (qkv_dwconv): Conv2d(288, 288, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=288, bias=False)
+        (project_out): Conv2d(96, 96, kernel_size=(1, 1), stride=(1, 1), bias=False)
+      )
+      (norm2): LayerNorm(
+        (body): WithBias_LayerNorm()
+      )
+      (ffn): HoloGDFN(
+        (project_in): Conv2d(96, 510, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (dwconv): Conv2d(510, 510, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=510, bias=False)
+        (project_out): Conv2d(255, 96, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (dirconv): Identity()
+      )
+      (split): HoloBandSplit()
+      (dirc): Identity()
+      (ms): Identity()
+    )
+    (2): HoloBlock(
+      (norm1): LayerNorm(
+        (body): WithBias_LayerNorm()
+      )
+      (attn): HoloAttention(
+        (qkv): Conv2d(96, 288, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (qkv_dwconv): Conv2d(288, 288, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=288, bias=False)
+        (project_out): Conv2d(96, 96, kernel_size=(1, 1), stride=(1, 1), bias=False)
+      )
+      (norm2): LayerNorm(
+        (body): WithBias_LayerNorm()
+      )
+      (ffn): HoloGDFN(
+        (project_in): Conv2d(96, 510, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (dwconv): Conv2d(510, 510, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=510, bias=False)
+        (project_out): Conv2d(255, 96, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (dirconv): Identity()
+      )
+      (split): HoloBandSplit()
+      (dirc): Identity()
+      (ms): Identity()
+    )
+    (3): HoloBlock(
+      (norm1): LayerNorm(
+        (body): WithBias_LayerNorm()
+      )
+      (attn): HoloAttention(
+        (qkv): Conv2d(96, 288, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (qkv_dwconv): Conv2d(288, 288, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=288, bias=False)
+        (project_out): Conv2d(96, 96, kernel_size=(1, 1), stride=(1, 1), bias=False)
+      )
+      (norm2): LayerNorm(
+        (body): WithBias_LayerNorm()
+      )
+      (ffn): HoloGDFN(
+        (project_in): Conv2d(96, 510, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (dwconv): Conv2d(510, 510, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=510, bias=False)
+        (project_out): Conv2d(255, 96, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (dirconv): Identity()
+      )
+      (split): HoloBandSplit()
+      (dirc): Identity()
+      (ms): Identity()
+    )
+    (4): HoloBlock(
+      (norm1): LayerNorm(
+        (body): WithBias_LayerNorm()
+      )
+      (attn): HoloAttention(
+        (qkv): Conv2d(96, 288, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (qkv_dwconv): Conv2d(288, 288, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=288, bias=False)
+        (project_out): Conv2d(96, 96, kernel_size=(1, 1), stride=(1, 1), bias=False)
+      )
+      (norm2): LayerNorm(
+        (body): WithBias_LayerNorm()
+      )
+      (ffn): HoloGDFN(
+        (project_in): Conv2d(96, 510, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (dwconv): Conv2d(510, 510, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=510, bias=False)
+        (project_out): Conv2d(255, 96, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (dirconv): Identity()
+      )
+      (split): HoloBandSplit()
+      (dirc): Identity()
+      (ms): Identity()
+    )
+    (5): HoloBlock(
+      (norm1): LayerNorm(
+        (body): WithBias_LayerNorm()
+      )
+      (attn): HoloAttention(
+        (qkv): Conv2d(96, 288, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (qkv_dwconv): Conv2d(288, 288, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=288, bias=False)
+        (project_out): Conv2d(96, 96, kernel_size=(1, 1), stride=(1, 1), bias=False)
+      )
+      (norm2): LayerNorm(
+        (body): WithBias_LayerNorm()
+      )
+      (ffn): HoloGDFN(
+        (project_in): Conv2d(96, 510, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (dwconv): Conv2d(510, 510, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=510, bias=False)
+        (project_out): Conv2d(255, 96, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (dirconv): Identity()
+      )
+      (split): HoloBandSplit()
+      (dirc): Identity()
+      (ms): Identity()
+    )
+  )
+  (up2_1): Upsample(
+    (body): Sequential(
+      (0): Conv2d(96, 192, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (1): PixelShuffle(upscale_factor=2)
+    )
+  )
+  (decoder_level1): Sequential(
+    (0): HoloBlock(
+      (norm1): LayerNorm(
+        (body): WithBias_LayerNorm()
+      )
+      (attn): HoloAttention(
+        (qkv): Conv2d(96, 288, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (qkv_dwconv): Conv2d(288, 288, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=288, bias=False)
+        (project_out): Conv2d(96, 96, kernel_size=(1, 1), stride=(1, 1), bias=False)
+      )
+      (norm2): LayerNorm(
+        (body): WithBias_LayerNorm()
+      )
+      (ffn): HoloGDFN(
+        (project_in): Conv2d(96, 510, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (dwconv): Conv2d(510, 510, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=510, bias=False)
+        (project_out): Conv2d(255, 96, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (dirconv): Identity()
+      )
+      (split): HoloBandSplit()
+      (dirc): Identity()
+      (ms): Identity()
+    )
+    (1): HoloBlock(
+      (norm1): LayerNorm(
+        (body): WithBias_LayerNorm()
+      )
+      (attn): HoloAttention(
+        (qkv): Conv2d(96, 288, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (qkv_dwconv): Conv2d(288, 288, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=288, bias=False)
+        (project_out): Conv2d(96, 96, kernel_size=(1, 1), stride=(1, 1), bias=False)
+      )
+      (norm2): LayerNorm(
+        (body): WithBias_LayerNorm()
+      )
+      (ffn): HoloGDFN(
+        (project_in): Conv2d(96, 510, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (dwconv): Conv2d(510, 510, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=510, bias=False)
+        (project_out): Conv2d(255, 96, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (dirconv): Identity()
+      )
+      (split): HoloBandSplit()
+      (dirc): Identity()
+      (ms): Identity()
+    )
+    (2): HoloBlock(
+      (norm1): LayerNorm(
+        (body): WithBias_LayerNorm()
+      )
+      (attn): HoloAttention(
+        (qkv): Conv2d(96, 288, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (qkv_dwconv): Conv2d(288, 288, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=288, bias=False)
+        (project_out): Conv2d(96, 96, kernel_size=(1, 1), stride=(1, 1), bias=False)
+      )
+      (norm2): LayerNorm(
+        (body): WithBias_LayerNorm()
+      )
+      (ffn): HoloGDFN(
+        (project_in): Conv2d(96, 510, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (dwconv): Conv2d(510, 510, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=510, bias=False)
+        (project_out): Conv2d(255, 96, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (dirconv): Identity()
+      )
+      (split): HoloBandSplit()
+      (dirc): Identity()
+      (ms): Identity()
+    )
+    (3): HoloBlock(
+      (norm1): LayerNorm(
+        (body): WithBias_LayerNorm()
+      )
+      (attn): HoloAttention(
+        (qkv): Conv2d(96, 288, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (qkv_dwconv): Conv2d(288, 288, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=288, bias=False)
+        (project_out): Conv2d(96, 96, kernel_size=(1, 1), stride=(1, 1), bias=False)
+      )
+      (norm2): LayerNorm(
+        (body): WithBias_LayerNorm()
+      )
+      (ffn): HoloGDFN(
+        (project_in): Conv2d(96, 510, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (dwconv): Conv2d(510, 510, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=510, bias=False)
+        (project_out): Conv2d(255, 96, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (dirconv): Identity()
+      )
+      (split): HoloBandSplit()
+      (dirc): Identity()
+      (ms): Identity()
+    )
+  )
+  (refinement): Sequential(
+    (0): HoloBlock(
+      (norm1): LayerNorm(
+        (body): WithBias_LayerNorm()
+      )
+      (attn): HoloAttention(
+        (qkv): Conv2d(96, 288, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (qkv_dwconv): Conv2d(288, 288, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=288, bias=False)
+        (project_out): Conv2d(96, 96, kernel_size=(1, 1), stride=(1, 1), bias=False)
+      )
+      (norm2): LayerNorm(
+        (body): WithBias_LayerNorm()
+      )
+      (ffn): HoloGDFN(
+        (project_in): Conv2d(96, 510, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (dwconv): Conv2d(510, 510, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=510, bias=False)
+        (project_out): Conv2d(255, 96, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (dirconv): Identity()
+      )
+      (split): HoloBandSplit()
+      (dirc): Identity()
+      (ms): Identity()
+    )
+    (1): HoloBlock(
+      (norm1): LayerNorm(
+        (body): WithBias_LayerNorm()
+      )
+      (attn): HoloAttention(
+        (qkv): Conv2d(96, 288, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (qkv_dwconv): Conv2d(288, 288, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=288, bias=False)
+        (project_out): Conv2d(96, 96, kernel_size=(1, 1), stride=(1, 1), bias=False)
+      )
+      (norm2): LayerNorm(
+        (body): WithBias_LayerNorm()
+      )
+      (ffn): HoloGDFN(
+        (project_in): Conv2d(96, 510, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (dwconv): Conv2d(510, 510, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=510, bias=False)
+        (project_out): Conv2d(255, 96, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (dirconv): Identity()
+      )
+      (split): HoloBandSplit()
+      (dirc): Identity()
+      (ms): Identity()
+    )
+    (2): HoloBlock(
+      (norm1): LayerNorm(
+        (body): WithBias_LayerNorm()
+      )
+      (attn): HoloAttention(
+        (qkv): Conv2d(96, 288, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (qkv_dwconv): Conv2d(288, 288, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=288, bias=False)
+        (project_out): Conv2d(96, 96, kernel_size=(1, 1), stride=(1, 1), bias=False)
+      )
+      (norm2): LayerNorm(
+        (body): WithBias_LayerNorm()
+      )
+      (ffn): HoloGDFN(
+        (project_in): Conv2d(96, 510, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (dwconv): Conv2d(510, 510, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=510, bias=False)
+        (project_out): Conv2d(255, 96, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (dirconv): Identity()
+      )
+      (split): HoloBandSplit()
+      (dirc): Identity()
+      (ms): Identity()
+    )
+    (3): HoloBlock(
+      (norm1): LayerNorm(
+        (body): WithBias_LayerNorm()
+      )
+      (attn): HoloAttention(
+        (qkv): Conv2d(96, 288, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (qkv_dwconv): Conv2d(288, 288, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=288, bias=False)
+        (project_out): Conv2d(96, 96, kernel_size=(1, 1), stride=(1, 1), bias=False)
+      )
+      (norm2): LayerNorm(
+        (body): WithBias_LayerNorm()
+      )
+      (ffn): HoloGDFN(
+        (project_in): Conv2d(96, 510, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (dwconv): Conv2d(510, 510, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=510, bias=False)
+        (project_out): Conv2d(255, 96, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (dirconv): Identity()
+      )
+      (split): HoloBandSplit()
+      (dirc): Identity()
+      (ms): Identity()
+    )
+  )
+  (output): Conv2d(96, 48, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+  (reconstruction): PixelShuffle(upscale_factor=4)
+)
+2026-10-13 10:06:16,066 INFO: Use Exponential Moving Average with decay: 0.999
+2026-10-13 10:06:16,329 INFO: Model [ImageCleanModel] is created.
+2026-10-13 10:06:16,431 INFO: Start training from epoch: 0, iter: 0
+2026-10-13 10:07:58,829 INFO: [holo_..][epoch:  0, iter:     100, lr:(5.000e-06,)] [eta: 16:53:08, time (data): 0.263 (0.003)] l_pix: 1.0318e-01 l_gfl: 5.0904e-02 l_hf: 6.2349e-02 l_total: 1.2074e-01 
+2026-10-13 10:09:36,222 INFO: [holo_..][epoch:  0, iter:     200, lr:(1.000e-05,)] [eta: 16:31:09, time (data): 0.261 (0.002)] l_pix: 8.7672e-02 l_gfl: 2.9767e-02 l_hf: 3.5437e-02 l_total: 9.7736e-02 
+2026-10-13 10:11:12,389 INFO: [holo_..][epoch:  0, iter:     300, lr:(1.500e-05,)] [eta: 16:18:39, time (data): 0.257 (0.002)] l_pix: 5.9646e-02 l_gfl: 2.8362e-02 l_hf: 3.0128e-02 l_total: 6.8508e-02 
+2026-10-13 10:12:48,791 INFO: [holo_..][epoch:  0, iter:     400, lr:(2.000e-05,)] [eta: 16:12:10, time (data): 0.252 (0.002)] l_pix: 3.8521e-02 l_gfl: 2.4982e-02 l_hf: 2.3060e-02 l_total: 4.5632e-02 
+2026-10-13 10:14:24,033 INFO: [holo_..][epoch:  0, iter:     500, lr:(2.500e-05,)] [eta: 16:05:19, time (data): 0.267 (0.002)] l_pix: 3.9339e-02 l_gfl: 3.2598e-02 l_hf: 2.3966e-02 l_total: 4.7392e-02 
+2026-10-13 10:16:03,133 INFO: [holo_..][epoch:  1, iter:     600, lr:(3.000e-05,)] [eta: 16:06:35, time (data): 0.262 (0.002)] l_pix: 2.5159e-02 l_gfl: 2.0137e-02 l_hf: 1.5848e-02 l_total: 3.0342e-02 
+2026-10-13 10:17:37,553 INFO: [holo_..][epoch:  1, iter:     700, lr:(3.500e-05,)] [eta: 16:00:26, time (data): 0.238 (0.002)] l_pix: 2.3875e-02 l_gfl: 1.3843e-02 l_hf: 1.3258e-02 l_total: 2.7910e-02 
+2026-10-13 10:19:09,657 INFO: [holo_..][epoch:  1, iter:     800, lr:(4.000e-05,)] [eta: 15:52:33, time (data): 0.239 (0.002)] l_pix: 3.1031e-02 l_gfl: 2.9094e-02 l_hf: 1.8427e-02 l_total: 3.7626e-02 
+2026-10-13 10:20:42,652 INFO: [holo_..][epoch:  1, iter:     900, lr:(4.500e-05,)] [eta: 15:47:04, time (data): 0.260 (0.002)] l_pix: 3.8184e-02 l_gfl: 1.9743e-02 l_hf: 1.7512e-02 l_total: 4.3661e-02 
+2026-10-13 10:22:16,464 INFO: [holo_..][epoch:  1, iter:   1,000, lr:(5.000e-05,)] [eta: 15:43:10, time (data): 0.256 (0.002)] l_pix: 2.4112e-02 l_gfl: 2.7025e-02 l_hf: 1.5818e-02 l_total: 2.9978e-02 
+2026-10-13 10:23:51,476 INFO: [holo_..][epoch:  2, iter:   1,100, lr:(5.500e-05,)] [eta: 15:40:46, time (data): 0.259 (0.002)] l_pix: 4.4869e-02 l_gfl: 1.9235e-02 l_hf: 1.6589e-02 l_total: 5.0110e-02 
+2026-10-13 10:25:28,811 INFO: [holo_..][epoch:  2, iter:   1,200, lr:(6.000e-05,)] [eta: 15:40:23, time (data): 0.260 (0.002)] l_pix: 2.6247e-02 l_gfl: 2.7497e-02 l_hf: 1.6671e-02 l_total: 3.2331e-02 
+2026-10-13 10:27:04,134 INFO: [holo_..][epoch:  2, iter:   1,300, lr:(6.500e-05,)] [eta: 15:38:18, time (data): 0.252 (0.002)] l_pix: 2.3385e-02 l_gfl: 1.7978e-02 l_hf: 1.2014e-02 l_total: 2.7585e-02 
+2026-10-13 10:28:40,101 INFO: [holo_..][epoch:  2, iter:   1,400, lr:(7.000e-05,)] [eta: 15:36:45, time (data): 0.260 (0.002)] l_pix: 2.2146e-02 l_gfl: 1.8810e-02 l_hf: 1.2501e-02 l_total: 2.6527e-02 
+2026-10-13 10:30:17,690 INFO: [holo_..][epoch:  2, iter:   1,500, lr:(7.500e-05,)] [eta: 15:36:14, time (data): 0.264 (0.002)] l_pix: 2.6804e-02 l_gfl: 2.2825e-02 l_hf: 1.5600e-02 l_total: 3.2207e-02 
+2026-10-13 10:31:52,586 INFO: [holo_..][epoch:  3, iter:   1,600, lr:(8.000e-05,)] [eta: 15:33:57, time (data): 0.258 (0.002)] l_pix: 2.8007e-02 l_gfl: 1.7718e-02 l_hf: 1.2310e-02 l_total: 3.2241e-02 
+2026-10-13 10:33:26,390 INFO: [holo_..][epoch:  3, iter:   1,700, lr:(8.500e-05,)] [eta: 15:31:07, time (data): 0.261 (0.002)] l_pix: 3.3195e-02 l_gfl: 1.3609e-02 l_hf: 1.2097e-02 l_total: 3.6976e-02 
+2026-10-13 10:35:03,891 INFO: [holo_..][epoch:  3, iter:   1,800, lr:(9.000e-05,)] [eta: 15:30:25, time (data): 0.259 (0.002)] l_pix: 2.1217e-02 l_gfl: 1.7402e-02 l_hf: 1.1739e-02 l_total: 2.5305e-02 
+2026-10-13 10:36:39,694 INFO: [holo_..][epoch:  3, iter:   1,900, lr:(9.500e-05,)] [eta: 15:28:46, time (data): 0.252 (0.002)] l_pix: 2.3212e-02 l_gfl: 1.8503e-02 l_hf: 1.2260e-02 l_total: 2.7514e-02 
+2026-10-13 10:38:15,816 INFO: [holo_..][epoch:  3, iter:   2,000, lr:(9.995e-05,)] [eta: 15:27:16, time (data): 0.256 (0.002)] l_pix: 2.0917e-02 l_gfl: 1.6317e-02 l_hf: 1.0729e-02 l_total: 2.4694e-02 
+2026-10-13 10:39:52,496 INFO: [holo_..][epoch:  4, iter:   2,100, lr:(9.995e-05,)] [eta: 15:26:01, time (data): 0.354 (0.002)] l_pix: 2.0049e-02 l_gfl: 1.6768e-02 l_hf: 1.2089e-02 l_total: 2.4144e-02 
+2026-10-13 10:41:30,148 INFO: [holo_..][epoch:  4, iter:   2,200, lr:(9.995e-05,)] [eta: 15:25:09, time (data): 0.264 (0.002)] l_pix: 1.9333e-02 l_gfl: 9.2831e-03 l_hf: 8.8621e-03 l_total: 2.2034e-02 
+2026-10-13 10:43:07,529 INFO: [holo_..][epoch:  4, iter:   2,300, lr:(9.995e-05,)] [eta: 15:24:07, time (data): 0.259 (0.002)] l_pix: 1.8953e-02 l_gfl: 2.4842e-02 l_hf: 1.2947e-02 l_total: 2.4026e-02 
+2026-10-13 10:44:43,825 INFO: [holo_..][epoch:  4, iter:   2,400, lr:(9.995e-05,)] [eta: 15:22:35, time (data): 0.252 (0.002)] l_pix: 1.8701e-02 l_gfl: 2.4649e-02 l_hf: 1.3402e-02 l_total: 2.3847e-02 
+2026-10-13 10:46:20,452 INFO: [holo_..][epoch:  4, iter:   2,500, lr:(9.995e-05,)] [eta: 15:21:11, time (data): 0.256 (0.002)] l_pix: 1.9273e-02 l_gfl: 1.7742e-02 l_hf: 1.1388e-02 l_total: 2.3325e-02 
+2026-10-13 10:47:54,077 INFO: [holo_..][epoch:  5, iter:   2,600, lr:(9.995e-05,)] [eta: 15:18:40, time (data): 0.253 (0.002)] l_pix: 1.9696e-02 l_gfl: 2.5031e-02 l_hf: 1.3464e-02 l_total: 2.4892e-02 
+2026-10-13 10:49:29,108 INFO: [holo_..][epoch:  5, iter:   2,700, lr:(9.995e-05,)] [eta: 15:16:43, time (data): 0.252 (0.002)] l_pix: 1.8463e-02 l_gfl: 8.8096e-03 l_hf: 7.9159e-03 l_total: 2.0927e-02 
+2026-10-13 10:51:04,547 INFO: [holo_..][epoch:  5, iter:   2,800, lr:(9.995e-05,)] [eta: 15:14:55, time (data): 0.259 (0.002)] l_pix: 1.5798e-02 l_gfl: 1.5333e-02 l_hf: 9.2278e-03 l_total: 1.9176e-02 
+2026-10-13 10:52:40,594 INFO: [holo_..][epoch:  5, iter:   2,900, lr:(9.995e-05,)] [eta: 15:13:21, time (data): 0.262 (0.002)] l_pix: 1.4351e-02 l_gfl: 1.4770e-02 l_hf: 9.3747e-03 l_total: 1.7703e-02 
+2026-10-13 10:54:17,640 INFO: [holo_..][epoch:  5, iter:   3,000, lr:(9.995e-05,)] [eta: 15:12:05, time (data): 0.256 (0.002)] l_pix: 1.4997e-02 l_gfl: 7.3645e-03 l_hf: 6.9025e-03 l_total: 1.7114e-02 
+2026-10-13 10:55:55,359 INFO: [holo_..][epoch:  6, iter:   3,100, lr:(9.995e-05,)] [eta: 15:11:01, time (data): 0.260 (0.002)] l_pix: 1.6151e-02 l_gfl: 8.7264e-03 l_hf: 7.3540e-03 l_total: 1.8494e-02 
+2026-10-13 10:57:32,628 INFO: [holo_..][epoch:  6, iter:   3,200, lr:(9.995e-05,)] [eta: 15:09:46, time (data): 0.260 (0.002)] l_pix: 2.9052e-02 l_gfl: 1.3751e-02 l_hf: 1.2179e-02 l_total: 3.2863e-02 
+2026-10-13 10:59:09,217 INFO: [holo_..][epoch:  6, iter:   3,300, lr:(9.995e-05,)] [eta: 15:08:18, time (data): 0.261 (0.002)] l_pix: 2.6554e-02 l_gfl: 1.1299e-02 l_hf: 8.7974e-03 l_total: 2.9443e-02 
+2026-10-13 11:00:44,318 INFO: [holo_..][epoch:  6, iter:   3,400, lr:(9.995e-05,)] [eta: 15:06:25, time (data): 0.261 (0.002)] l_pix: 2.3291e-02 l_gfl: 2.0308e-02 l_hf: 1.2088e-02 l_total: 2.7739e-02 
+2026-10-13 11:02:19,560 INFO: [holo_..][epoch:  6, iter:   3,500, lr:(9.995e-05,)] [eta: 15:04:35, time (data): 0.259 (0.002)] l_pix: 2.2986e-02 l_gfl: 1.7382e-02 l_hf: 1.1028e-02 l_total: 2.6930e-02 
+2026-10-13 11:03:57,925 INFO: [holo_..][epoch:  7, iter:   3,600, lr:(9.995e-05,)] [eta: 15:03:35, time (data): 0.254 (0.002)] l_pix: 1.5203e-02 l_gfl: 6.7239e-03 l_hf: 5.8408e-03 l_total: 1.7044e-02 
+2026-10-13 11:05:35,435 INFO: [holo_..][epoch:  7, iter:   3,700, lr:(9.995e-05,)] [eta: 15:02:20, time (data): 0.254 (0.002)] l_pix: 1.9456e-02 l_gfl: 1.6788e-02 l_hf: 9.8740e-03 l_total: 2.3110e-02 
+2026-10-13 11:07:11,522 INFO: [holo_..][epoch:  7, iter:   3,800, lr:(9.995e-05,)] [eta: 15:00:43, time (data): 0.261 (0.002)] l_pix: 2.1234e-02 l_gfl: 1.1430e-02 l_hf: 8.8263e-03 l_total: 2.4142e-02 
+2026-10-13 11:08:49,279 INFO: [holo_..][epoch:  7, iter:   3,900, lr:(9.995e-05,)] [eta: 14:59:29, time (data): 0.270 (0.002)] l_pix: 1.5066e-02 l_gfl: 8.1842e-03 l_hf: 6.9819e-03 l_total: 1.7281e-02 
+2026-10-13 11:10:24,762 INFO: [holo_..][epoch:  7, iter:   4,000, lr:(9.995e-05,)] [eta: 14:57:43, time (data): 0.250 (0.002)] l_pix: 1.5730e-02 l_gfl: 2.3993e-02 l_hf: 1.1659e-02 l_total: 2.0461e-02 
+2026-10-13 11:12:00,317 INFO: [holo_..][epoch:  8, iter:   4,100, lr:(9.995e-05,)] [eta: 14:55:58, time (data): 0.253 (0.002)] l_pix: 1.8305e-02 l_gfl: 1.6043e-02 l_hf: 1.0057e-02 l_total: 2.1921e-02 
+2026-10-13 11:13:36,967 INFO: [holo_..][epoch:  8, iter:   4,200, lr:(9.995e-05,)] [eta: 14:54:29, time (data): 0.261 (0.002)] l_pix: 2.1826e-02 l_gfl: 2.0178e-02 l_hf: 1.1954e-02 l_total: 2.6235e-02 
+2026-10-13 11:15:14,619 INFO: [holo_..][epoch:  8, iter:   4,300, lr:(9.995e-05,)] [eta: 14:53:11, time (data): 0.260 (0.002)] l_pix: 2.4276e-02 l_gfl: 2.1037e-02 l_hf: 1.2786e-02 l_total: 2.8936e-02 
+2026-10-13 11:16:49,392 INFO: [holo_..][epoch:  8, iter:   4,400, lr:(9.995e-05,)] [eta: 14:51:17, time (data): 0.254 (0.002)] l_pix: 1.9936e-02 l_gfl: 1.9670e-02 l_hf: 1.1398e-02 l_total: 2.4183e-02 
+2026-10-13 11:18:21,695 INFO: [holo_..][epoch:  8, iter:   4,500, lr:(9.995e-05,)] [eta: 14:48:53, time (data): 0.237 (0.002)] l_pix: 1.9436e-02 l_gfl: 7.7443e-03 l_hf: 6.9772e-03 l_total: 2.1606e-02 
+2026-10-13 11:19:57,641 INFO: [holo_..][epoch:  9, iter:   4,600, lr:(9.995e-05,)] [eta: 14:47:15, time (data): 0.262 (0.002)] l_pix: 2.5997e-02 l_gfl: 2.0966e-02 l_hf: 1.2027e-02 l_total: 3.0499e-02 
+2026-10-13 11:21:33,555 INFO: [holo_..][epoch:  9, iter:   4,700, lr:(9.995e-05,)] [eta: 14:45:37, time (data): 0.265 (0.002)] l_pix: 2.1111e-02 l_gfl: 1.5724e-02 l_hf: 8.9851e-03 l_total: 2.4481e-02 
+2026-10-13 11:23:12,093 INFO: [holo_..][epoch:  9, iter:   4,800, lr:(9.995e-05,)] [eta: 14:44:29, time (data): 0.263 (0.002)] l_pix: 2.2613e-02 l_gfl: 9.3772e-03 l_hf: 7.1725e-03 l_total: 2.4985e-02 
+2026-10-13 11:24:48,940 INFO: [holo_..][epoch:  9, iter:   4,900, lr:(9.995e-05,)] [eta: 14:43:01, time (data): 0.254 (0.002)] l_pix: 1.5045e-02 l_gfl: 2.3478e-02 l_hf: 1.1387e-02 l_total: 1.9670e-02 
+2026-10-13 11:26:25,251 INFO: [holo_..][epoch:  9, iter:   5,000, lr:(9.995e-05,)] [eta: 14:41:26, time (data): 0.256 (0.002)] l_pix: 1.5611e-02 l_gfl: 1.5388e-02 l_hf: 8.4437e-03 l_total: 1.8839e-02 
+2026-10-13 11:26:25,251 INFO: Saving models and training states.
+2026-10-13 11:33:40,930 INFO: Validation HoloVal,		 # psnr: 30.2174	 # ssim: 0.9006	 # rmse: 0.0321	 # mae: 0.0159
+2026-10-13 11:33:41,235 INFO: New best checkpoint at iter 5000: PSNR=30.217445, SSIM=0.900603
+2026-10-13 11:35:19,676 INFO: [holo_..][epoch: 10, iter:   5,100, lr:(9.995e-05,)] [eta: 15:58:27, time (data): 0.262 (0.002)] l_pix: 1.8371e-02 l_gfl: 1.1697e-02 l_hf: 8.9194e-03 l_total: 2.1325e-02 
+2026-10-13 11:36:55,016 INFO: [holo_..][epoch: 10, iter:   5,200, lr:(9.995e-05,)] [eta: 15:55:03, time (data): 0.268 (0.002)] l_pix: 1.3154e-02 l_gfl: 1.4178e-02 l_hf: 7.9183e-03 l_total: 1.6155e-02 
+2026-10-13 11:38:32,004 INFO: [holo_..][epoch: 10, iter:   5,300, lr:(9.995e-05,)] [eta: 15:52:00, time (data): 0.270 (0.002)] l_pix: 3.0818e-02 l_gfl: 1.4970e-02 l_hf: 1.0294e-02 l_total: 3.4374e-02 
+2026-10-13 11:40:09,424 INFO: [holo_..][epoch: 10, iter:   5,400, lr:(9.995e-05,)] [eta: 15:49:05, time (data): 0.266 (0.002)] l_pix: 1.7804e-02 l_gfl: 8.2605e-03 l_hf: 7.0077e-03 l_total: 2.0031e-02 
+2026-10-13 11:41:47,348 INFO: [holo_..][epoch: 10, iter:   5,500, lr:(9.995e-05,)] [eta: 15:46:17, time (data): 0.258 (0.001)] l_pix: 2.0723e-02 l_gfl: 1.9290e-02 l_hf: 1.1115e-02 l_total: 2.4875e-02 
+2026-10-13 11:43:25,251 INFO: [holo_..][epoch: 11, iter:   5,600, lr:(9.995e-05,)] [eta: 15:43:32, time (data): 0.263 (0.002)] l_pix: 2.3415e-02 l_gfl: 9.1055e-03 l_hf: 6.6500e-03 l_total: 2.5656e-02 
+2026-10-13 11:45:02,153 INFO: [holo_..][epoch: 11, iter:   5,700, lr:(9.995e-05,)] [eta: 15:40:40, time (data): 0.254 (0.002)] l_pix: 1.8144e-02 l_gfl: 9.2933e-03 l_hf: 6.8164e-03 l_total: 2.0436e-02 
+2026-10-13 11:46:35,255 INFO: [holo_..][epoch: 11, iter:   5,800, lr:(9.995e-05,)] [eta: 15:37:15, time (data): 0.265 (0.002)] l_pix: 1.5104e-02 l_gfl: 1.5401e-02 l_hf: 8.4563e-03 l_total: 1.8335e-02 
+2026-10-13 11:48:13,503 INFO: [holo_..][epoch: 11, iter:   5,900, lr:(9.995e-05,)] [eta: 15:34:40, time (data): 0.265 (0.002)] l_pix: 1.5702e-02 l_gfl: 8.1084e-03 l_hf: 6.0002e-03 l_total: 1.7713e-02 
+2026-10-13 11:49:51,707 INFO: [holo_..][epoch: 11, iter:   6,000, lr:(9.995e-05,)] [eta: 15:32:08, time (data): 0.255 (0.001)] l_pix: 1.6580e-02 l_gfl: 8.3717e-03 l_hf: 6.6030e-03 l_total: 1.8738e-02 
+2026-10-13 11:51:29,900 INFO: [holo_..][epoch: 12, iter:   6,100, lr:(9.995e-05,)] [eta: 15:29:36, time (data): 0.263 (0.002)] l_pix: 2.0282e-02 l_gfl: 1.8105e-02 l_hf: 1.0362e-02 l_total: 2.4165e-02 
+2026-10-13 11:53:06,847 INFO: [holo_..][epoch: 12, iter:   6,200, lr:(9.995e-05,)] [eta: 15:26:56, time (data): 0.256 (0.002)] l_pix: 1.3413e-02 l_gfl: 2.2650e-02 l_hf: 1.0604e-02 l_total: 1.7799e-02 
+2026-10-13 11:54:43,234 INFO: [holo_..][epoch: 12, iter:   6,300, lr:(9.995e-05,)] [eta: 15:24:13, time (data): 0.255 (0.002)] l_pix: 1.3401e-02 l_gfl: 2.2713e-02 l_hf: 1.0539e-02 l_total: 1.7780e-02 
+2026-10-13 11:56:18,270 INFO: [holo_..][epoch: 12, iter:   6,400, lr:(9.995e-05,)] [eta: 15:21:21, time (data): 0.265 (0.002)] l_pix: 1.3036e-02 l_gfl: 7.7708e-03 l_hf: 6.5609e-03 l_total: 1.5125e-02 
+2026-10-13 11:57:53,114 INFO: [holo_..][epoch: 12, iter:   6,500, lr:(9.995e-05,)] [eta: 15:18:30, time (data): 0.249 (0.002)] l_pix: 1.6338e-02 l_gfl: 9.5392e-03 l_hf: 6.8772e-03 l_total: 1.8667e-02 
+2026-10-13 11:59:30,004 INFO: [holo_..][epoch: 13, iter:   6,600, lr:(9.995e-05,)] [eta: 15:15:57, time (data): 0.262 (0.002)] l_pix: 2.0349e-02 l_gfl: 1.8554e-02 l_hf: 1.0353e-02 l_total: 2.4275e-02 
+2026-10-13 12:01:07,571 INFO: [holo_..][epoch: 13, iter:   6,700, lr:(9.995e-05,)] [eta: 15:13:32, time (data): 0.263 (0.002)] l_pix: 1.4050e-02 l_gfl: 1.6043e-02 l_hf: 8.6841e-03 l_total: 1.7392e-02 
+2026-10-13 12:02:43,738 INFO: [holo_..][epoch: 13, iter:   6,800, lr:(9.995e-05,)] [eta: 15:10:57, time (data): 0.262 (0.002)] l_pix: 1.5640e-02 l_gfl: 1.6760e-02 l_hf: 9.2109e-03 l_total: 1.9158e-02 
+2026-10-13 12:04:21,916 INFO: [holo_..][epoch: 13, iter:   6,900, lr:(9.995e-05,)] [eta: 15:08:39, time (data): 0.266 (0.002)] l_pix: 1.2963e-02 l_gfl: 2.2177e-02 l_hf: 1.0198e-02 l_total: 1.7220e-02 
+2026-10-13 12:05:59,667 INFO: [holo_..][epoch: 13, iter:   7,000, lr:(9.995e-05,)] [eta: 15:06:19, time (data): 0.260 (0.002)] l_pix: 1.5367e-02 l_gfl: 1.4151e-02 l_hf: 7.2093e-03 l_total: 1.8224e-02 
+2026-10-13 12:07:38,135 INFO: [holo_..][epoch: 14, iter:   7,100, lr:(9.995e-05,)] [eta: 15:04:05, time (data): 0.264 (0.002)] l_pix: 1.2856e-02 l_gfl: 2.2017e-02 l_hf: 1.0100e-02 l_total: 1.7078e-02 
+2026-10-13 12:09:16,591 INFO: [holo_..][epoch: 14, iter:   7,200, lr:(9.995e-05,)] [eta: 15:01:53, time (data): 0.261 (0.002)] l_pix: 1.1876e-02 l_gfl: 5.4891e-03 l_hf: 4.2712e-03 l_total: 1.3280e-02 
+2026-10-13 12:10:54,874 INFO: [holo_..][epoch: 14, iter:   7,300, lr:(9.995e-05,)] [eta: 14:59:40, time (data): 0.262 (0.002)] l_pix: 1.3163e-02 l_gfl: 1.4983e-02 l_hf: 7.9273e-03 l_total: 1.6247e-02 
+2026-10-13 12:12:31,359 INFO: [holo_..][epoch: 14, iter:   7,400, lr:(9.995e-05,)] [eta: 14:57:15, time (data): 0.256 (0.002)] l_pix: 1.1754e-02 l_gfl: 6.0957e-03 l_hf: 5.5681e-03 l_total: 1.3477e-02 
+2026-10-13 12:14:06,038 INFO: [holo_..][epoch: 14, iter:   7,500, lr:(9.995e-05,)] [eta: 14:54:39, time (data): 0.255 (0.002)] l_pix: 8.8680e-03 l_gfl: 4.4705e-03 l_hf: 5.1436e-03 l_total: 1.0344e-02 
+2026-10-13 12:15:43,920 INFO: [holo_..][epoch: 15, iter:   7,600, lr:(9.995e-05,)] [eta: 14:52:27, time (data): 0.261 (0.002)] l_pix: 1.4961e-02 l_gfl: 1.0375e-02 l_hf: 6.8107e-03 l_total: 1.7360e-02 
+2026-10-13 12:17:21,634 INFO: [holo_..][epoch: 15, iter:   7,700, lr:(9.995e-05,)] [eta: 14:50:14, time (data): 0.263 (0.002)] l_pix: 1.8659e-02 l_gfl: 8.2994e-03 l_hf: 5.9747e-03 l_total: 2.0684e-02 
+2026-10-13 12:18:59,177 INFO: [holo_..][epoch: 15, iter:   7,800, lr:(9.995e-05,)] [eta: 14:48:01, time (data): 0.263 (0.002)] l_pix: 1.4600e-02 l_gfl: 9.2755e-03 l_hf: 6.4271e-03 l_total: 1.6813e-02 
+2026-10-13 12:20:37,159 INFO: [holo_..][epoch: 15, iter:   7,900, lr:(9.995e-05,)] [eta: 14:45:52, time (data): 0.260 (0.002)] l_pix: 2.4157e-02 l_gfl: 1.3412e-02 l_hf: 9.5873e-03 l_total: 2.7416e-02 
+2026-10-13 12:22:12,132 INFO: [holo_..][epoch: 15, iter:   8,000, lr:(9.995e-05,)] [eta: 14:43:25, time (data): 0.254 (0.002)] l_pix: 1.2283e-02 l_gfl: 1.5364e-02 l_hf: 8.3238e-03 l_total: 1.5484e-02 
+2026-10-13 12:23:49,847 INFO: [holo_..][epoch: 16, iter:   8,100, lr:(9.995e-05,)] [eta: 14:41:16, time (data): 0.261 (0.002)] l_pix: 1.8205e-02 l_gfl: 1.1517e-02 l_hf: 8.2999e-03 l_total: 2.1017e-02 
+2026-10-13 12:25:28,485 INFO: [holo_..][epoch: 16, iter:   8,200, lr:(9.995e-05,)] [eta: 14:39:13, time (data): 0.269 (0.002)] l_pix: 1.2732e-02 l_gfl: 2.2258e-02 l_hf: 9.9811e-03 l_total: 1.6954e-02 
+2026-10-13 12:27:05,995 INFO: [holo_..][epoch: 16, iter:   8,300, lr:(9.995e-05,)] [eta: 14:37:04, time (data): 0.242 (0.002)] l_pix: 1.4782e-02 l_gfl: 9.5296e-03 l_hf: 7.1746e-03 l_total: 1.7170e-02 
+2026-10-13 12:28:43,938 INFO: [holo_..][epoch: 16, iter:   8,400, lr:(9.995e-05,)] [eta: 14:34:59, time (data): 0.268 (0.002)] l_pix: 1.5279e-02 l_gfl: 1.5709e-02 l_hf: 8.3701e-03 l_total: 1.8524e-02 
+2026-10-13 12:30:22,035 INFO: [holo_..][epoch: 16, iter:   8,500, lr:(9.995e-05,)] [eta: 14:32:55, time (data): 0.260 (0.002)] l_pix: 1.4080e-02 l_gfl: 1.5781e-02 l_hf: 8.4532e-03 l_total: 1.7349e-02 
+2026-10-13 12:31:59,769 INFO: [holo_..][epoch: 17, iter:   8,600, lr:(9.995e-05,)] [eta: 14:30:50, time (data): 0.269 (0.002)] l_pix: 1.7611e-02 l_gfl: 1.3106e-02 l_hf: 8.9149e-03 l_total: 2.0705e-02 
+2026-10-13 12:33:36,859 INFO: [holo_..][epoch: 17, iter:   8,700, lr:(9.995e-05,)] [eta: 14:28:41, time (data): 0.254 (0.002)] l_pix: 1.7526e-02 l_gfl: 2.0147e-02 l_hf: 1.1739e-02 l_total: 2.1888e-02 
+2026-10-13 12:35:12,600 INFO: [holo_..][epoch: 17, iter:   8,800, lr:(9.995e-05,)] [eta: 14:26:25, time (data): 0.254 (0.002)] l_pix: 1.3981e-02 l_gfl: 1.6643e-02 l_hf: 8.8317e-03 l_total: 1.7411e-02 
+2026-10-13 12:36:50,053 INFO: [holo_..][epoch: 17, iter:   8,900, lr:(9.995e-05,)] [eta: 14:24:20, time (data): 0.262 (0.002)] l_pix: 1.2094e-02 l_gfl: 7.0194e-03 l_hf: 5.2292e-03 l_total: 1.3841e-02 
+2026-10-13 12:38:25,935 INFO: [holo_..][epoch: 17, iter:   9,000, lr:(9.995e-05,)] [eta: 14:22:07, time (data): 0.258 (0.002)] l_pix: 1.1983e-02 l_gfl: 1.4971e-02 l_hf: 7.8665e-03 l_total: 1.5054e-02 
+2026-10-13 12:40:03,892 INFO: [holo_..][epoch: 18, iter:   9,100, lr:(9.995e-05,)] [eta: 14:20:06, time (data): 0.267 (0.002)] l_pix: 1.3144e-02 l_gfl: 1.5437e-02 l_hf: 8.1301e-03 l_total: 1.6314e-02 
+2026-10-13 12:41:41,591 INFO: [holo_..][epoch: 18, iter:   9,200, lr:(9.995e-05,)] [eta: 14:18:05, time (data): 0.264 (0.002)] l_pix: 1.4562e-02 l_gfl: 8.5230e-03 l_hf: 6.2397e-03 l_total: 1.6662e-02 
+2026-10-13 12:43:20,080 INFO: [holo_..][epoch: 18, iter:   9,300, lr:(9.995e-05,)] [eta: 14:16:08, time (data): 0.263 (0.002)] l_pix: 1.6194e-02 l_gfl: 7.1274e-03 l_hf: 5.6167e-03 l_total: 1.8030e-02 
+2026-10-13 12:44:57,789 INFO: [holo_..][epoch: 18, iter:   9,400, lr:(9.995e-05,)] [eta: 14:14:07, time (data): 0.248 (0.002)] l_pix: 1.3913e-02 l_gfl: 2.1581e-02 l_hf: 1.0163e-02 l_total: 1.8104e-02 
+2026-10-13 12:46:33,622 INFO: [holo_..][epoch: 18, iter:   9,500, lr:(9.995e-05,)] [eta: 14:11:57, time (data): 0.265 (0.003)] l_pix: 1.0476e-02 l_gfl: 5.3974e-03 l_hf: 4.1234e-03 l_total: 1.1840e-02 
+2026-10-13 12:48:12,243 INFO: [holo_..][epoch: 19, iter:   9,600, lr:(9.995e-05,)] [eta: 14:10:02, time (data): 0.270 (0.002)] l_pix: 1.5359e-02 l_gfl: 9.2308e-03 l_hf: 6.0607e-03 l_total: 1.7494e-02 
+2026-10-13 12:49:50,975 INFO: [holo_..][epoch: 19, iter:   9,700, lr:(9.995e-05,)] [eta: 14:08:08, time (data): 0.263 (0.002)] l_pix: 1.7627e-02 l_gfl: 7.0695e-03 l_hf: 5.0696e-03 l_total: 1.9348e-02 
+2026-10-13 12:51:28,951 INFO: [holo_..][epoch: 19, iter:   9,800, lr:(9.995e-05,)] [eta: 14:06:10, time (data): 0.258 (0.002)] l_pix: 1.2782e-02 l_gfl: 1.5969e-02 l_hf: 8.4422e-03 l_total: 1.6067e-02 
+2026-10-13 12:53:05,557 INFO: [holo_..][epoch: 19, iter:   9,900, lr:(9.995e-05,)] [eta: 14:04:06, time (data): 0.256 (0.002)] l_pix: 1.1968e-02 l_gfl: 1.3830e-02 l_hf: 6.9687e-03 l_total: 1.4745e-02 
+2026-10-13 12:54:41,081 INFO: [holo_..][epoch: 19, iter:  10,000, lr:(9.995e-05,)] [eta: 14:01:57, time (data): 0.258 (0.002)] l_pix: 1.4623e-02 l_gfl: 8.0359e-03 l_hf: 5.9758e-03 l_total: 1.6622e-02 
+2026-10-13 12:54:41,081 INFO: Saving models and training states.
+2026-10-13 13:01:48,864 INFO: Validation HoloVal,		 # psnr: 31.3383	 # ssim: 0.9166	 # rmse: 0.0281	 # mae: 0.0140
+2026-10-13 13:01:49,112 INFO: New best checkpoint at iter 10000: PSNR=31.338303, SSIM=0.916575
+2026-10-13 13:03:24,647 INFO: [holo_..][epoch: 20, iter:  10,100, lr:(9.995e-05,)] [eta: 14:35:03, time (data): 0.257 (0.002)] l_pix: 1.4280e-02 l_gfl: 1.6804e-02 l_hf: 8.8288e-03 l_total: 1.7726e-02 
+2026-10-13 13:05:01,255 INFO: [holo_..][epoch: 20, iter:  10,200, lr:(9.995e-05,)] [eta: 14:32:36, time (data): 0.267 (0.002)] l_pix: 1.6118e-02 l_gfl: 7.9612e-03 l_hf: 5.8875e-03 l_total: 1.8091e-02 
+2026-10-13 13:06:39,374 INFO: [holo_..][epoch: 20, iter:  10,300, lr:(9.995e-05,)] [eta: 14:30:17, time (data): 0.263 (0.002)] l_pix: 9.4173e-03 l_gfl: 1.2504e-02 l_hf: 6.2160e-03 l_total: 1.1911e-02 
+2026-10-13 13:08:17,349 INFO: [holo_..][epoch: 20, iter:  10,400, lr:(9.995e-05,)] [eta: 14:27:58, time (data): 0.265 (0.002)] l_pix: 1.0602e-02 l_gfl: 6.4947e-03 l_hf: 5.1788e-03 l_total: 1.2288e-02 
+2026-10-13 13:09:55,227 INFO: [holo_..][epoch: 20, iter:  10,500, lr:(9.995e-05,)] [eta: 14:25:40, time (data): 0.258 (0.002)] l_pix: 1.2206e-02 l_gfl: 8.1503e-03 l_hf: 5.5280e-03 l_total: 1.4127e-02 
+2026-10-13 13:11:31,179 INFO: [holo_..][epoch: 21, iter:  10,600, lr:(9.995e-05,)] [eta: 14:23:13, time (data): 0.253 (0.002)] l_pix: 1.5606e-02 l_gfl: 1.3126e-02 l_hf: 9.5847e-03 l_total: 1.8835e-02 
+2026-10-13 13:13:06,229 INFO: [holo_..][epoch: 21, iter:  10,700, lr:(9.995e-05,)] [eta: 14:20:43, time (data): 0.253 (0.002)] l_pix: 1.1427e-02 l_gfl: 2.1336e-02 l_hf: 9.4332e-03 l_total: 1.5448e-02 
+2026-10-13 13:14:41,186 INFO: [holo_..][epoch: 21, iter:  10,800, lr:(9.995e-05,)] [eta: 14:18:14, time (data): 0.254 (0.002)] l_pix: 1.3942e-02 l_gfl: 1.5991e-02 l_hf: 8.1137e-03 l_total: 1.7164e-02 
+2026-10-13 13:16:16,544 INFO: [holo_..][epoch: 21, iter:  10,900, lr:(9.995e-05,)] [eta: 14:15:47, time (data): 0.269 (0.002)] l_pix: 1.1656e-02 l_gfl: 2.1248e-02 l_hf: 9.3835e-03 l_total: 1.5658e-02 
+2026-10-13 13:17:54,515 INFO: [holo_..][epoch: 21, iter:  11,000, lr:(9.995e-05,)] [eta: 14:13:33, time (data): 0.257 (0.002)] l_pix: 1.7369e-02 l_gfl: 1.6807e-02 l_hf: 8.6466e-03 l_total: 2.0779e-02 
+2026-10-13 13:19:30,363 INFO: [holo_..][epoch: 22, iter:  11,100, lr:(9.995e-05,)] [eta: 14:11:10, time (data): 0.254 (0.002)] l_pix: 1.9141e-02 l_gfl: 1.8414e-02 l_hf: 1.0251e-02 l_total: 2.3033e-02 
+2026-10-13 13:21:06,727 INFO: [holo_..][epoch: 22, iter:  11,200, lr:(9.995e-05,)] [eta: 14:08:51, time (data): 0.261 (0.002)] l_pix: 1.4078e-02 l_gfl: 1.9185e-02 l_hf: 1.0850e-02 l_total: 1.8166e-02 
+2026-10-13 13:22:44,099 INFO: [holo_..][epoch: 22, iter:  11,300, lr:(9.995e-05,)] [eta: 14:06:36, time (data): 0.261 (0.002)] l_pix: 1.0919e-02 l_gfl: 6.0773e-03 l_hf: 4.7442e-03 l_total: 1.2476e-02 
+2026-10-13 13:24:21,349 INFO: [holo_..][epoch: 22, iter:  11,400, lr:(9.995e-05,)] [eta: 14:04:22, time (data): 0.262 (0.002)] l_pix: 1.5932e-02 l_gfl: 9.7539e-03 l_hf: 6.8798e-03 l_total: 1.8283e-02 
+2026-10-13 13:25:59,472 INFO: [holo_..][epoch: 22, iter:  11,500, lr:(9.995e-05,)] [eta: 14:02:12, time (data): 0.268 (0.002)] l_pix: 1.0714e-02 l_gfl: 1.4602e-02 l_hf: 7.5936e-03 l_total: 1.3693e-02 
+2026-10-13 13:27:35,429 INFO: [holo_..][epoch: 23, iter:  11,600, lr:(9.995e-05,)] [eta: 13:59:53, time (data): 0.253 (0.002)] l_pix: 1.0535e-02 l_gfl: 1.3918e-02 l_hf: 7.1514e-03 l_total: 1.3357e-02 
+2026-10-13 13:29:10,438 INFO: [holo_..][epoch: 23, iter:  11,700, lr:(9.995e-05,)] [eta: 13:57:31, time (data): 0.253 (0.002)] l_pix: 9.9826e-03 l_gfl: 1.2918e-02 l_hf: 6.8698e-03 l_total: 1.2648e-02 
+2026-10-13 13:30:45,714 INFO: [holo_..][epoch: 23, iter:  11,800, lr:(9.995e-05,)] [eta: 13:55:12, time (data): 0.254 (0.002)] l_pix: 1.3336e-02 l_gfl: 1.5967e-02 l_hf: 8.4457e-03 l_total: 1.6622e-02 
+2026-10-13 13:32:21,074 INFO: [holo_..][epoch: 23, iter:  11,900, lr:(9.995e-05,)] [eta: 13:52:53, time (data): 0.266 (0.002)] l_pix: 1.1137e-02 l_gfl: 2.0717e-02 l_hf: 9.2235e-03 l_total: 1.5054e-02 
+2026-10-13 13:33:59,040 INFO: [holo_..][epoch: 23, iter:  12,000, lr:(9.995e-05,)] [eta: 13:50:45, time (data): 0.259 (0.002)] l_pix: 1.3443e-02 l_gfl: 8.6814e-03 l_hf: 6.0016e-03 l_total: 1.5512e-02 
+2026-10-13 13:35:37,665 INFO: [holo_..][epoch: 24, iter:  12,100, lr:(9.995e-05,)] [eta: 13:48:41, time (data): 0.262 (0.002)] l_pix: 1.5584e-02 l_gfl: 1.3447e-02 l_hf: 9.2246e-03 l_total: 1.8774e-02 
+2026-10-13 13:37:15,765 INFO: [holo_..][epoch: 24, iter:  12,200, lr:(9.995e-05,)] [eta: 13:46:34, time (data): 0.261 (0.002)] l_pix: 1.1280e-02 l_gfl: 2.0426e-02 l_hf: 9.0721e-03 l_total: 1.5137e-02 
+2026-10-13 13:38:53,265 INFO: [holo_..][epoch: 24, iter:  12,300, lr:(9.995e-05,)] [eta: 13:44:26, time (data): 0.261 (0.002)] l_pix: 1.1469e-02 l_gfl: 1.4508e-02 l_hf: 7.6438e-03 l_total: 1.4448e-02 
+2026-10-13 13:40:28,593 INFO: [holo_..][epoch: 24, iter:  12,400, lr:(9.995e-05,)] [eta: 13:42:11, time (data): 0.254 (0.002)] l_pix: 1.2480e-02 l_gfl: 2.0937e-02 l_hf: 9.2611e-03 l_total: 1.6426e-02 
+2026-10-13 13:42:02,415 INFO: [holo_..][epoch: 24, iter:  12,500, lr:(9.995e-05,)] [eta: 13:39:50, time (data): 0.251 (0.002)] l_pix: 1.2962e-02 l_gfl: 8.3117e-03 l_hf: 6.0442e-03 l_total: 1.5002e-02 
+2026-10-13 13:43:40,343 INFO: [holo_..][epoch: 25, iter:  12,600, lr:(9.995e-05,)] [eta: 13:37:45, time (data): 0.261 (0.002)] l_pix: 1.5350e-02 l_gfl: 1.9416e-02 l_hf: 1.1136e-02 l_total: 1.9519e-02 
+2026-10-13 13:45:18,534 INFO: [holo_..][epoch: 25, iter:  12,700, lr:(9.995e-05,)] [eta: 13:35:42, time (data): 0.262 (0.002)] l_pix: 1.1118e-02 l_gfl: 1.5067e-02 l_hf: 8.2253e-03 l_total: 1.4270e-02 
+2026-10-13 13:46:56,942 INFO: [holo_..][epoch: 25, iter:  12,800, lr:(9.995e-05,)] [eta: 13:33:39, time (data): 0.262 (0.002)] l_pix: 1.1848e-02 l_gfl: 1.3287e-02 l_hf: 6.7224e-03 l_total: 1.4521e-02 
+2026-10-13 13:48:35,039 INFO: [holo_..][epoch: 25, iter:  12,900, lr:(9.995e-05,)] [eta: 13:31:36, time (data): 0.267 (0.002)] l_pix: 1.0484e-02 l_gfl: 2.0302e-02 l_hf: 8.9935e-03 l_total: 1.4313e-02 
+2026-10-13 13:50:12,489 INFO: [holo_..][epoch: 25, iter:  13,000, lr:(9.995e-05,)] [eta: 13:29:32, time (data): 0.257 (0.002)] l_pix: 1.2841e-02 l_gfl: 1.5706e-02 l_hf: 8.2209e-03 l_total: 1.6056e-02 
+2026-10-13 13:51:49,333 INFO: [holo_..][epoch: 26, iter:  13,100, lr:(9.995e-05,)] [eta: 13:27:25, time (data): 0.266 (0.002)] l_pix: 1.3542e-02 l_gfl: 1.5870e-02 l_hf: 8.4066e-03 l_total: 1.6810e-02 
+2026-10-13 13:53:26,975 INFO: [holo_..][epoch: 26, iter:  13,200, lr:(9.995e-05,)] [eta: 13:25:22, time (data): 0.262 (0.002)] l_pix: 1.0594e-02 l_gfl: 2.0559e-02 l_hf: 8.9968e-03 l_total: 1.4449e-02 
+2026-10-13 13:55:05,196 INFO: [holo_..][epoch: 26, iter:  13,300, lr:(9.995e-05,)] [eta: 13:23:21, time (data): 0.262 (0.002)] l_pix: 1.0907e-02 l_gfl: 2.0373e-02 l_hf: 9.0579e-03 l_total: 1.4756e-02 
+2026-10-13 13:56:40,954 INFO: [holo_..][epoch: 26, iter:  13,400, lr:(9.995e-05,)] [eta: 13:21:12, time (data): 0.261 (0.002)] l_pix: 1.1013e-02 l_gfl: 2.1106e-02 l_hf: 9.0641e-03 l_total: 1.4936e-02 
+2026-10-13 13:58:18,222 INFO: [holo_..][epoch: 26, iter:  13,500, lr:(9.995e-05,)] [eta: 13:19:08, time (data): 0.251 (0.002)] l_pix: 1.6938e-02 l_gfl: 9.7035e-03 l_hf: 7.4501e-03 l_total: 1.9398e-02 
+2026-10-13 13:59:54,133 INFO: [holo_..][epoch: 27, iter:  13,600, lr:(9.995e-05,)] [eta: 13:17:00, time (data): 0.263 (0.002)] l_pix: 1.1658e-02 l_gfl: 9.4973e-03 l_hf: 6.4110e-03 l_total: 1.3889e-02 
+2026-10-13 14:01:32,560 INFO: [holo_..][epoch: 27, iter:  13,700, lr:(9.995e-05,)] [eta: 13:15:02, time (data): 0.257 (0.002)] l_pix: 1.4801e-02 l_gfl: 9.3295e-03 l_hf: 6.2349e-03 l_total: 1.6981e-02 
+2026-10-13 14:03:11,526 INFO: [holo_..][epoch: 27, iter:  13,800, lr:(9.995e-05,)] [eta: 13:13:05, time (data): 0.268 (0.002)] l_pix: 1.8421e-02 l_gfl: 1.2951e-02 l_hf: 8.5543e-03 l_total: 2.1427e-02 
+2026-10-13 14:04:50,377 INFO: [holo_..][epoch: 27, iter:  13,900, lr:(9.995e-05,)] [eta: 13:11:08, time (data): 0.267 (0.002)] l_pix: 1.1031e-02 l_gfl: 1.5069e-02 l_hf: 7.8197e-03 l_total: 1.4101e-02 
+2026-10-13 14:06:30,418 INFO: [holo_..][epoch: 27, iter:  14,000, lr:(9.995e-05,)] [eta: 13:09:16, time (data): 0.276 (0.002)] l_pix: 1.3904e-02 l_gfl: 1.7913e-02 l_hf: 9.3860e-03 l_total: 1.7573e-02 
+2026-10-13 14:08:08,935 INFO: [holo_..][epoch: 28, iter:  14,100, lr:(9.995e-05,)] [eta: 13:07:18, time (data): 0.271 (0.005)] l_pix: 9.4945e-03 l_gfl: 7.5524e-03 l_hf: 5.3934e-03 l_total: 1.1328e-02 
+2026-10-13 14:09:46,037 INFO: [holo_..][epoch: 28, iter:  14,200, lr:(9.995e-05,)] [eta: 13:05:17, time (data): 0.255 (0.002)] l_pix: 1.0719e-02 l_gfl: 1.3158e-02 l_hf: 6.5335e-03 l_total: 1.3342e-02 
+2026-10-13 14:11:25,103 INFO: [holo_..][epoch: 28, iter:  14,300, lr:(9.995e-05,)] [eta: 13:03:22, time (data): 0.269 (0.002)] l_pix: 1.1146e-02 l_gfl: 2.0638e-02 l_hf: 9.0570e-03 l_total: 1.5022e-02 
+2026-10-13 14:13:05,567 INFO: [holo_..][epoch: 28, iter:  14,400, lr:(9.995e-05,)] [eta: 13:01:31, time (data): 0.268 (0.002)] l_pix: 8.3854e-03 l_gfl: 1.1947e-02 l_hf: 5.8455e-03 l_total: 1.0749e-02 
+2026-10-13 14:14:45,373 INFO: [holo_..][epoch: 28, iter:  14,500, lr:(9.995e-05,)] [eta: 12:59:39, time (data): 0.245 (0.002)] l_pix: 1.0990e-02 l_gfl: 1.5263e-02 l_hf: 7.9185e-03 l_total: 1.4100e-02 
+2026-10-13 14:16:19,871 INFO: [holo_..][epoch: 29, iter:  14,600, lr:(9.995e-05,)] [eta: 12:57:30, time (data): 0.253 (0.002)] l_pix: 1.1103e-02 l_gfl: 1.3235e-02 l_hf: 6.7761e-03 l_total: 1.3781e-02 
+2026-10-13 14:17:56,513 INFO: [holo_..][epoch: 29, iter:  14,700, lr:(9.995e-05,)] [eta: 12:55:29, time (data): 0.249 (0.002)] l_pix: 1.6562e-02 l_gfl: 1.1726e-02 l_hf: 8.4327e-03 l_total: 1.9422e-02 
+2026-10-13 14:19:32,005 INFO: [holo_..][epoch: 29, iter:  14,800, lr:(9.995e-05,)] [eta: 12:53:24, time (data): 0.257 (0.002)] l_pix: 1.1596e-02 l_gfl: 1.5058e-02 l_hf: 7.6117e-03 l_total: 1.4624e-02 
+2026-10-13 14:21:06,488 INFO: [holo_..][epoch: 29, iter:  14,900, lr:(9.995e-05,)] [eta: 12:51:16, time (data): 0.252 (0.002)] l_pix: 1.4327e-02 l_gfl: 9.5858e-03 l_hf: 7.1472e-03 l_total: 1.6715e-02 
+2026-10-13 14:22:41,693 INFO: [holo_..][epoch: 29, iter:  15,000, lr:(9.995e-05,)] [eta: 12:49:11, time (data): 0.263 (0.002)] l_pix: 8.7469e-03 l_gfl: 7.0260e-03 l_hf: 4.8857e-03 l_total: 1.0427e-02 
+2026-10-13 14:22:41,694 INFO: Saving models and training states.
+2026-10-13 14:29:54,065 INFO: Validation HoloVal,		 # psnr: 31.8345	 # ssim: 0.9220	 # rmse: 0.0264	 # mae: 0.0134
+2026-10-13 14:29:54,340 INFO: New best checkpoint at iter 15000: PSNR=31.834486, SSIM=0.922037
+2026-10-13 14:31:32,173 INFO: [holo_..][epoch: 30, iter:  15,100, lr:(9.995e-05,)] [eta: 13:08:41, time (data): 0.261 (0.002)] l_pix: 1.5184e-02 l_gfl: 1.7057e-02 l_hf: 9.1788e-03 l_total: 1.8725e-02 
+2026-10-13 14:33:09,247 INFO: [holo_..][epoch: 30, iter:  15,200, lr:(9.995e-05,)] [eta: 13:06:31, time (data): 0.257 (0.002)] l_pix: 7.9368e-03 l_gfl: 1.2047e-02 l_hf: 5.8028e-03 l_total: 1.0302e-02 
+2026-10-13 14:34:45,308 INFO: [holo_..][epoch: 30, iter:  15,300, lr:(9.995e-05,)] [eta: 13:04:19, time (data): 0.262 (0.002)] l_pix: 1.0735e-02 l_gfl: 1.3038e-02 l_hf: 6.7322e-03 l_total: 1.3385e-02 
+2026-10-13 14:36:23,522 INFO: [holo_..][epoch: 30, iter:  15,400, lr:(9.995e-05,)] [eta: 13:02:13, time (data): 0.266 (0.002)] l_pix: 1.0341e-02 l_gfl: 2.0094e-02 l_hf: 8.9014e-03 l_total: 1.4131e-02 
+2026-10-13 14:38:01,595 INFO: [holo_..][epoch: 30, iter:  15,500, lr:(9.995e-05,)] [eta: 13:00:07, time (data): 0.256 (0.002)] l_pix: 9.9197e-03 l_gfl: 1.9801e-02 l_hf: 8.6924e-03 l_total: 1.3638e-02 
+2026-10-13 14:39:40,383 INFO: [holo_..][epoch: 31, iter:  15,600, lr:(9.995e-05,)] [eta: 12:58:04, time (data): 0.261 (0.002)] l_pix: 1.4281e-02 l_gfl: 1.1453e-02 l_hf: 8.1800e-03 l_total: 1.7063e-02 
+2026-10-13 14:41:18,924 INFO: [holo_..][epoch: 31, iter:  15,700, lr:(9.995e-05,)] [eta: 12:56:00, time (data): 0.261 (0.002)] l_pix: 1.2701e-02 l_gfl: 1.5640e-02 l_hf: 8.0839e-03 l_total: 1.5882e-02 
+2026-10-13 14:42:55,928 INFO: [holo_..][epoch: 31, iter:  15,800, lr:(9.995e-05,)] [eta: 12:53:52, time (data): 0.266 (0.003)] l_pix: 1.1445e-02 l_gfl: 1.5175e-02 l_hf: 7.8812e-03 l_total: 1.4539e-02 
+2026-10-13 14:44:33,460 INFO: [holo_..][epoch: 31, iter:  15,900, lr:(9.995e-05,)] [eta: 12:51:46, time (data): 0.264 (0.003)] l_pix: 1.2505e-02 l_gfl: 1.1520e-02 l_hf: 7.8301e-03 l_total: 1.5223e-02 
+2026-10-13 14:46:10,791 INFO: [holo_..][epoch: 31, iter:  16,000, lr:(9.995e-05,)] [eta: 12:49:40, time (data): 0.257 (0.002)] l_pix: 1.0526e-02 l_gfl: 1.4353e-02 l_hf: 7.4351e-03 l_total: 1.3448e-02 
+2026-10-13 14:47:49,675 INFO: [holo_..][epoch: 32, iter:  16,100, lr:(9.995e-05,)] [eta: 12:47:39, time (data): 0.261 (0.002)] l_pix: 1.1397e-02 l_gfl: 1.3338e-02 l_hf: 6.5470e-03 l_total: 1.4040e-02 
+2026-10-13 14:49:28,153 INFO: [holo_..][epoch: 32, iter:  16,200, lr:(9.995e-05,)] [eta: 12:45:36, time (data): 0.266 (0.002)] l_pix: 1.0160e-02 l_gfl: 1.4550e-02 l_hf: 7.2996e-03 l_total: 1.3075e-02 
+2026-10-13 14:51:04,886 INFO: [holo_..][epoch: 32, iter:  16,300, lr:(9.995e-05,)] [eta: 12:43:30, time (data): 0.270 (0.002)] l_pix: 9.2040e-03 l_gfl: 1.3263e-02 l_hf: 6.7333e-03 l_total: 1.1877e-02 
+2026-10-13 14:52:40,861 INFO: [holo_..][epoch: 32, iter:  16,400, lr:(9.995e-05,)] [eta: 12:41:21, time (data): 0.268 (0.002)] l_pix: 1.2290e-02 l_gfl: 9.0344e-03 l_hf: 6.2754e-03 l_total: 1.4449e-02 
+2026-10-13 14:54:19,704 INFO: [holo_..][epoch: 32, iter:  16,500, lr:(9.995e-05,)] [eta: 12:39:21, time (data): 0.262 (0.002)] l_pix: 1.1531e-02 l_gfl: 9.3092e-03 l_hf: 5.8925e-03 l_total: 1.3641e-02 
+2026-10-13 14:55:58,678 INFO: [holo_..][epoch: 33, iter:  16,600, lr:(9.995e-05,)] [eta: 12:37:21, time (data): 0.265 (0.002)] l_pix: 1.5870e-02 l_gfl: 9.0867e-03 l_hf: 5.6182e-03 l_total: 1.7902e-02 
+2026-10-13 14:57:36,943 INFO: [holo_..][epoch: 33, iter:  16,700, lr:(9.995e-05,)] [eta: 12:35:20, time (data): 0.262 (0.002)] l_pix: 1.1327e-02 l_gfl: 1.2890e-02 l_hf: 6.5761e-03 l_total: 1.3931e-02 
+2026-10-13 14:59:15,564 INFO: [holo_..][epoch: 33, iter:  16,800, lr:(9.995e-05,)] [eta: 12:33:20, time (data): 0.264 (0.002)] l_pix: 1.5567e-02 l_gfl: 9.9183e-03 l_hf: 6.2485e-03 l_total: 1.7808e-02 
+2026-10-13 15:00:54,330 INFO: [holo_..][epoch: 33, iter:  16,900, lr:(9.995e-05,)] [eta: 12:31:20, time (data): 0.265 (0.002)] l_pix: 1.0131e-02 l_gfl: 7.0886e-03 l_hf: 5.5553e-03 l_total: 1.1951e-02 
+2026-10-13 15:02:29,337 INFO: [holo_..][epoch: 33, iter:  17,000, lr:(9.995e-05,)] [eta: 12:29:11, time (data): 0.244 (0.002)] l_pix: 1.2616e-02 l_gfl: 1.6483e-02 l_hf: 8.6377e-03 l_total: 1.5992e-02 
+2026-10-13 15:04:07,492 INFO: [holo_..][epoch: 34, iter:  17,100, lr:(9.995e-05,)] [eta: 12:27:11, time (data): 0.262 (0.002)] l_pix: 1.0389e-02 l_gfl: 1.3849e-02 l_hf: 7.1418e-03 l_total: 1.3202e-02 
+2026-10-13 15:05:45,554 INFO: [holo_..][epoch: 34, iter:  17,200, lr:(9.995e-05,)] [eta: 12:25:10, time (data): 0.264 (0.002)] l_pix: 1.1142e-02 l_gfl: 9.2195e-03 l_hf: 6.2459e-03 l_total: 1.3313e-02 
+2026-10-13 15:07:23,902 INFO: [holo_..][epoch: 34, iter:  17,300, lr:(9.995e-05,)] [eta: 12:23:10, time (data): 0.262 (0.002)] l_pix: 1.8648e-02 l_gfl: 1.1565e-02 l_hf: 7.6294e-03 l_total: 2.1331e-02 
+2026-10-13 15:09:02,162 INFO: [holo_..][epoch: 34, iter:  17,400, lr:(9.995e-05,)] [eta: 12:21:11, time (data): 0.263 (0.002)] l_pix: 1.0312e-02 l_gfl: 2.0465e-02 l_hf: 8.7610e-03 l_total: 1.4111e-02 
+2026-10-13 15:10:40,779 INFO: [holo_..][epoch: 34, iter:  17,500, lr:(9.995e-05,)] [eta: 12:19:12, time (data): 0.265 (0.003)] l_pix: 1.3315e-02 l_gfl: 1.1136e-02 l_hf: 7.3457e-03 l_total: 1.5898e-02 
+2026-10-13 15:12:19,545 INFO: [holo_..][epoch: 35, iter:  17,600, lr:(9.995e-05,)] [eta: 12:17:15, time (data): 0.261 (0.002)] l_pix: 1.0234e-02 l_gfl: 1.4430e-02 l_hf: 7.5730e-03 l_total: 1.3192e-02 
+2026-10-13 15:13:58,595 INFO: [holo_..][epoch: 35, iter:  17,700, lr:(9.995e-05,)] [eta: 12:15:18, time (data): 0.262 (0.002)] l_pix: 9.7270e-03 l_gfl: 1.9349e-02 l_hf: 8.4932e-03 l_total: 1.3361e-02 
+2026-10-13 15:15:37,123 INFO: [holo_..][epoch: 35, iter:  17,800, lr:(9.995e-05,)] [eta: 12:13:20, time (data): 0.253 (0.002)] l_pix: 1.4557e-02 l_gfl: 8.6301e-03 l_hf: 5.4528e-03 l_total: 1.6511e-02 
+2026-10-13 15:17:14,834 INFO: [holo_..][epoch: 35, iter:  17,900, lr:(9.995e-05,)] [eta: 12:11:20, time (data): 0.267 (0.003)] l_pix: 1.2998e-02 l_gfl: 9.8774e-03 l_hf: 6.8612e-03 l_total: 1.5358e-02 
+2026-10-13 15:18:53,163 INFO: [holo_..][epoch: 35, iter:  18,000, lr:(9.995e-05,)] [eta: 12:09:22, time (data): 0.264 (0.002)] l_pix: 1.0120e-02 l_gfl: 1.3071e-02 l_hf: 6.5544e-03 l_total: 1.2738e-02 
+2026-10-13 15:20:30,319 INFO: [holo_..][epoch: 36, iter:  18,100, lr:(9.995e-05,)] [eta: 12:07:21, time (data): 0.266 (0.002)] l_pix: 9.6278e-03 l_gfl: 1.4699e-02 l_hf: 7.2929e-03 l_total: 1.2556e-02 
+2026-10-13 15:22:08,057 INFO: [holo_..][epoch: 36, iter:  18,200, lr:(9.995e-05,)] [eta: 12:05:23, time (data): 0.261 (0.002)] l_pix: 1.3913e-02 l_gfl: 8.6183e-03 l_hf: 5.4788e-03 l_total: 1.5871e-02 
+2026-10-13 15:23:46,533 INFO: [holo_..][epoch: 36, iter:  18,300, lr:(9.995e-05,)] [eta: 12:03:26, time (data): 0.261 (0.002)] l_pix: 9.3208e-03 l_gfl: 1.9123e-02 l_hf: 7.9637e-03 l_total: 1.2826e-02 
+2026-10-13 15:25:23,523 INFO: [holo_..][epoch: 36, iter:  18,400, lr:(9.995e-05,)] [eta: 12:01:25, time (data): 0.271 (0.003)] l_pix: 8.0942e-03 l_gfl: 1.1889e-02 l_hf: 5.6320e-03 l_total: 1.0410e-02 
+2026-10-13 15:27:00,615 INFO: [holo_..][epoch: 36, iter:  18,500, lr:(9.995e-05,)] [eta: 11:59:26, time (data): 0.263 (0.002)] l_pix: 7.9308e-03 l_gfl: 6.6406e-03 l_hf: 4.7313e-03 l_total: 9.5411e-03 
+2026-10-13 15:28:39,320 INFO: [holo_..][epoch: 37, iter:  18,600, lr:(9.995e-05,)] [eta: 11:57:30, time (data): 0.262 (0.002)] l_pix: 1.2772e-02 l_gfl: 1.6416e-02 l_hf: 8.8257e-03 l_total: 1.6179e-02 
+2026-10-13 15:30:17,180 INFO: [holo_..][epoch: 37, iter:  18,700, lr:(9.995e-05,)] [eta: 11:55:32, time (data): 0.261 (0.002)] l_pix: 1.4536e-02 l_gfl: 1.8727e-02 l_hf: 1.0723e-02 l_total: 1.8553e-02 
+2026-10-13 15:31:55,787 INFO: [holo_..][epoch: 37, iter:  18,800, lr:(9.995e-05,)] [eta: 11:53:37, time (data): 0.260 (0.002)] l_pix: 1.0243e-02 l_gfl: 1.8944e-02 l_hf: 7.9949e-03 l_total: 1.3736e-02 
+2026-10-13 15:33:34,000 INFO: [holo_..][epoch: 37, iter:  18,900, lr:(9.995e-05,)] [eta: 11:51:40, time (data): 0.267 (0.003)] l_pix: 1.3307e-02 l_gfl: 1.2964e-02 l_hf: 8.6080e-03 l_total: 1.6325e-02 
+2026-10-13 15:35:12,105 INFO: [holo_..][epoch: 37, iter:  19,000, lr:(9.995e-05,)] [eta: 11:49:44, time (data): 0.263 (0.002)] l_pix: 1.0417e-02 l_gfl: 1.4142e-02 l_hf: 6.9769e-03 l_total: 1.3226e-02 
+2026-10-13 15:36:48,844 INFO: [holo_..][epoch: 38, iter:  19,100, lr:(9.995e-05,)] [eta: 11:47:45, time (data): 0.257 (0.002)] l_pix: 1.0228e-02 l_gfl: 6.4221e-03 l_hf: 4.8808e-03 l_total: 1.1846e-02 
+2026-10-13 15:38:26,807 INFO: [holo_..][epoch: 38, iter:  19,200, lr:(9.995e-05,)] [eta: 11:45:49, time (data): 0.265 (0.002)] l_pix: 1.1175e-02 l_gfl: 1.4624e-02 l_hf: 7.4056e-03 l_total: 1.4119e-02 
+2026-10-13 15:40:04,700 INFO: [holo_..][epoch: 38, iter:  19,300, lr:(9.995e-05,)] [eta: 11:43:52, time (data): 0.255 (0.002)] l_pix: 9.6380e-03 l_gfl: 1.3523e-02 l_hf: 6.9162e-03 l_total: 1.2374e-02 
+2026-10-13 15:41:41,340 INFO: [holo_..][epoch: 38, iter:  19,400, lr:(9.995e-05,)] [eta: 11:41:54, time (data): 0.268 (0.002)] l_pix: 7.5251e-03 l_gfl: 1.1885e-02 l_hf: 5.5194e-03 l_total: 9.8175e-03 
+2026-10-13 15:43:19,307 INFO: [holo_..][epoch: 38, iter:  19,500, lr:(9.995e-05,)] [eta: 11:39:58, time (data): 0.263 (0.002)] l_pix: 9.4067e-03 l_gfl: 1.3433e-02 l_hf: 6.8103e-03 l_total: 1.2112e-02 
+2026-10-13 15:44:57,744 INFO: [holo_..][epoch: 39, iter:  19,600, lr:(9.995e-05,)] [eta: 11:38:03, time (data): 0.296 (0.002)] l_pix: 9.2958e-03 l_gfl: 1.8442e-02 l_hf: 7.7316e-03 l_total: 1.2686e-02 
+2026-10-13 15:46:34,458 INFO: [holo_..][epoch: 39, iter:  19,700, lr:(9.995e-05,)] [eta: 11:36:05, time (data): 0.262 (0.002)] l_pix: 1.0344e-02 l_gfl: 7.7054e-03 l_hf: 5.3785e-03 l_total: 1.2190e-02 
+2026-10-13 15:48:11,721 INFO: [holo_..][epoch: 39, iter:  19,800, lr:(9.995e-05,)] [eta: 11:34:09, time (data): 0.254 (0.002)] l_pix: 9.5319e-03 l_gfl: 1.4166e-02 l_hf: 7.0209e-03 l_total: 1.2353e-02 
+2026-10-13 15:49:50,597 INFO: [holo_..][epoch: 39, iter:  19,900, lr:(9.995e-05,)] [eta: 11:32:16, time (data): 0.259 (0.002)] l_pix: 9.5982e-03 l_gfl: 6.6347e-03 l_hf: 4.8007e-03 l_total: 1.1222e-02 
+2026-10-13 15:51:26,887 INFO: [holo_..][epoch: 39, iter:  20,000, lr:(9.995e-05,)] [eta: 11:30:18, time (data): 0.264 (0.002)] l_pix: 1.0708e-02 l_gfl: 1.2836e-02 l_hf: 6.6560e-03 l_total: 1.3323e-02 
+2026-10-13 15:51:26,887 INFO: Saving models and training states.
+2026-10-13 15:58:34,146 INFO: Validation HoloVal,		 # psnr: 32.5506	 # ssim: 0.9263	 # rmse: 0.0243	 # mae: 0.0129
+2026-10-13 15:58:34,421 INFO: New best checkpoint at iter 20000: PSNR=32.550551, SSIM=0.926341
+2026-10-13 16:00:13,221 INFO: [holo_..][epoch: 40, iter:  20,100, lr:(9.995e-05,)] [eta: 11:42:33, time (data): 0.264 (0.002)] l_pix: 1.2498e-02 l_gfl: 1.2458e-02 l_hf: 8.4997e-03 l_total: 1.5444e-02 
+2026-10-13 16:01:52,283 INFO: [holo_..][epoch: 40, iter:  20,200, lr:(9.995e-05,)] [eta: 11:40:35, time (data): 0.285 (0.002)] l_pix: 7.5461e-03 l_gfl: 1.1378e-02 l_hf: 5.4032e-03 l_total: 9.7645e-03 
+2026-10-13 16:03:29,599 INFO: [holo_..][epoch: 40, iter:  20,300, lr:(9.995e-05,)] [eta: 11:38:33, time (data): 0.267 (0.003)] l_pix: 8.7766e-03 l_gfl: 1.8235e-02 l_hf: 7.6500e-03 l_total: 1.2130e-02 
+2026-10-13 16:05:08,088 INFO: [holo_..][epoch: 40, iter:  20,400, lr:(9.995e-05,)] [eta: 11:36:33, time (data): 0.270 (0.002)] l_pix: 7.5129e-03 l_gfl: 1.1776e-02 l_hf: 5.6083e-03 l_total: 9.8122e-03 
+2026-10-13 16:06:46,150 INFO: [holo_..][epoch: 40, iter:  20,500, lr:(9.995e-05,)] [eta: 11:34:33, time (data): 0.262 (0.002)] l_pix: 9.1513e-03 l_gfl: 7.1131e-03 l_hf: 4.8034e-03 l_total: 1.0823e-02 
+2026-10-13 16:08:24,947 INFO: [holo_..][epoch: 41, iter:  20,600, lr:(9.995e-05,)] [eta: 11:32:35, time (data): 0.262 (0.002)] l_pix: 9.7285e-03 l_gfl: 1.3823e-02 l_hf: 6.6767e-03 l_total: 1.2446e-02 
+2026-10-13 16:10:03,828 INFO: [holo_..][epoch: 41, iter:  20,700, lr:(9.995e-05,)] [eta: 11:30:37, time (data): 0.263 (0.002)] l_pix: 1.3317e-02 l_gfl: 1.1472e-02 l_hf: 8.2983e-03 l_total: 1.6124e-02 
+2026-10-13 16:11:41,484 INFO: [holo_..][epoch: 41, iter:  20,800, lr:(9.995e-05,)] [eta: 11:28:37, time (data): 0.263 (0.002)] l_pix: 9.7875e-03 l_gfl: 1.4402e-02 l_hf: 7.6986e-03 l_total: 1.2768e-02 
+2026-10-13 16:13:19,125 INFO: [holo_..][epoch: 41, iter:  20,900, lr:(9.995e-05,)] [eta: 11:26:37, time (data): 0.272 (0.002)] l_pix: 1.3262e-02 l_gfl: 1.2205e-02 l_hf: 9.2442e-03 l_total: 1.6332e-02 
+2026-10-13 16:14:57,411 INFO: [holo_..][epoch: 41, iter:  21,000, lr:(9.995e-05,)] [eta: 11:24:39, time (data): 0.258 (0.002)] l_pix: 9.0219e-03 l_gfl: 1.8086e-02 l_hf: 7.5980e-03 l_total: 1.2350e-02 
+2026-10-13 16:16:35,878 INFO: [holo_..][epoch: 42, iter:  21,100, lr:(9.995e-05,)] [eta: 11:22:41, time (data): 0.260 (0.002)] l_pix: 1.3759e-02 l_gfl: 1.7883e-02 l_hf: 1.0157e-02 l_total: 1.7579e-02 
+2026-10-13 16:18:14,264 INFO: [holo_..][epoch: 42, iter:  21,200, lr:(9.995e-05,)] [eta: 11:20:43, time (data): 0.264 (0.002)] l_pix: 9.7986e-03 l_gfl: 1.2694e-02 l_hf: 6.0045e-03 l_total: 1.2269e-02 
+2026-10-13 16:19:53,109 INFO: [holo_..][epoch: 42, iter:  21,300, lr:(9.995e-05,)] [eta: 11:18:46, time (data): 0.261 (0.002)] l_pix: 1.3047e-02 l_gfl: 1.1269e-02 l_hf: 7.1060e-03 l_total: 1.5595e-02 
+2026-10-13 16:21:31,639 INFO: [holo_..][epoch: 42, iter:  21,400, lr:(9.995e-05,)] [eta: 11:16:48, time (data): 0.284 (0.002)] l_pix: 1.1793e-02 l_gfl: 1.5732e-02 l_hf: 8.5347e-03 l_total: 1.5073e-02 
+2026-10-13 16:23:09,682 INFO: [holo_..][epoch: 42, iter:  21,500, lr:(9.995e-05,)] [eta: 11:14:50, time (data): 0.263 (0.002)] l_pix: 8.4277e-03 l_gfl: 7.5547e-03 l_hf: 5.1715e-03 l_total: 1.0218e-02 
+2026-10-13 16:24:47,178 INFO: [holo_..][epoch: 43, iter:  21,600, lr:(9.995e-05,)] [eta: 11:12:51, time (data): 0.265 (0.002)] l_pix: 1.1814e-02 l_gfl: 1.0764e-02 l_hf: 6.9313e-03 l_total: 1.4276e-02 
+2026-10-13 16:26:25,790 INFO: [holo_..][epoch: 43, iter:  21,700, lr:(9.995e-05,)] [eta: 11:10:55, time (data): 0.265 (0.002)] l_pix: 1.4541e-02 l_gfl: 2.1470e-02 l_hf: 1.2738e-02 l_total: 1.9236e-02 
+2026-10-13 16:28:02,593 INFO: [holo_..][epoch: 43, iter:  21,800, lr:(9.995e-05,)] [eta: 11:08:55, time (data): 0.253 (0.002)] l_pix: 1.1189e-02 l_gfl: 1.6195e-02 l_hf: 8.6612e-03 l_total: 1.4541e-02 
+2026-10-13 16:29:40,854 INFO: [holo_..][epoch: 43, iter:  21,900, lr:(9.995e-05,)] [eta: 11:06:58, time (data): 0.265 (0.002)] l_pix: 9.8034e-03 l_gfl: 1.3660e-02 l_hf: 6.9311e-03 l_total: 1.2556e-02 
+2026-10-13 16:31:17,717 INFO: [holo_..][epoch: 43, iter:  22,000, lr:(9.995e-05,)] [eta: 11:04:59, time (data): 0.273 (0.002)] l_pix: 1.1427e-02 l_gfl: 1.7039e-02 l_hf: 9.1611e-03 l_total: 1.4963e-02 
+2026-10-13 16:32:57,072 INFO: [holo_..][epoch: 44, iter:  22,100, lr:(9.995e-05,)] [eta: 11:03:04, time (data): 0.253 (0.002)] l_pix: 1.2690e-02 l_gfl: 1.7329e-02 l_hf: 9.4370e-03 l_total: 1.6311e-02 
+2026-10-13 16:34:35,065 INFO: [holo_..][epoch: 44, iter:  22,200, lr:(9.995e-05,)] [eta: 11:01:07, time (data): 0.258 (0.002)] l_pix: 9.4388e-03 l_gfl: 1.3075e-02 l_hf: 6.6901e-03 l_total: 1.2084e-02 
+2026-10-13 16:36:13,418 INFO: [holo_..][epoch: 44, iter:  22,300, lr:(9.995e-05,)] [eta: 10:59:11, time (data): 0.271 (0.002)] l_pix: 9.3888e-03 l_gfl: 1.3183e-02 l_hf: 6.6918e-03 l_total: 1.2045e-02 
+2026-10-13 16:37:52,492 INFO: [holo_..][epoch: 44, iter:  22,400, lr:(9.995e-05,)] [eta: 10:57:17, time (data): 0.285 (0.002)] l_pix: 8.6504e-03 l_gfl: 1.7509e-02 l_hf: 7.4438e-03 l_total: 1.1890e-02 
+2026-10-13 16:39:29,618 INFO: [holo_..][epoch: 44, iter:  22,500, lr:(9.995e-05,)] [eta: 10:55:19, time (data): 0.267 (0.002)] l_pix: 8.8555e-03 l_gfl: 1.7999e-02 l_hf: 7.5149e-03 l_total: 1.2158e-02 
+2026-10-13 16:41:06,224 INFO: [holo_..][epoch: 45, iter:  22,600, lr:(9.995e-05,)] [eta: 10:53:20, time (data): 0.254 (0.002)] l_pix: 9.5144e-03 l_gfl: 1.3517e-02 l_hf: 6.5977e-03 l_total: 1.2186e-02 
+2026-10-13 16:42:44,225 INFO: [holo_..][epoch: 45, iter:  22,700, lr:(9.995e-05,)] [eta: 10:51:24, time (data): 0.268 (0.002)] l_pix: 1.1153e-02 l_gfl: 1.5325e-02 l_hf: 7.9742e-03 l_total: 1.4280e-02 
+2026-10-13 16:44:23,395 INFO: [holo_..][epoch: 45, iter:  22,800, lr:(9.995e-05,)] [eta: 10:49:30, time (data): 0.302 (0.003)] l_pix: 9.0926e-03 l_gfl: 1.7247e-02 l_hf: 7.3256e-03 l_total: 1.2282e-02 
+2026-10-13 16:46:02,991 INFO: [holo_..][epoch: 45, iter:  22,900, lr:(9.995e-05,)] [eta: 10:47:37, time (data): 0.267 (0.002)] l_pix: 8.5485e-03 l_gfl: 1.2794e-02 l_hf: 6.3403e-03 l_total: 1.1096e-02 
+2026-10-13 16:47:41,756 INFO: [holo_..][epoch: 45, iter:  23,000, lr:(9.995e-05,)] [eta: 10:45:43, time (data): 0.265 (0.002)] l_pix: 1.7882e-02 l_gfl: 1.5986e-02 l_hf: 1.0828e-02 l_total: 2.1646e-02 
+2026-10-13 16:49:21,841 INFO: [holo_..][epoch: 46, iter:  23,100, lr:(9.995e-05,)] [eta: 10:43:51, time (data): 0.266 (0.002)] l_pix: 1.2064e-02 l_gfl: 1.1705e-02 l_hf: 7.9743e-03 l_total: 1.4829e-02 
+2026-10-13 16:50:59,437 INFO: [holo_..][epoch: 46, iter:  23,200, lr:(9.995e-05,)] [eta: 10:41:55, time (data): 0.245 (0.002)] l_pix: 9.6625e-03 l_gfl: 1.3854e-02 l_hf: 6.9494e-03 l_total: 1.2438e-02 
+2026-10-13 16:52:36,702 INFO: [holo_..][epoch: 46, iter:  23,300, lr:(9.995e-05,)] [eta: 10:39:59, time (data): 0.257 (0.002)] l_pix: 1.0819e-02 l_gfl: 1.4848e-02 l_hf: 7.6371e-03 l_total: 1.3831e-02 
+2026-10-13 16:54:14,743 INFO: [holo_..][epoch: 46, iter:  23,400, lr:(9.995e-05,)] [eta: 10:38:04, time (data): 0.254 (0.002)] l_pix: 9.9308e-03 l_gfl: 8.8734e-03 l_hf: 5.4999e-03 l_total: 1.1918e-02 
+2026-10-13 16:55:51,321 INFO: [holo_..][epoch: 46, iter:  23,500, lr:(9.995e-05,)] [eta: 10:36:06, time (data): 0.261 (0.002)] l_pix: 7.9480e-03 l_gfl: 1.1830e-02 l_hf: 5.7824e-03 l_total: 1.0287e-02 
+2026-10-13 16:57:29,600 INFO: [holo_..][epoch: 47, iter:  23,600, lr:(9.995e-05,)] [eta: 10:34:12, time (data): 0.259 (0.002)] l_pix: 7.8562e-03 l_gfl: 6.4871e-03 l_hf: 4.5927e-03 l_total: 9.4234e-03 
+2026-10-13 16:59:06,144 INFO: [holo_..][epoch: 47, iter:  23,700, lr:(9.995e-05,)] [eta: 10:32:15, time (data): 0.250 (0.002)] l_pix: 8.7173e-03 l_gfl: 1.2875e-02 l_hf: 6.5581e-03 l_total: 1.1316e-02 
+2026-10-13 17:00:45,088 INFO: [holo_..][epoch: 47, iter:  23,800, lr:(9.995e-05,)] [eta: 10:30:22, time (data): 0.255 (0.002)] l_pix: 1.2671e-02 l_gfl: 1.4272e-02 l_hf: 8.3011e-03 l_total: 1.5758e-02 
+2026-10-13 17:02:24,297 INFO: [holo_..][epoch: 47, iter:  23,900, lr:(9.995e-05,)] [eta: 10:28:30, time (data): 0.269 (0.002)] l_pix: 8.9689e-03 l_gfl: 1.6889e-02 l_hf: 7.1819e-03 l_total: 1.2094e-02 
+2026-10-13 17:04:03,601 INFO: [holo_..][epoch: 47, iter:  24,000, lr:(9.995e-05,)] [eta: 10:26:38, time (data): 0.273 (0.002)] l_pix: 8.3941e-03 l_gfl: 1.7373e-02 l_hf: 7.2609e-03 l_total: 1.1584e-02 
+2026-10-13 17:05:40,885 INFO: [holo_..][epoch: 48, iter:  24,100, lr:(9.995e-05,)] [eta: 10:24:43, time (data): 0.285 (0.002)] l_pix: 9.9253e-03 l_gfl: 8.8950e-03 l_hf: 5.7588e-03 l_total: 1.1967e-02 
+2026-10-13 17:07:19,147 INFO: [holo_..][epoch: 48, iter:  24,200, lr:(9.995e-05,)] [eta: 10:22:49, time (data): 0.260 (0.002)] l_pix: 9.0652e-03 l_gfl: 1.2405e-02 l_hf: 6.4642e-03 l_total: 1.1599e-02 
+2026-10-13 17:08:57,084 INFO: [holo_..][epoch: 48, iter:  24,300, lr:(9.995e-05,)] [eta: 10:20:55, time (data): 0.268 (0.003)] l_pix: 8.7335e-03 l_gfl: 8.3073e-03 l_hf: 5.6652e-03 l_total: 1.0697e-02 
+2026-10-13 17:10:37,596 INFO: [holo_..][epoch: 48, iter:  24,400, lr:(9.995e-05,)] [eta: 10:19:05, time (data): 0.270 (0.002)] l_pix: 1.1486e-02 l_gfl: 1.1414e-02 l_hf: 8.1231e-03 l_total: 1.4252e-02 
+2026-10-13 17:12:14,596 INFO: [holo_..][epoch: 48, iter:  24,500, lr:(9.995e-05,)] [eta: 10:17:10, time (data): 0.256 (0.002)] l_pix: 1.2132e-02 l_gfl: 1.2249e-02 l_hf: 6.0412e-03 l_total: 1.4565e-02 
+2026-10-13 17:13:53,388 INFO: [holo_..][epoch: 49, iter:  24,600, lr:(9.995e-05,)] [eta: 10:15:18, time (data): 0.254 (0.002)] l_pix: 1.0492e-02 l_gfl: 1.5421e-02 l_hf: 8.2525e-03 l_total: 1.3684e-02 
+2026-10-13 17:15:31,757 INFO: [holo_..][epoch: 49, iter:  24,700, lr:(9.995e-05,)] [eta: 10:13:25, time (data): 0.259 (0.002)] l_pix: 9.6154e-03 l_gfl: 1.4389e-02 l_hf: 7.7416e-03 l_total: 1.2603e-02 
+2026-10-13 17:17:07,944 INFO: [holo_..][epoch: 49, iter:  24,800, lr:(9.995e-05,)] [eta: 10:11:30, time (data): 0.259 (0.003)] l_pix: 9.2383e-03 l_gfl: 1.2480e-02 l_hf: 6.4940e-03 l_total: 1.1785e-02 
+2026-10-13 17:18:46,475 INFO: [holo_..][epoch: 49, iter:  24,900, lr:(9.995e-05,)] [eta: 10:09:37, time (data): 0.268 (0.002)] l_pix: 8.2327e-03 l_gfl: 1.1069e-02 l_hf: 5.4082e-03 l_total: 1.0421e-02 
+2026-10-13 17:20:26,031 INFO: [holo_..][epoch: 49, iter:  25,000, lr:(9.995e-05,)] [eta: 10:07:47, time (data): 0.266 (0.002)] l_pix: 9.6650e-03 l_gfl: 1.2061e-02 l_hf: 6.0288e-03 l_total: 1.2077e-02 
+2026-10-13 17:20:26,032 INFO: Saving models and training states.
+2026-10-13 17:27:53,741 INFO: Validation HoloVal,		 # psnr: 33.3423	 # ssim: 0.9298	 # rmse: 0.0224	 # mae: 0.0124
+2026-10-13 17:27:54,035 INFO: New best checkpoint at iter 25000: PSNR=33.342268, SSIM=0.929796
+2026-10-13 17:29:33,095 INFO: [holo_..][epoch: 50, iter:  25,100, lr:(9.995e-05,)] [eta: 10:16:18, time (data): 0.267 (0.003)] l_pix: 8.6419e-03 l_gfl: 1.2478e-02 l_hf: 6.4623e-03 l_total: 1.1182e-02 
+2026-10-13 17:31:10,602 INFO: [holo_..][epoch: 50, iter:  25,200, lr:(9.995e-05,)] [eta: 10:14:20, time (data): 0.268 (0.002)] l_pix: 9.8606e-03 l_gfl: 1.4920e-02 l_hf: 8.0372e-03 l_total: 1.2960e-02 
+2026-10-13 17:32:49,437 INFO: [holo_..][epoch: 50, iter:  25,300, lr:(9.995e-05,)] [eta: 10:12:25, time (data): 0.264 (0.003)] l_pix: 9.0289e-03 l_gfl: 7.5841e-03 l_hf: 4.9135e-03 l_total: 1.0770e-02 
+2026-10-13 17:34:28,429 INFO: [holo_..][epoch: 50, iter:  25,400, lr:(9.995e-05,)] [eta: 10:10:30, time (data): 0.264 (0.003)] l_pix: 1.0309e-02 l_gfl: 1.3933e-02 l_hf: 7.1926e-03 l_total: 1.3141e-02 
+2026-10-13 17:36:06,555 INFO: [holo_..][epoch: 50, iter:  25,500, lr:(9.995e-05,)] [eta: 10:08:33, time (data): 0.263 (0.003)] l_pix: 8.2084e-03 l_gfl: 1.6397e-02 l_hf: 6.9781e-03 l_total: 1.1244e-02 
+2026-10-13 17:37:43,547 INFO: [holo_..][epoch: 51, iter:  25,600, lr:(9.995e-05,)] [eta: 10:06:35, time (data): 0.256 (0.003)] l_pix: 7.5213e-03 l_gfl: 1.1044e-02 l_hf: 5.3978e-03 l_total: 9.7052e-03 
+2026-10-13 17:39:21,762 INFO: [holo_..][epoch: 51, iter:  25,700, lr:(9.995e-05,)] [eta: 10:04:40, time (data): 0.263 (0.002)] l_pix: 8.1140e-03 l_gfl: 1.1453e-02 l_hf: 5.6593e-03 l_total: 1.0391e-02 
+2026-10-13 17:40:59,058 INFO: [holo_..][epoch: 51, iter:  25,800, lr:(9.995e-05,)] [eta: 10:02:43, time (data): 0.264 (0.002)] l_pix: 1.3665e-02 l_gfl: 1.4942e-02 l_hf: 1.0312e-02 l_total: 1.7222e-02 
+2026-10-13 17:42:39,684 INFO: [holo_..][epoch: 51, iter:  25,900, lr:(9.995e-05,)] [eta: 10:00:50, time (data): 0.262 (0.003)] l_pix: 8.1912e-03 l_gfl: 1.2109e-02 l_hf: 6.2276e-03 l_total: 1.0648e-02 
+2026-10-13 17:44:20,043 INFO: [holo_..][epoch: 51, iter:  26,000, lr:(9.995e-05,)] [eta: 9:58:57, time (data): 0.260 (0.003)] l_pix: 9.1035e-03 l_gfl: 8.9320e-03 l_hf: 5.9602e-03 l_total: 1.1189e-02 
+2026-10-13 17:45:55,329 INFO: [holo_..][epoch: 52, iter:  26,100, lr:(9.995e-05,)] [eta: 9:56:58, time (data): 0.245 (0.002)] l_pix: 8.6343e-03 l_gfl: 6.8561e-03 l_hf: 4.3613e-03 l_total: 1.0192e-02 
+2026-10-13 17:47:31,303 INFO: [holo_..][epoch: 52, iter:  26,200, lr:(9.995e-05,)] [eta: 9:55:00, time (data): 0.247 (0.002)] l_pix: 9.4021e-03 l_gfl: 1.3180e-02 l_hf: 6.6959e-03 l_total: 1.2059e-02 
+2026-10-13 17:49:08,346 INFO: [holo_..][epoch: 52, iter:  26,300, lr:(9.995e-05,)] [eta: 9:53:03, time (data): 0.247 (0.002)] l_pix: 8.1396e-03 l_gfl: 1.6021e-02 l_hf: 6.7964e-03 l_total: 1.1101e-02 
+2026-10-13 17:50:43,724 INFO: [holo_..][epoch: 52, iter:  26,400, lr:(9.995e-05,)] [eta: 9:51:05, time (data): 0.255 (0.002)] l_pix: 6.6793e-03 l_gfl: 9.9855e-03 l_hf: 4.7793e-03 l_total: 8.6337e-03 
+2026-10-13 17:52:20,827 INFO: [holo_..][epoch: 52, iter:  26,500, lr:(9.995e-05,)] [eta: 9:49:08, time (data): 0.244 (0.002)] l_pix: 1.8866e-02 l_gfl: 1.6507e-02 l_hf: 1.0800e-02 l_total: 2.2676e-02 
+2026-10-13 17:53:57,966 INFO: [holo_..][epoch: 53, iter:  26,600, lr:(9.995e-05,)] [eta: 9:47:12, time (data): 0.280 (0.003)] l_pix: 7.7952e-03 l_gfl: 1.5715e-02 l_hf: 6.7493e-03 l_total: 1.0717e-02 
+2026-10-13 17:55:35,594 INFO: [holo_..][epoch: 53, iter:  26,700, lr:(9.995e-05,)] [eta: 9:45:17, time (data): 0.255 (0.002)] l_pix: 8.8002e-03 l_gfl: 8.4872e-03 l_hf: 5.5753e-03 l_total: 1.0764e-02 
+2026-10-13 17:57:13,417 INFO: [holo_..][epoch: 53, iter:  26,800, lr:(9.995e-05,)] [eta: 9:43:22, time (data): 0.264 (0.002)] l_pix: 7.8419e-03 l_gfl: 1.5989e-02 l_hf: 6.7483e-03 l_total: 1.0790e-02 
+2026-10-13 17:58:53,305 INFO: [holo_..][epoch: 53, iter:  26,900, lr:(9.995e-05,)] [eta: 9:41:30, time (data): 0.273 (0.002)] l_pix: 8.8021e-03 l_gfl: 1.1774e-02 l_hf: 6.1107e-03 l_total: 1.1202e-02 
+2026-10-13 18:00:27,580 INFO: [holo_..][epoch: 53, iter:  27,000, lr:(9.995e-05,)] [eta: 9:39:31, time (data): 0.258 (0.003)] l_pix: 1.0539e-02 l_gfl: 1.3840e-02 l_hf: 7.1000e-03 l_total: 1.3343e-02 
+2026-10-13 18:02:04,931 INFO: [holo_..][epoch: 54, iter:  27,100, lr:(9.995e-05,)] [eta: 9:37:36, time (data): 0.273 (0.002)] l_pix: 7.6008e-03 l_gfl: 1.5642e-02 l_hf: 6.6642e-03 l_total: 1.0498e-02 
+2026-10-13 18:03:43,229 INFO: [holo_..][epoch: 54, iter:  27,200, lr:(9.995e-05,)] [eta: 9:35:42, time (data): 0.268 (0.002)] l_pix: 8.0685e-03 l_gfl: 1.6004e-02 l_hf: 6.7622e-03 l_total: 1.1021e-02 
+2026-10-13 18:05:22,390 INFO: [holo_..][epoch: 54, iter:  27,300, lr:(9.995e-05,)] [eta: 9:33:49, time (data): 0.258 (0.002)] l_pix: 8.0555e-03 l_gfl: 1.1850e-02 l_hf: 6.0716e-03 l_total: 1.0455e-02 
+2026-10-13 18:07:01,225 INFO: [holo_..][epoch: 54, iter:  27,400, lr:(9.995e-05,)] [eta: 9:31:56, time (data): 0.269 (0.002)] l_pix: 1.0209e-02 l_gfl: 8.4564e-03 l_hf: 5.5221e-03 l_total: 1.2159e-02 
+2026-10-13 18:08:40,056 INFO: [holo_..][epoch: 54, iter:  27,500, lr:(9.995e-05,)] [eta: 9:30:03, time (data): 0.253 (0.002)] l_pix: 1.1245e-02 l_gfl: 1.5289e-02 l_hf: 8.0855e-03 l_total: 1.4391e-02 
+2026-10-13 18:10:18,191 INFO: [holo_..][epoch: 55, iter:  27,600, lr:(9.995e-05,)] [eta: 9:28:10, time (data): 0.269 (0.002)] l_pix: 1.1836e-02 l_gfl: 1.0753e-02 l_hf: 7.0152e-03 l_total: 1.4314e-02 
+2026-10-13 18:11:57,917 INFO: [holo_..][epoch: 55, iter:  27,700, lr:(9.995e-05,)] [eta: 9:26:18, time (data): 0.278 (0.002)] l_pix: 8.9060e-03 l_gfl: 1.3152e-02 l_hf: 6.8009e-03 l_total: 1.1581e-02 
+2026-10-13 18:13:35,815 INFO: [holo_..][epoch: 55, iter:  27,800, lr:(9.995e-05,)] [eta: 9:24:25, time (data): 0.258 (0.002)] l_pix: 6.6453e-03 l_gfl: 5.9876e-03 l_hf: 4.2335e-03 l_total: 8.0908e-03 
+2026-10-13 18:15:12,664 INFO: [holo_..][epoch: 55, iter:  27,900, lr:(9.995e-05,)] [eta: 9:22:30, time (data): 0.267 (0.002)] l_pix: 8.5547e-03 l_gfl: 7.6396e-03 l_hf: 5.4624e-03 l_total: 1.0411e-02 
+2026-10-13 18:16:52,749 INFO: [holo_..][epoch: 55, iter:  28,000, lr:(9.995e-05,)] [eta: 9:20:39, time (data): 0.265 (0.002)] l_pix: 8.8203e-03 l_gfl: 8.1036e-03 l_hf: 5.5337e-03 l_total: 1.0737e-02 
+2026-10-13 18:18:33,504 INFO: [holo_..][epoch: 56, iter:  28,100, lr:(9.995e-05,)] [eta: 9:18:49, time (data): 0.254 (0.002)] l_pix: 1.0855e-02 l_gfl: 9.7375e-03 l_hf: 5.8525e-03 l_total: 1.3000e-02 
+2026-10-13 18:20:12,860 INFO: [holo_..][epoch: 56, iter:  28,200, lr:(9.995e-05,)] [eta: 9:16:57, time (data): 0.269 (0.002)] l_pix: 1.1044e-02 l_gfl: 1.5324e-02 l_hf: 8.7571e-03 l_total: 1.4328e-02 
+2026-10-13 18:21:52,742 INFO: [holo_..][epoch: 56, iter:  28,300, lr:(9.995e-05,)] [eta: 9:15:06, time (data): 0.257 (0.002)] l_pix: 1.0875e-02 l_gfl: 1.4415e-02 l_hf: 7.8483e-03 l_total: 1.3886e-02 
+2026-10-13 18:23:33,043 INFO: [holo_..][epoch: 56, iter:  28,400, lr:(9.995e-05,)] [eta: 9:13:16, time (data): 0.262 (0.002)] l_pix: 1.7555e-02 l_gfl: 2.4923e-02 l_hf: 1.5438e-02 l_total: 2.3135e-02 
+2026-10-13 18:25:11,718 INFO: [holo_..][epoch: 56, iter:  28,500, lr:(9.995e-05,)] [eta: 9:11:24, time (data): 0.272 (0.003)] l_pix: 8.7027e-03 l_gfl: 7.3143e-03 l_hf: 4.6616e-03 l_total: 1.0366e-02 
+2026-10-13 18:26:52,879 INFO: [holo_..][epoch: 57, iter:  28,600, lr:(9.995e-05,)] [eta: 9:09:34, time (data): 0.261 (0.003)] l_pix: 7.7146e-03 l_gfl: 7.0746e-03 l_hf: 4.8696e-03 l_total: 9.3959e-03 
+2026-10-13 18:28:31,617 INFO: [holo_..][epoch: 57, iter:  28,700, lr:(9.995e-05,)] [eta: 9:07:43, time (data): 0.263 (0.003)] l_pix: 1.0013e-02 l_gfl: 1.2473e-02 l_hf: 6.6390e-03 l_total: 1.2588e-02 
+2026-10-13 18:30:11,826 INFO: [holo_..][epoch: 57, iter:  28,800, lr:(9.995e-05,)] [eta: 9:05:52, time (data): 0.275 (0.003)] l_pix: 7.6855e-03 l_gfl: 1.5091e-02 l_hf: 6.5046e-03 l_total: 1.0496e-02 
+2026-10-13 18:31:51,703 INFO: [holo_..][epoch: 57, iter:  28,900, lr:(9.995e-05,)] [eta: 9:04:02, time (data): 0.275 (0.002)] l_pix: 1.0515e-02 l_gfl: 6.6898e-03 l_hf: 4.3101e-03 l_total: 1.2046e-02 
+2026-10-13 18:33:29,298 INFO: [holo_..][epoch: 57, iter:  29,000, lr:(9.995e-05,)] [eta: 9:02:09, time (data): 0.248 (0.002)] l_pix: 8.3874e-03 l_gfl: 1.2158e-02 l_hf: 6.3934e-03 l_total: 1.0882e-02 
+2026-10-13 18:35:04,961 INFO: [holo_..][epoch: 58, iter:  29,100, lr:(9.995e-05,)] [eta: 9:00:14, time (data): 0.244 (0.002)] l_pix: 8.1806e-03 l_gfl: 1.1928e-02 l_hf: 6.2211e-03 l_total: 1.0618e-02 
+2026-10-13 18:36:41,537 INFO: [holo_..][epoch: 58, iter:  29,200, lr:(9.995e-05,)] [eta: 8:58:21, time (data): 0.263 (0.002)] l_pix: 7.5639e-03 l_gfl: 7.3503e-03 l_hf: 4.6833e-03 l_total: 9.2356e-03 
+2026-10-13 18:38:16,332 INFO: [holo_..][epoch: 58, iter:  29,300, lr:(9.995e-05,)] [eta: 8:56:25, time (data): 0.271 (0.002)] l_pix: 8.1830e-03 l_gfl: 1.2266e-02 l_hf: 6.3211e-03 l_total: 1.0674e-02 
+2026-10-13 18:39:52,519 INFO: [holo_..][epoch: 58, iter:  29,400, lr:(9.995e-05,)] [eta: 8:54:31, time (data): 0.268 (0.002)] l_pix: 8.1118e-03 l_gfl: 1.2012e-02 l_hf: 6.1152e-03 l_total: 1.0536e-02 
+2026-10-13 18:41:28,225 INFO: [holo_..][epoch: 58, iter:  29,500, lr:(9.995e-05,)] [eta: 8:52:37, time (data): 0.245 (0.002)] l_pix: 6.6193e-03 l_gfl: 9.8717e-03 l_hf: 4.7822e-03 l_total: 8.5629e-03 
+2026-10-13 18:43:03,047 INFO: [holo_..][epoch: 59, iter:  29,600, lr:(9.995e-05,)] [eta: 8:50:42, time (data): 0.251 (0.002)] l_pix: 8.9468e-03 l_gfl: 1.2422e-02 l_hf: 6.3618e-03 l_total: 1.1461e-02 
+2026-10-13 18:44:42,861 INFO: [holo_..][epoch: 59, iter:  29,700, lr:(9.995e-05,)] [eta: 8:48:52, time (data): 0.254 (0.003)] l_pix: 8.8297e-03 l_gfl: 1.2348e-02 l_hf: 6.0621e-03 l_total: 1.1277e-02 
+2026-10-13 18:46:21,429 INFO: [holo_..][epoch: 59, iter:  29,800, lr:(9.995e-05,)] [eta: 8:47:01, time (data): 0.271 (0.003)] l_pix: 7.8711e-03 l_gfl: 1.1989e-02 l_hf: 6.0364e-03 l_total: 1.0277e-02 
+2026-10-13 18:47:59,500 INFO: [holo_..][epoch: 59, iter:  29,900, lr:(9.995e-05,)] [eta: 8:45:10, time (data): 0.294 (0.003)] l_pix: 7.5245e-03 l_gfl: 1.5142e-02 l_hf: 6.4605e-03 l_total: 1.0331e-02 
+2026-10-13 18:49:38,495 INFO: [holo_..][epoch: 59, iter:  30,000, lr:(9.995e-05,)] [eta: 8:43:20, time (data): 0.269 (0.004)] l_pix: 1.2607e-02 l_gfl: 1.3090e-02 l_hf: 8.1087e-03 l_total: 1.5538e-02 
+2026-10-13 18:49:38,495 INFO: Saving models and training states.
+2026-10-13 18:57:10,963 INFO: Validation HoloVal,		 # psnr: 33.9286	 # ssim: 0.9320	 # rmse: 0.0212	 # mae: 0.0122
+2026-10-13 18:57:11,217 INFO: New best checkpoint at iter 30000: PSNR=33.928582, SSIM=0.932018
+2026-10-13 18:58:48,635 INFO: [holo_..][epoch: 60, iter:  30,100, lr:(4.998e-05,)] [eta: 8:48:57, time (data): 0.266 (0.003)] l_pix: 7.8318e-03 l_gfl: 1.1610e-02 l_hf: 6.0179e-03 l_total: 1.0196e-02 
+2026-10-13 19:00:27,831 INFO: [holo_..][epoch: 60, iter:  30,200, lr:(4.998e-05,)] [eta: 8:47:04, time (data): 0.265 (0.003)] l_pix: 7.5123e-03 l_gfl: 1.0532e-02 l_hf: 5.3537e-03 l_total: 9.6362e-03 
+2026-10-13 19:02:06,215 INFO: [holo_..][epoch: 60, iter:  30,300, lr:(4.998e-05,)] [eta: 8:45:11, time (data): 0.259 (0.002)] l_pix: 1.0518e-02 l_gfl: 1.4935e-02 l_hf: 8.6581e-03 l_total: 1.3743e-02 
+2026-10-13 19:03:44,605 INFO: [holo_..][epoch: 60, iter:  30,400, lr:(4.998e-05,)] [eta: 8:43:17, time (data): 0.266 (0.003)] l_pix: 5.8373e-03 l_gfl: 5.8953e-03 l_hf: 4.1345e-03 l_total: 7.2537e-03 
+2026-10-13 19:05:25,127 INFO: [holo_..][epoch: 60, iter:  30,500, lr:(4.998e-05,)] [eta: 8:41:26, time (data): 0.266 (0.002)] l_pix: 7.7900e-03 l_gfl: 1.2172e-02 l_hf: 6.1529e-03 l_total: 1.0238e-02 
+2026-10-13 19:07:02,928 INFO: [holo_..][epoch: 61, iter:  30,600, lr:(4.998e-05,)] [eta: 8:39:32, time (data): 0.263 (0.003)] l_pix: 8.1321e-03 l_gfl: 1.0912e-02 l_hf: 5.3969e-03 l_total: 1.0303e-02 
+2026-10-13 19:08:39,868 INFO: [holo_..][epoch: 61, iter:  30,700, lr:(4.998e-05,)] [eta: 8:37:37, time (data): 0.271 (0.003)] l_pix: 6.8398e-03 l_gfl: 1.0432e-02 l_hf: 5.2174e-03 l_total: 8.9265e-03 
+2026-10-13 19:10:17,215 INFO: [holo_..][epoch: 61, iter:  30,800, lr:(4.998e-05,)] [eta: 8:35:43, time (data): 0.250 (0.003)] l_pix: 8.1530e-03 l_gfl: 1.1322e-02 l_hf: 5.6874e-03 l_total: 1.0423e-02 
+2026-10-13 19:11:55,056 INFO: [holo_..][epoch: 61, iter:  30,900, lr:(4.998e-05,)] [eta: 8:33:49, time (data): 0.263 (0.002)] l_pix: 1.6057e-02 l_gfl: 2.2936e-02 l_hf: 1.4360e-02 l_total: 2.1223e-02 
+2026-10-13 19:13:35,151 INFO: [holo_..][epoch: 61, iter:  31,000, lr:(4.998e-05,)] [eta: 8:31:58, time (data): 0.259 (0.002)] l_pix: 4.0273e-03 l_gfl: 3.7803e-03 l_hf: 2.6543e-03 l_total: 4.9361e-03 
+2026-10-13 19:15:16,732 INFO: [holo_..][epoch: 62, iter:  31,100, lr:(4.998e-05,)] [eta: 8:30:08, time (data): 0.279 (0.003)] l_pix: 8.9475e-03 l_gfl: 8.6783e-03 l_hf: 5.6417e-03 l_total: 1.0944e-02 
+2026-10-13 19:16:55,366 INFO: [holo_..][epoch: 62, iter:  31,200, lr:(4.998e-05,)] [eta: 8:28:15, time (data): 0.243 (0.002)] l_pix: 7.4983e-03 l_gfl: 1.1660e-02 l_hf: 5.5772e-03 l_total: 9.7797e-03 
+2026-10-13 19:18:31,271 INFO: [holo_..][epoch: 62, iter:  31,300, lr:(4.998e-05,)] [eta: 8:26:20, time (data): 0.272 (0.002)] l_pix: 8.9684e-03 l_gfl: 1.0348e-02 l_hf: 6.0013e-03 l_total: 1.1203e-02 
+2026-10-13 19:20:12,112 INFO: [holo_..][epoch: 62, iter:  31,400, lr:(4.998e-05,)] [eta: 8:24:30, time (data): 0.256 (0.002)] l_pix: 9.2399e-03 l_gfl: 9.3033e-03 l_hf: 5.7002e-03 l_total: 1.1310e-02 
+2026-10-13 19:21:48,843 INFO: [holo_..][epoch: 62, iter:  31,500, lr:(4.998e-05,)] [eta: 8:22:35, time (data): 0.274 (0.003)] l_pix: 8.0739e-03 l_gfl: 1.2156e-02 l_hf: 6.3432e-03 l_total: 1.0558e-02 
+2026-10-13 19:23:30,407 INFO: [holo_..][epoch: 63, iter:  31,600, lr:(4.998e-05,)] [eta: 8:20:46, time (data): 0.275 (0.003)] l_pix: 9.8228e-03 l_gfl: 1.4248e-02 l_hf: 8.3363e-03 l_total: 1.2915e-02 
+2026-10-13 19:25:10,551 INFO: [holo_..][epoch: 63, iter:  31,700, lr:(4.998e-05,)] [eta: 8:18:55, time (data): 0.284 (0.003)] l_pix: 1.0196e-02 l_gfl: 1.0846e-02 l_hf: 6.7543e-03 l_total: 1.2632e-02 
+2026-10-13 19:26:50,410 INFO: [holo_..][epoch: 63, iter:  31,800, lr:(4.998e-05,)] [eta: 8:17:04, time (data): 0.254 (0.002)] l_pix: 1.1039e-02 l_gfl: 1.1397e-02 l_hf: 7.9803e-03 l_total: 1.3774e-02 
+2026-10-13 19:28:28,724 INFO: [holo_..][epoch: 63, iter:  31,900, lr:(4.998e-05,)] [eta: 8:15:12, time (data): 0.274 (0.003)] l_pix: 5.4682e-03 l_gfl: 8.9807e-03 l_hf: 4.3708e-03 l_total: 7.2404e-03 
+2026-10-13 19:30:07,269 INFO: [holo_..][epoch: 63, iter:  32,000, lr:(4.998e-05,)] [eta: 8:13:20, time (data): 0.259 (0.002)] l_pix: 1.2476e-02 l_gfl: 1.3500e-02 l_hf: 9.4061e-03 l_total: 1.5707e-02 
+2026-10-13 19:31:48,594 INFO: [holo_..][epoch: 64, iter:  32,100, lr:(4.998e-05,)] [eta: 8:11:30, time (data): 0.268 (0.002)] l_pix: 6.3397e-03 l_gfl: 7.0099e-03 l_hf: 4.6893e-03 l_total: 7.9786e-03 
+2026-10-13 19:33:27,385 INFO: [holo_..][epoch: 64, iter:  32,200, lr:(4.998e-05,)] [eta: 8:09:38, time (data): 0.244 (0.002)] l_pix: 7.3064e-03 l_gfl: 1.4699e-02 l_hf: 6.3297e-03 l_total: 1.0042e-02 
+2026-10-13 19:35:03,940 INFO: [holo_..][epoch: 64, iter:  32,300, lr:(4.998e-05,)] [eta: 8:07:45, time (data): 0.283 (0.002)] l_pix: 7.1283e-03 l_gfl: 6.9532e-03 l_hf: 4.5896e-03 l_total: 8.7416e-03 
+2026-10-13 19:36:43,191 INFO: [holo_..][epoch: 64, iter:  32,400, lr:(4.998e-05,)] [eta: 8:05:54, time (data): 0.273 (0.002)] l_pix: 6.8294e-03 l_gfl: 7.5704e-03 l_hf: 4.7769e-03 l_total: 8.5418e-03 
+2026-10-13 19:38:20,120 INFO: [holo_..][epoch: 64, iter:  32,500, lr:(4.998e-05,)] [eta: 8:04:01, time (data): 0.259 (0.002)] l_pix: 1.0321e-02 l_gfl: 1.4818e-02 l_hf: 7.9598e-03 l_total: 1.3395e-02 
+2026-10-13 19:39:59,304 INFO: [holo_..][epoch: 65, iter:  32,600, lr:(4.998e-05,)] [eta: 8:02:10, time (data): 0.267 (0.002)] l_pix: 7.5182e-03 l_gfl: 8.2161e-03 l_hf: 5.6981e-03 l_total: 9.4795e-03 
+2026-10-13 19:41:38,624 INFO: [holo_..][epoch: 65, iter:  32,700, lr:(4.998e-05,)] [eta: 8:00:19, time (data): 0.259 (0.002)] l_pix: 7.3405e-03 l_gfl: 7.7911e-03 l_hf: 4.9697e-03 l_total: 9.1135e-03 
+2026-10-13 19:43:15,407 INFO: [holo_..][epoch: 65, iter:  32,800, lr:(4.998e-05,)] [eta: 7:58:26, time (data): 0.248 (0.002)] l_pix: 7.2292e-03 l_gfl: 1.0203e-02 l_hf: 5.1261e-03 l_total: 9.2747e-03 
+2026-10-13 19:44:50,583 INFO: [holo_..][epoch: 65, iter:  32,900, lr:(4.998e-05,)] [eta: 7:56:32, time (data): 0.273 (0.002)] l_pix: 9.6823e-03 l_gfl: 8.7542e-03 l_hf: 5.1770e-03 l_total: 1.1593e-02 
+2026-10-13 19:46:28,461 INFO: [holo_..][epoch: 65, iter:  33,000, lr:(4.998e-05,)] [eta: 7:54:40, time (data): 0.265 (0.002)] l_pix: 6.4226e-03 l_gfl: 1.0312e-02 l_hf: 5.1369e-03 l_total: 8.4812e-03 
+2026-10-13 19:48:06,427 INFO: [holo_..][epoch: 66, iter:  33,100, lr:(4.998e-05,)] [eta: 7:52:49, time (data): 0.248 (0.002)] l_pix: 7.6118e-03 l_gfl: 1.1949e-02 l_hf: 6.2422e-03 l_total: 1.0055e-02 
+2026-10-13 19:49:44,970 INFO: [holo_..][epoch: 66, iter:  33,200, lr:(4.998e-05,)] [eta: 7:50:58, time (data): 0.265 (0.003)] l_pix: 8.0662e-03 l_gfl: 1.2138e-02 l_hf: 6.6265e-03 l_total: 1.0605e-02 
+2026-10-13 19:51:24,720 INFO: [holo_..][epoch: 66, iter:  33,300, lr:(4.998e-05,)] [eta: 7:49:08, time (data): 0.257 (0.002)] l_pix: 1.0942e-02 l_gfl: 1.2765e-02 l_hf: 8.1136e-03 l_total: 1.3841e-02 
+2026-10-13 19:53:05,651 INFO: [holo_..][epoch: 66, iter:  33,400, lr:(4.998e-05,)] [eta: 7:47:19, time (data): 0.274 (0.003)] l_pix: 1.2644e-02 l_gfl: 1.1011e-02 l_hf: 7.0405e-03 l_total: 1.5153e-02 
+2026-10-13 19:54:44,699 INFO: [holo_..][epoch: 66, iter:  33,500, lr:(4.998e-05,)] [eta: 7:45:28, time (data): 0.249 (0.003)] l_pix: 7.1881e-03 l_gfl: 1.4318e-02 l_hf: 6.2718e-03 l_total: 9.8743e-03 
+2026-10-13 19:56:24,370 INFO: [holo_..][epoch: 67, iter:  33,600, lr:(4.998e-05,)] [eta: 7:43:38, time (data): 0.258 (0.002)] l_pix: 6.7010e-03 l_gfl: 7.3150e-03 l_hf: 4.9145e-03 l_total: 8.4154e-03 
+2026-10-13 19:57:59,889 INFO: [holo_..][epoch: 67, iter:  33,700, lr:(4.998e-05,)] [eta: 7:41:45, time (data): 0.253 (0.002)] l_pix: 7.3884e-03 l_gfl: 6.5006e-03 l_hf: 3.8481e-03 l_total: 8.8080e-03 
+2026-10-13 19:59:44,205 INFO: [holo_..][epoch: 67, iter:  33,800, lr:(4.998e-05,)] [eta: 7:39:59, time (data): 0.348 (0.003)] l_pix: 1.0513e-02 l_gfl: 1.1782e-02 l_hf: 7.8520e-03 l_total: 1.3262e-02 
+2026-10-13 20:01:22,789 INFO: [holo_..][epoch: 67, iter:  33,900, lr:(4.998e-05,)] [eta: 7:38:08, time (data): 0.275 (0.003)] l_pix: 7.4377e-03 l_gfl: 8.2609e-03 l_hf: 5.3081e-03 l_total: 9.3254e-03 
+2026-10-13 20:03:00,955 INFO: [holo_..][epoch: 67, iter:  34,000, lr:(4.998e-05,)] [eta: 7:36:18, time (data): 0.252 (0.001)] l_pix: 7.9845e-03 l_gfl: 1.2206e-02 l_hf: 6.2112e-03 l_total: 1.0447e-02 
+2026-10-13 20:04:39,433 INFO: [holo_..][epoch: 68, iter:  34,100, lr:(4.998e-05,)] [eta: 7:34:27, time (data): 0.256 (0.002)] l_pix: 7.4856e-03 l_gfl: 8.7581e-03 l_hf: 5.2098e-03 l_total: 9.4033e-03 
+2026-10-13 20:06:16,310 INFO: [holo_..][epoch: 68, iter:  34,200, lr:(4.998e-05,)] [eta: 7:32:36, time (data): 0.264 (0.002)] l_pix: 8.3798e-03 l_gfl: 1.2434e-02 l_hf: 6.8167e-03 l_total: 1.0987e-02 
+2026-10-13 20:07:55,367 INFO: [holo_..][epoch: 68, iter:  34,300, lr:(4.998e-05,)] [eta: 7:30:46, time (data): 0.271 (0.002)] l_pix: 7.2168e-03 l_gfl: 1.0218e-02 l_hf: 5.0757e-03 l_total: 9.2537e-03 
+2026-10-13 20:09:33,466 INFO: [holo_..][epoch: 68, iter:  34,400, lr:(4.998e-05,)] [eta: 7:28:55, time (data): 0.271 (0.003)] l_pix: 9.8033e-03 l_gfl: 1.3400e-02 l_hf: 7.4317e-03 l_total: 1.2630e-02 
+2026-10-13 20:11:11,949 INFO: [holo_..][epoch: 68, iter:  34,500, lr:(4.998e-05,)] [eta: 7:27:05, time (data): 0.261 (0.002)] l_pix: 8.9542e-03 l_gfl: 1.0368e-02 l_hf: 6.7149e-03 l_total: 1.1334e-02 
+2026-10-13 20:12:55,809 INFO: [holo_..][epoch: 69, iter:  34,600, lr:(4.998e-05,)] [eta: 7:25:19, time (data): 0.240 (0.002)] l_pix: 7.4415e-03 l_gfl: 7.6961e-03 l_hf: 4.9845e-03 l_total: 9.2080e-03 
+2026-10-13 20:14:31,807 INFO: [holo_..][epoch: 69, iter:  34,700, lr:(4.998e-05,)] [eta: 7:23:27, time (data): 0.262 (0.002)] l_pix: 6.9450e-03 l_gfl: 6.3626e-03 l_hf: 4.0333e-03 l_total: 8.3879e-03 
+2026-10-13 20:16:13,404 INFO: [holo_..][epoch: 69, iter:  34,800, lr:(4.998e-05,)] [eta: 7:21:39, time (data): 0.322 (0.004)] l_pix: 6.3302e-03 l_gfl: 1.0160e-02 l_hf: 5.1441e-03 l_total: 8.3750e-03 
+2026-10-13 20:18:01,977 INFO: [holo_..][epoch: 69, iter:  34,900, lr:(4.998e-05,)] [eta: 7:19:56, time (data): 0.273 (0.003)] l_pix: 7.5554e-03 l_gfl: 1.1745e-02 l_hf: 6.2510e-03 l_total: 9.9801e-03 
+2026-10-13 20:19:43,898 INFO: [holo_..][epoch: 69, iter:  35,000, lr:(4.998e-05,)] [eta: 7:18:09, time (data): 0.319 (0.004)] l_pix: 9.9053e-03 l_gfl: 1.1030e-02 l_hf: 6.9771e-03 l_total: 1.2404e-02 
+2026-10-13 20:19:43,898 INFO: Saving models and training states.
+2026-10-13 20:27:05,025 INFO: Validation HoloVal,		 # psnr: 34.2580	 # ssim: 0.9331	 # rmse: 0.0206	 # mae: 0.0120
+2026-10-13 20:27:05,308 INFO: New best checkpoint at iter 35000: PSNR=34.258002, SSIM=0.933100
+2026-10-13 20:28:48,321 INFO: [holo_..][epoch: 70, iter:  35,100, lr:(4.998e-05,)] [eta: 7:21:35, time (data): 0.267 (0.002)] l_pix: 7.0888e-03 l_gfl: 1.0891e-02 l_hf: 5.6857e-03 l_total: 9.3150e-03 
+2026-10-13 20:30:27,007 INFO: [holo_..][epoch: 70, iter:  35,200, lr:(4.998e-05,)] [eta: 7:19:43, time (data): 0.267 (0.002)] l_pix: 5.4629e-03 l_gfl: 5.1811e-03 l_hf: 3.4950e-03 l_total: 6.6800e-03 
+2026-10-13 20:32:05,002 INFO: [holo_..][epoch: 70, iter:  35,300, lr:(4.998e-05,)] [eta: 7:17:51, time (data): 0.269 (0.002)] l_pix: 6.9855e-03 l_gfl: 1.3901e-02 l_hf: 6.0714e-03 l_total: 9.5900e-03 
+2026-10-13 20:33:44,338 INFO: [holo_..][epoch: 70, iter:  35,400, lr:(4.998e-05,)] [eta: 7:16:00, time (data): 0.271 (0.002)] l_pix: 1.0023e-02 l_gfl: 1.4089e-02 l_hf: 7.8204e-03 l_total: 1.2996e-02 
+2026-10-13 20:35:21,025 INFO: [holo_..][epoch: 70, iter:  35,500, lr:(4.998e-05,)] [eta: 7:14:07, time (data): 0.258 (0.002)] l_pix: 8.0534e-03 l_gfl: 8.7892e-03 l_hf: 5.3772e-03 l_total: 1.0008e-02 
+2026-10-13 20:36:57,447 INFO: [holo_..][epoch: 71, iter:  35,600, lr:(4.998e-05,)] [eta: 7:12:14, time (data): 0.258 (0.002)] l_pix: 7.3035e-03 l_gfl: 8.4656e-03 l_hf: 5.5031e-03 l_total: 9.2507e-03 
+2026-10-13 20:38:33,196 INFO: [holo_..][epoch: 71, iter:  35,700, lr:(4.998e-05,)] [eta: 7:10:20, time (data): 0.254 (0.002)] l_pix: 9.5109e-03 l_gfl: 1.3746e-02 l_hf: 8.0902e-03 l_total: 1.2504e-02 
+2026-10-13 20:40:09,061 INFO: [holo_..][epoch: 71, iter:  35,800, lr:(4.998e-05,)] [eta: 7:08:27, time (data): 0.261 (0.003)] l_pix: 7.7049e-03 l_gfl: 1.2046e-02 l_hf: 6.3241e-03 l_total: 1.0174e-02 
+2026-10-13 20:41:44,645 INFO: [holo_..][epoch: 71, iter:  35,900, lr:(4.998e-05,)] [eta: 7:06:34, time (data): 0.273 (0.003)] l_pix: 7.1089e-03 l_gfl: 1.0979e-02 l_hf: 5.9038e-03 l_total: 9.3875e-03 
+2026-10-13 20:43:22,609 INFO: [holo_..][epoch: 71, iter:  36,000, lr:(4.998e-05,)] [eta: 7:04:42, time (data): 0.252 (0.002)] l_pix: 7.7409e-03 l_gfl: 1.2058e-02 l_hf: 6.3767e-03 l_total: 1.0222e-02 
+2026-10-13 20:45:01,854 INFO: [holo_..][epoch: 72, iter:  36,100, lr:(4.998e-05,)] [eta: 7:02:51, time (data): 0.257 (0.002)] l_pix: 8.7249e-03 l_gfl: 1.2451e-02 l_hf: 6.5096e-03 l_total: 1.1272e-02 
+2026-10-13 20:46:40,363 INFO: [holo_..][epoch: 72, iter:  36,200, lr:(4.998e-05,)] [eta: 7:01:00, time (data): 0.255 (0.002)] l_pix: 7.0703e-03 l_gfl: 1.1118e-02 l_hf: 5.6120e-03 l_total: 9.3046e-03 
+2026-10-13 20:48:18,808 INFO: [holo_..][epoch: 72, iter:  36,300, lr:(4.998e-05,)] [eta: 6:59:09, time (data): 0.251 (0.002)] l_pix: 8.4489e-03 l_gfl: 6.9695e-03 l_hf: 4.4412e-03 l_total: 1.0034e-02 
+2026-10-13 20:49:58,443 INFO: [holo_..][epoch: 72, iter:  36,400, lr:(4.998e-05,)] [eta: 6:57:18, time (data): 0.324 (0.006)] l_pix: 6.4661e-03 l_gfl: 9.7736e-03 l_hf: 4.9395e-03 l_total: 8.4314e-03 
+2026-10-13 20:51:44,467 INFO: [holo_..][epoch: 72, iter:  36,500, lr:(4.998e-05,)] [eta: 6:55:32, time (data): 0.245 (0.002)] l_pix: 7.4445e-03 l_gfl: 8.4587e-03 l_hf: 4.8240e-03 l_total: 9.2552e-03 
+2026-10-13 20:53:29,596 INFO: [holo_..][epoch: 73, iter:  36,600, lr:(4.998e-05,)] [eta: 6:53:46, time (data): 0.312 (0.004)] l_pix: 9.4134e-03 l_gfl: 1.3678e-02 l_hf: 7.6687e-03 l_total: 1.2315e-02 
+2026-10-13 20:55:11,273 INFO: [holo_..][epoch: 73, iter:  36,700, lr:(4.998e-05,)] [eta: 6:51:57, time (data): 0.265 (0.002)] l_pix: 7.2612e-03 l_gfl: 7.7119e-03 l_hf: 5.2810e-03 l_total: 9.0886e-03 
+2026-10-13 20:56:50,432 INFO: [holo_..][epoch: 73, iter:  36,800, lr:(4.998e-05,)] [eta: 6:50:06, time (data): 0.273 (0.003)] l_pix: 1.0151e-02 l_gfl: 1.1930e-02 l_hf: 7.7422e-03 l_total: 1.2892e-02 
+2026-10-13 20:58:29,120 INFO: [holo_..][epoch: 73, iter:  36,900, lr:(4.998e-05,)] [eta: 6:48:16, time (data): 0.262 (0.002)] l_pix: 1.0580e-02 l_gfl: 1.1280e-02 l_hf: 7.6823e-03 l_total: 1.3244e-02 
+2026-10-13 21:00:06,627 INFO: [holo_..][epoch: 73, iter:  37,000, lr:(4.998e-05,)] [eta: 6:46:24, time (data): 0.256 (0.002)] l_pix: 9.3072e-03 l_gfl: 1.3855e-02 l_hf: 7.6988e-03 l_total: 1.2232e-02 
+2026-10-13 21:01:45,895 INFO: [holo_..][epoch: 74, iter:  37,100, lr:(4.998e-05,)] [eta: 6:44:34, time (data): 0.257 (0.003)] l_pix: 8.7738e-03 l_gfl: 7.4207e-03 l_hf: 4.5395e-03 l_total: 1.0424e-02 
+2026-10-13 21:03:24,750 INFO: [holo_..][epoch: 74, iter:  37,200, lr:(4.998e-05,)] [eta: 6:42:44, time (data): 0.263 (0.002)] l_pix: 7.9914e-03 l_gfl: 9.1936e-03 l_hf: 5.8723e-03 l_total: 1.0085e-02 
+2026-10-13 21:05:04,215 INFO: [holo_..][epoch: 74, iter:  37,300, lr:(4.998e-05,)] [eta: 6:40:54, time (data): 0.263 (0.002)] l_pix: 9.9666e-03 l_gfl: 1.4418e-02 l_hf: 8.2575e-03 l_total: 1.3060e-02 
+2026-10-13 21:06:42,516 INFO: [holo_..][epoch: 74, iter:  37,400, lr:(4.998e-05,)] [eta: 6:39:03, time (data): 0.264 (0.002)] l_pix: 1.0460e-02 l_gfl: 1.0849e-02 l_hf: 7.7861e-03 l_total: 1.3102e-02 
+2026-10-13 21:08:18,545 INFO: [holo_..][epoch: 74, iter:  37,500, lr:(4.998e-05,)] [eta: 6:37:11, time (data): 0.258 (0.002)] l_pix: 9.9063e-03 l_gfl: 1.4751e-02 l_hf: 8.3823e-03 l_total: 1.3058e-02 
+2026-10-13 21:09:56,613 INFO: [holo_..][epoch: 75, iter:  37,600, lr:(4.998e-05,)] [eta: 6:35:21, time (data): 0.263 (0.002)] l_pix: 9.3373e-03 l_gfl: 1.4015e-02 l_hf: 7.6296e-03 l_total: 1.2265e-02 
+2026-10-13 21:11:35,388 INFO: [holo_..][epoch: 75, iter:  37,700, lr:(4.998e-05,)] [eta: 6:33:30, time (data): 0.263 (0.002)] l_pix: 1.0596e-02 l_gfl: 1.1801e-02 l_hf: 7.7448e-03 l_total: 1.3325e-02 
+2026-10-13 21:13:14,081 INFO: [holo_..][epoch: 75, iter:  37,800, lr:(4.998e-05,)] [eta: 6:31:40, time (data): 0.267 (0.002)] l_pix: 1.1020e-02 l_gfl: 1.3617e-02 l_hf: 8.8807e-03 l_total: 1.4158e-02 
+2026-10-13 21:15:02,424 INFO: [holo_..][epoch: 75, iter:  37,900, lr:(4.998e-05,)] [eta: 6:29:56, time (data): 0.309 (0.003)] l_pix: 9.6891e-03 l_gfl: 1.2033e-02 l_hf: 7.2937e-03 l_total: 1.2351e-02 
+2026-10-13 21:16:53,001 INFO: [holo_..][epoch: 75, iter:  38,000, lr:(4.998e-05,)] [eta: 6:28:13, time (data): 0.268 (0.003)] l_pix: 1.2904e-02 l_gfl: 1.5346e-02 l_hf: 1.0530e-02 l_total: 1.6544e-02 
+2026-10-13 21:18:38,205 INFO: [holo_..][epoch: 76, iter:  38,100, lr:(4.998e-05,)] [eta: 6:26:26, time (data): 0.323 (0.007)] l_pix: 6.6632e-03 l_gfl: 1.3458e-02 l_hf: 5.8994e-03 l_total: 9.1889e-03 
+2026-10-13 21:20:23,712 INFO: [holo_..][epoch: 76, iter:  38,200, lr:(4.998e-05,)] [eta: 6:24:40, time (data): 0.260 (0.003)] l_pix: 9.5927e-03 l_gfl: 1.4150e-02 l_hf: 7.7685e-03 l_total: 1.2561e-02 
+2026-10-13 21:22:07,318 INFO: [holo_..][epoch: 76, iter:  38,300, lr:(4.998e-05,)] [eta: 6:22:53, time (data): 0.265 (0.004)] l_pix: 7.1471e-03 l_gfl: 7.4979e-03 l_hf: 4.7134e-03 l_total: 8.8396e-03 
+2026-10-13 21:23:53,103 INFO: [holo_..][epoch: 76, iter:  38,400, lr:(4.998e-05,)] [eta: 6:21:07, time (data): 0.264 (0.004)] l_pix: 7.2286e-03 l_gfl: 1.0076e-02 l_hf: 5.2582e-03 l_total: 9.2878e-03 
+2026-10-13 21:25:33,442 INFO: [holo_..][epoch: 76, iter:  38,500, lr:(4.998e-05,)] [eta: 6:19:18, time (data): 0.258 (0.002)] l_pix: 6.6998e-03 l_gfl: 1.3402e-02 l_hf: 5.9520e-03 l_total: 9.2304e-03 
+2026-10-13 21:27:12,129 INFO: [holo_..][epoch: 77, iter:  38,600, lr:(4.998e-05,)] [eta: 6:17:28, time (data): 0.271 (0.002)] l_pix: 8.0038e-03 l_gfl: 1.0882e-02 l_hf: 5.6134e-03 l_total: 1.0215e-02 
+2026-10-13 21:28:50,951 INFO: [holo_..][epoch: 77, iter:  38,700, lr:(4.998e-05,)] [eta: 6:15:39, time (data): 0.263 (0.002)] l_pix: 6.9119e-03 l_gfl: 1.0828e-02 l_hf: 5.7713e-03 l_total: 9.1489e-03 
+2026-10-13 21:30:28,733 INFO: [holo_..][epoch: 77, iter:  38,800, lr:(4.998e-05,)] [eta: 6:13:49, time (data): 0.277 (0.005)] l_pix: 5.9986e-03 l_gfl: 9.5263e-03 l_hf: 4.9162e-03 l_total: 7.9345e-03 
+2026-10-13 21:32:07,025 INFO: [holo_..][epoch: 77, iter:  38,900, lr:(4.998e-05,)] [eta: 6:11:59, time (data): 0.263 (0.002)] l_pix: 6.6878e-03 l_gfl: 1.3449e-02 l_hf: 5.9460e-03 l_total: 9.2219e-03 
+2026-10-13 21:33:46,016 INFO: [holo_..][epoch: 77, iter:  39,000, lr:(4.998e-05,)] [eta: 6:10:09, time (data): 0.291 (0.004)] l_pix: 1.3585e-02 l_gfl: 1.9544e-02 l_hf: 1.2661e-02 l_total: 1.8071e-02 
+2026-10-13 21:35:23,712 INFO: [holo_..][epoch: 78, iter:  39,100, lr:(4.998e-05,)] [eta: 6:08:19, time (data): 0.267 (0.003)] l_pix: 6.2346e-03 l_gfl: 9.5713e-03 l_hf: 5.0427e-03 l_total: 8.2002e-03 
+2026-10-13 21:37:02,529 INFO: [holo_..][epoch: 78, iter:  39,200, lr:(4.998e-05,)] [eta: 6:06:30, time (data): 0.302 (0.004)] l_pix: 6.7291e-03 l_gfl: 1.3545e-02 l_hf: 5.9748e-03 l_total: 9.2785e-03 
+2026-10-13 21:38:42,051 INFO: [holo_..][epoch: 78, iter:  39,300, lr:(4.998e-05,)] [eta: 6:04:41, time (data): 0.267 (0.003)] l_pix: 1.0860e-02 l_gfl: 1.1811e-02 l_hf: 7.9504e-03 l_total: 1.3631e-02 
+2026-10-13 21:40:20,165 INFO: [holo_..][epoch: 78, iter:  39,400, lr:(4.998e-05,)] [eta: 6:02:51, time (data): 0.256 (0.002)] l_pix: 8.9601e-03 l_gfl: 1.2194e-02 l_hf: 6.4121e-03 l_total: 1.1462e-02 
+2026-10-13 21:41:56,512 INFO: [holo_..][epoch: 78, iter:  39,500, lr:(4.998e-05,)] [eta: 6:01:01, time (data): 0.269 (0.002)] l_pix: 1.6127e-02 l_gfl: 1.9767e-02 l_hf: 1.4463e-02 l_total: 2.0996e-02 
+2026-10-13 21:43:37,960 INFO: [holo_..][epoch: 79, iter:  39,600, lr:(4.998e-05,)] [eta: 5:59:13, time (data): 0.289 (0.004)] l_pix: 7.2462e-03 l_gfl: 1.0491e-02 l_hf: 5.1873e-03 l_total: 9.3328e-03 
+2026-10-13 21:45:19,592 INFO: [holo_..][epoch: 79, iter:  39,700, lr:(4.998e-05,)] [eta: 5:57:25, time (data): 0.324 (0.003)] l_pix: 8.2719e-03 l_gfl: 1.2453e-02 l_hf: 6.3021e-03 l_total: 1.0778e-02 
+2026-10-13 21:46:59,725 INFO: [holo_..][epoch: 79, iter:  39,800, lr:(4.998e-05,)] [eta: 5:55:37, time (data): 0.260 (0.002)] l_pix: 6.2854e-03 l_gfl: 1.0098e-02 l_hf: 5.2109e-03 l_total: 8.3374e-03 
+2026-10-13 21:48:41,606 INFO: [holo_..][epoch: 79, iter:  39,900, lr:(4.998e-05,)] [eta: 5:53:49, time (data): 0.321 (0.004)] l_pix: 6.3827e-03 l_gfl: 1.2947e-02 l_hf: 5.6524e-03 l_total: 8.8078e-03 
+2026-10-13 21:50:21,666 INFO: [holo_..][epoch: 79, iter:  40,000, lr:(4.998e-05,)] [eta: 5:52:01, time (data): 0.308 (0.003)] l_pix: 9.7711e-03 l_gfl: 1.4739e-02 l_hf: 7.9619e-03 l_total: 1.2837e-02 
+2026-10-13 21:50:21,667 INFO: Saving models and training states.
+2026-10-13 21:57:37,123 INFO: Validation HoloVal,		 # psnr: 34.4757	 # ssim: 0.9340	 # rmse: 0.0202	 # mae: 0.0119
+2026-10-13 21:57:37,433 INFO: New best checkpoint at iter 40000: PSNR=34.475727, SSIM=0.933985
+2026-10-13 21:59:14,109 INFO: [holo_..][epoch: 80, iter:  40,100, lr:(4.998e-05,)] [eta: 5:53:47, time (data): 0.263 (0.003)] l_pix: 6.5892e-03 l_gfl: 1.3104e-02 l_hf: 5.8611e-03 l_total: 9.0718e-03 
+2026-10-13 22:00:48,939 INFO: [holo_..][epoch: 80, iter:  40,200, lr:(4.998e-05,)] [eta: 5:51:54, time (data): 0.255 (0.003)] l_pix: 5.8161e-03 l_gfl: 6.4218e-03 l_hf: 4.3120e-03 l_total: 7.3207e-03 
+2026-10-13 22:02:25,612 INFO: [holo_..][epoch: 80, iter:  40,300, lr:(4.998e-05,)] [eta: 5:50:03, time (data): 0.261 (0.002)] l_pix: 1.1661e-02 l_gfl: 1.3833e-02 l_hf: 8.8914e-03 l_total: 1.4823e-02 
+2026-10-13 22:04:03,345 INFO: [holo_..][epoch: 80, iter:  40,400, lr:(4.998e-05,)] [eta: 5:48:12, time (data): 0.345 (0.002)] l_pix: 8.5473e-03 l_gfl: 9.8757e-03 l_hf: 5.9187e-03 l_total: 1.0719e-02 
+2026-10-13 22:05:41,326 INFO: [holo_..][epoch: 80, iter:  40,500, lr:(4.998e-05,)] [eta: 5:46:21, time (data): 0.254 (0.002)] l_pix: 7.2173e-03 l_gfl: 1.0975e-02 l_hf: 5.5898e-03 l_total: 9.4327e-03 
+2026-10-13 22:07:19,636 INFO: [holo_..][epoch: 81, iter:  40,600, lr:(4.998e-05,)] [eta: 5:44:31, time (data): 0.267 (0.002)] l_pix: 6.8120e-03 l_gfl: 1.0478e-02 l_hf: 5.3931e-03 l_total: 8.9384e-03 
+2026-10-13 22:08:56,264 INFO: [holo_..][epoch: 81, iter:  40,700, lr:(4.998e-05,)] [eta: 5:42:39, time (data): 0.254 (0.002)] l_pix: 1.0547e-02 l_gfl: 1.5407e-02 l_hf: 9.0449e-03 l_total: 1.3897e-02 
+2026-10-13 22:10:32,434 INFO: [holo_..][epoch: 81, iter:  40,800, lr:(4.998e-05,)] [eta: 5:40:48, time (data): 0.263 (0.003)] l_pix: 8.1713e-03 l_gfl: 1.2663e-02 l_hf: 6.8158e-03 l_total: 1.0801e-02 
+2026-10-13 22:12:09,379 INFO: [holo_..][epoch: 81, iter:  40,900, lr:(4.998e-05,)] [eta: 5:38:57, time (data): 0.254 (0.002)] l_pix: 9.1450e-03 l_gfl: 1.3720e-02 l_hf: 7.4485e-03 l_total: 1.2007e-02 
+2026-10-13 22:13:47,137 INFO: [holo_..][epoch: 81, iter:  41,000, lr:(4.998e-05,)] [eta: 5:37:06, time (data): 0.260 (0.002)] l_pix: 6.3748e-03 l_gfl: 6.7849e-03 l_hf: 4.6736e-03 l_total: 7.9880e-03 
+2026-10-13 22:15:22,344 INFO: [holo_..][epoch: 82, iter:  41,100, lr:(4.998e-05,)] [eta: 5:35:15, time (data): 0.254 (0.002)] l_pix: 9.0185e-03 l_gfl: 1.3497e-02 l_hf: 7.3572e-03 l_total: 1.1840e-02 
+2026-10-13 22:17:00,532 INFO: [holo_..][epoch: 82, iter:  41,200, lr:(4.998e-05,)] [eta: 5:33:25, time (data): 0.261 (0.002)] l_pix: 6.4837e-03 l_gfl: 1.2988e-02 l_hf: 5.7684e-03 l_total: 8.9362e-03 
+2026-10-13 22:18:38,091 INFO: [holo_..][epoch: 82, iter:  41,300, lr:(4.998e-05,)] [eta: 5:31:34, time (data): 0.259 (0.002)] l_pix: 1.2077e-02 l_gfl: 1.3297e-02 l_hf: 9.1676e-03 l_total: 1.5240e-02 
+2026-10-13 22:20:18,708 INFO: [holo_..][epoch: 82, iter:  41,400, lr:(4.998e-05,)] [eta: 5:29:45, time (data): 0.242 (0.002)] l_pix: 7.3033e-03 l_gfl: 1.1493e-02 l_hf: 6.0998e-03 l_total: 9.6726e-03 
+2026-10-13 22:21:53,423 INFO: [holo_..][epoch: 82, iter:  41,500, lr:(4.998e-05,)] [eta: 5:27:54, time (data): 0.252 (0.002)] l_pix: 9.8688e-03 l_gfl: 1.1743e-02 l_hf: 7.5069e-03 l_total: 1.2544e-02 
+2026-10-13 22:23:27,547 INFO: [holo_..][epoch: 83, iter:  41,600, lr:(4.998e-05,)] [eta: 5:26:02, time (data): 0.252 (0.002)] l_pix: 1.0036e-02 l_gfl: 1.1661e-02 l_hf: 7.2928e-03 l_total: 1.2660e-02 
+2026-10-13 22:25:03,839 INFO: [holo_..][epoch: 83, iter:  41,700, lr:(4.998e-05,)] [eta: 5:24:11, time (data): 0.262 (0.002)] l_pix: 7.2397e-03 l_gfl: 1.1372e-02 l_hf: 5.9945e-03 l_total: 9.5758e-03 
+2026-10-13 22:26:43,828 INFO: [holo_..][epoch: 83, iter:  41,800, lr:(4.998e-05,)] [eta: 5:22:22, time (data): 0.267 (0.002)] l_pix: 7.5053e-03 l_gfl: 1.0276e-02 l_hf: 5.5007e-03 l_total: 9.6331e-03 
+2026-10-13 22:28:23,432 INFO: [holo_..][epoch: 83, iter:  41,900, lr:(4.998e-05,)] [eta: 5:20:33, time (data): 0.268 (0.005)] l_pix: 1.8610e-02 l_gfl: 2.2980e-02 l_hf: 1.6182e-02 l_total: 2.4145e-02 
+2026-10-13 22:30:00,597 INFO: [holo_..][epoch: 83, iter:  42,000, lr:(4.998e-05,)] [eta: 5:18:43, time (data): 0.266 (0.004)] l_pix: 6.3771e-03 l_gfl: 1.2913e-02 l_hf: 5.7401e-03 l_total: 8.8165e-03 
+2026-10-13 22:31:40,300 INFO: [holo_..][epoch: 84, iter:  42,100, lr:(4.998e-05,)] [eta: 5:16:54, time (data): 0.266 (0.003)] l_pix: 1.2499e-02 l_gfl: 1.3601e-02 l_hf: 9.3788e-03 l_total: 1.5735e-02 
+2026-10-13 22:33:19,976 INFO: [holo_..][epoch: 84, iter:  42,200, lr:(4.998e-05,)] [eta: 5:15:05, time (data): 0.273 (0.002)] l_pix: 8.1680e-03 l_gfl: 1.1721e-02 l_hf: 6.2764e-03 l_total: 1.0595e-02 
+2026-10-13 22:34:57,371 INFO: [holo_..][epoch: 84, iter:  42,300, lr:(4.998e-05,)] [eta: 5:13:15, time (data): 0.259 (0.002)] l_pix: 7.2630e-03 l_gfl: 8.4677e-03 l_hf: 5.4540e-03 l_total: 9.2006e-03 
+2026-10-13 22:36:34,358 INFO: [holo_..][epoch: 84, iter:  42,400, lr:(4.998e-05,)] [eta: 5:11:25, time (data): 0.258 (0.002)] l_pix: 7.4676e-03 l_gfl: 1.0971e-02 l_hf: 5.8469e-03 l_total: 9.7341e-03 
+2026-10-13 22:38:12,907 INFO: [holo_..][epoch: 84, iter:  42,500, lr:(4.998e-05,)] [eta: 5:09:35, time (data): 0.269 (0.003)] l_pix: 1.1456e-02 l_gfl: 1.2922e-02 l_hf: 9.3319e-03 l_total: 1.4615e-02 
+2026-10-13 22:39:51,810 INFO: [holo_..][epoch: 85, iter:  42,600, lr:(4.998e-05,)] [eta: 5:07:46, time (data): 0.267 (0.002)] l_pix: 6.3189e-03 l_gfl: 1.0010e-02 l_hf: 5.0865e-03 l_total: 8.3371e-03 
+2026-10-13 22:41:31,018 INFO: [holo_..][epoch: 85, iter:  42,700, lr:(4.998e-05,)] [eta: 5:05:57, time (data): 0.279 (0.002)] l_pix: 7.3345e-03 l_gfl: 1.1258e-02 l_hf: 5.5356e-03 l_total: 9.5675e-03 
+2026-10-13 22:43:10,823 INFO: [holo_..][epoch: 85, iter:  42,800, lr:(4.998e-05,)] [eta: 5:04:09, time (data): 0.268 (0.002)] l_pix: 6.7166e-03 l_gfl: 1.0377e-02 l_hf: 5.6007e-03 l_total: 8.8744e-03 
+2026-10-13 22:44:49,537 INFO: [holo_..][epoch: 85, iter:  42,900, lr:(4.998e-05,)] [eta: 5:02:20, time (data): 0.278 (0.002)] l_pix: 7.6275e-03 l_gfl: 1.1680e-02 l_hf: 5.6930e-03 l_total: 9.9341e-03 
+2026-10-13 22:46:28,463 INFO: [holo_..][epoch: 85, iter:  43,000, lr:(4.998e-05,)] [eta: 5:00:31, time (data): 0.274 (0.003)] l_pix: 7.9167e-03 l_gfl: 9.0327e-03 l_hf: 6.0299e-03 l_total: 1.0026e-02 
+2026-10-13 22:48:08,177 INFO: [holo_..][epoch: 86, iter:  43,100, lr:(4.998e-05,)] [eta: 4:58:42, time (data): 0.267 (0.003)] l_pix: 7.6333e-03 l_gfl: 8.1692e-03 l_hf: 5.6027e-03 l_total: 9.5707e-03 
+2026-10-13 22:49:47,722 INFO: [holo_..][epoch: 86, iter:  43,200, lr:(4.998e-05,)] [eta: 4:56:54, time (data): 0.264 (0.003)] l_pix: 9.7590e-03 l_gfl: 9.2128e-03 l_hf: 5.4991e-03 l_total: 1.1780e-02 
+2026-10-13 22:51:25,667 INFO: [holo_..][epoch: 86, iter:  43,300, lr:(4.998e-05,)] [eta: 4:55:04, time (data): 0.269 (0.002)] l_pix: 8.1146e-03 l_gfl: 1.1549e-02 l_hf: 6.4363e-03 l_total: 1.0557e-02 
+2026-10-13 22:53:04,866 INFO: [holo_..][epoch: 86, iter:  43,400, lr:(4.998e-05,)] [eta: 4:53:16, time (data): 0.266 (0.002)] l_pix: 5.7152e-03 l_gfl: 5.9430e-03 l_hf: 4.1735e-03 l_total: 7.1442e-03 
+2026-10-13 22:54:41,285 INFO: [holo_..][epoch: 86, iter:  43,500, lr:(4.998e-05,)] [eta: 4:51:26, time (data): 0.269 (0.002)] l_pix: 5.0711e-03 l_gfl: 5.4881e-03 l_hf: 3.6043e-03 l_total: 6.3407e-03 
+2026-10-13 22:56:19,813 INFO: [holo_..][epoch: 87, iter:  43,600, lr:(4.998e-05,)] [eta: 4:49:37, time (data): 0.261 (0.002)] l_pix: 4.8501e-03 l_gfl: 5.1939e-03 l_hf: 3.4324e-03 l_total: 6.0560e-03 
+2026-10-13 22:57:58,325 INFO: [holo_..][epoch: 87, iter:  43,700, lr:(4.998e-05,)] [eta: 4:47:49, time (data): 0.249 (0.002)] l_pix: 5.9977e-03 l_gfl: 6.3703e-03 l_hf: 4.1321e-03 l_total: 7.4612e-03 
+2026-10-13 22:59:37,005 INFO: [holo_..][epoch: 87, iter:  43,800, lr:(4.998e-05,)] [eta: 4:46:00, time (data): 0.264 (0.002)] l_pix: 5.8961e-03 l_gfl: 6.3592e-03 l_hf: 4.3783e-03 l_total: 7.4077e-03 
+2026-10-13 23:01:15,432 INFO: [holo_..][epoch: 87, iter:  43,900, lr:(4.998e-05,)] [eta: 4:44:11, time (data): 0.261 (0.002)] l_pix: 8.9650e-03 l_gfl: 1.3438e-02 l_hf: 7.5717e-03 l_total: 1.1823e-02 
+2026-10-13 23:02:53,338 INFO: [holo_..][epoch: 87, iter:  44,000, lr:(4.998e-05,)] [eta: 4:42:22, time (data): 0.261 (0.002)] l_pix: 7.5305e-03 l_gfl: 8.8677e-03 l_hf: 5.9295e-03 l_total: 9.6031e-03 
+2026-10-13 23:04:32,431 INFO: [holo_..][epoch: 88, iter:  44,100, lr:(4.998e-05,)] [eta: 4:40:34, time (data): 0.261 (0.002)] l_pix: 9.1594e-03 l_gfl: 1.3441e-02 l_hf: 7.2775e-03 l_total: 1.1959e-02 
+2026-10-13 23:06:10,374 INFO: [holo_..][epoch: 88, iter:  44,200, lr:(4.998e-05,)] [eta: 4:38:45, time (data): 0.261 (0.002)] l_pix: 7.0614e-03 l_gfl: 1.0324e-02 l_hf: 5.5712e-03 l_total: 9.2081e-03 
+2026-10-13 23:07:47,543 INFO: [holo_..][epoch: 88, iter:  44,300, lr:(4.998e-05,)] [eta: 4:36:56, time (data): 0.259 (0.002)] l_pix: 8.9765e-03 l_gfl: 1.1769e-02 l_hf: 6.8128e-03 l_total: 1.1516e-02 
+2026-10-13 23:09:25,288 INFO: [holo_..][epoch: 88, iter:  44,400, lr:(4.998e-05,)] [eta: 4:35:08, time (data): 0.372 (0.002)] l_pix: 1.1601e-02 l_gfl: 1.2486e-02 l_hf: 8.0971e-03 l_total: 1.4469e-02 
+2026-10-13 23:11:03,726 INFO: [holo_..][epoch: 88, iter:  44,500, lr:(4.998e-05,)] [eta: 4:33:19, time (data): 0.257 (0.002)] l_pix: 9.7169e-03 l_gfl: 1.4184e-02 l_hf: 7.8403e-03 l_total: 1.2703e-02 
+2026-10-13 23:12:42,533 INFO: [holo_..][epoch: 89, iter:  44,600, lr:(4.998e-05,)] [eta: 4:31:31, time (data): 0.265 (0.002)] l_pix: 7.5189e-03 l_gfl: 6.8000e-03 l_hf: 4.7058e-03 l_total: 9.1401e-03 
+2026-10-13 23:14:20,970 INFO: [holo_..][epoch: 89, iter:  44,700, lr:(4.998e-05,)] [eta: 4:29:43, time (data): 0.265 (0.002)] l_pix: 7.6901e-03 l_gfl: 1.2024e-02 l_hf: 6.3956e-03 l_total: 1.0172e-02 
+2026-10-13 23:16:00,233 INFO: [holo_..][epoch: 89, iter:  44,800, lr:(4.998e-05,)] [eta: 4:27:55, time (data): 0.263 (0.002)] l_pix: 6.4565e-03 l_gfl: 9.5607e-03 l_hf: 5.0520e-03 l_total: 8.4230e-03 
+2026-10-13 23:17:37,792 INFO: [holo_..][epoch: 89, iter:  44,900, lr:(4.998e-05,)] [eta: 4:26:06, time (data): 0.263 (0.002)] l_pix: 7.6789e-03 l_gfl: 1.0138e-02 l_hf: 5.3550e-03 l_total: 9.7636e-03 
+2026-10-13 23:19:14,130 INFO: [holo_..][epoch: 89, iter:  45,000, lr:(4.998e-05,)] [eta: 4:24:17, time (data): 0.250 (0.002)] l_pix: 6.2039e-03 l_gfl: 1.2712e-02 l_hf: 5.6341e-03 l_total: 8.6019e-03 
+2026-10-13 23:19:14,130 INFO: Saving models and training states.
+2026-10-13 23:26:26,744 INFO: Validation HoloVal,		 # psnr: 34.6559	 # ssim: 0.9347	 # rmse: 0.0199	 # mae: 0.0118
+2026-10-13 23:26:27,022 INFO: New best checkpoint at iter 45000: PSNR=34.655870, SSIM=0.934726
+2026-10-13 23:28:05,796 INFO: [holo_..][epoch: 90, iter:  45,100, lr:(4.998e-05,)] [eta: 4:24:52, time (data): 0.273 (0.002)] l_pix: 1.0319e-02 l_gfl: 1.1888e-02 l_hf: 7.4660e-03 l_total: 1.3001e-02 
+2026-10-13 23:29:44,723 INFO: [holo_..][epoch: 90, iter:  45,200, lr:(4.998e-05,)] [eta: 4:23:03, time (data): 0.268 (0.002)] l_pix: 1.0207e-02 l_gfl: 1.4369e-02 l_hf: 8.1155e-03 l_total: 1.3267e-02 
+2026-10-13 23:31:24,110 INFO: [holo_..][epoch: 90, iter:  45,300, lr:(4.998e-05,)] [eta: 4:21:14, time (data): 0.266 (0.002)] l_pix: 7.4998e-03 l_gfl: 1.1465e-02 l_hf: 6.2358e-03 l_total: 9.8935e-03 
+2026-10-13 23:33:03,871 INFO: [holo_..][epoch: 90, iter:  45,400, lr:(4.998e-05,)] [eta: 4:19:25, time (data): 0.267 (0.003)] l_pix: 6.6717e-03 l_gfl: 1.0526e-02 l_hf: 5.7016e-03 l_total: 8.8646e-03 
+2026-10-13 23:34:43,833 INFO: [holo_..][epoch: 90, iter:  45,500, lr:(4.998e-05,)] [eta: 4:17:37, time (data): 0.261 (0.003)] l_pix: 8.3503e-03 l_gfl: 1.0455e-02 l_hf: 6.6310e-03 l_total: 1.0722e-02 
+2026-10-13 23:36:23,106 INFO: [holo_..][epoch: 91, iter:  45,600, lr:(4.998e-05,)] [eta: 4:15:48, time (data): 0.256 (0.002)] l_pix: 8.1625e-03 l_gfl: 8.7699e-03 l_hf: 5.9004e-03 l_total: 1.0220e-02 
+2026-10-13 23:37:59,606 INFO: [holo_..][epoch: 91, iter:  45,700, lr:(4.998e-05,)] [eta: 4:13:58, time (data): 0.266 (0.002)] l_pix: 1.0332e-02 l_gfl: 1.2330e-02 l_hf: 7.8825e-03 l_total: 1.3141e-02 
+2026-10-13 23:39:37,883 INFO: [holo_..][epoch: 91, iter:  45,800, lr:(4.998e-05,)] [eta: 4:12:09, time (data): 0.264 (0.002)] l_pix: 1.0342e-02 l_gfl: 1.2381e-02 l_hf: 8.0512e-03 l_total: 1.3191e-02 
+2026-10-13 23:41:17,827 INFO: [holo_..][epoch: 91, iter:  45,900, lr:(4.998e-05,)] [eta: 4:10:20, time (data): 0.253 (0.002)] l_pix: 1.1322e-02 l_gfl: 1.2373e-02 l_hf: 8.6671e-03 l_total: 1.4292e-02 
+2026-10-13 23:42:54,640 INFO: [holo_..][epoch: 91, iter:  46,000, lr:(4.998e-05,)] [eta: 4:08:31, time (data): 0.269 (0.002)] l_pix: 6.8782e-03 l_gfl: 1.0248e-02 l_hf: 5.2591e-03 l_total: 8.9548e-03 
+2026-10-13 23:44:31,813 INFO: [holo_..][epoch: 92, iter:  46,100, lr:(4.998e-05,)] [eta: 4:06:41, time (data): 0.270 (0.002)] l_pix: 7.2428e-03 l_gfl: 1.1450e-02 l_hf: 6.0414e-03 l_total: 9.5961e-03 
+2026-10-13 23:46:10,307 INFO: [holo_..][epoch: 92, iter:  46,200, lr:(4.998e-05,)] [eta: 4:04:52, time (data): 0.260 (0.002)] l_pix: 5.8311e-03 l_gfl: 6.1518e-03 l_hf: 4.1644e-03 l_total: 7.2792e-03 
+2026-10-13 23:47:48,561 INFO: [holo_..][epoch: 92, iter:  46,300, lr:(4.998e-05,)] [eta: 4:03:04, time (data): 0.262 (0.002)] l_pix: 6.2714e-03 l_gfl: 6.5949e-03 l_hf: 4.5161e-03 l_total: 7.8341e-03 
+2026-10-13 23:49:27,280 INFO: [holo_..][epoch: 92, iter:  46,400, lr:(4.998e-05,)] [eta: 4:01:15, time (data): 0.262 (0.002)] l_pix: 1.9129e-02 l_gfl: 2.3051e-02 l_hf: 1.5644e-02 l_total: 2.4563e-02 
+2026-10-13 23:51:04,767 INFO: [holo_..][epoch: 92, iter:  46,500, lr:(4.998e-05,)] [eta: 3:59:26, time (data): 0.262 (0.002)] l_pix: 8.8230e-03 l_gfl: 9.3396e-03 l_hf: 5.9044e-03 l_total: 1.0938e-02 
+2026-10-13 23:52:42,912 INFO: [holo_..][epoch: 93, iter:  46,600, lr:(4.998e-05,)] [eta: 3:57:37, time (data): 0.257 (0.002)] l_pix: 9.1173e-03 l_gfl: 8.5637e-03 l_hf: 5.5118e-03 l_total: 1.1076e-02 
+2026-10-13 23:54:18,537 INFO: [holo_..][epoch: 93, iter:  46,700, lr:(4.998e-05,)] [eta: 3:55:47, time (data): 0.250 (0.002)] l_pix: 6.7181e-03 l_gfl: 1.0563e-02 l_hf: 5.4340e-03 l_total: 8.8612e-03 
+2026-10-13 23:55:55,032 INFO: [holo_..][epoch: 93, iter:  46,800, lr:(4.998e-05,)] [eta: 3:53:58, time (data): 0.246 (0.002)] l_pix: 8.8629e-03 l_gfl: 9.7807e-03 l_hf: 6.3711e-03 l_total: 1.1115e-02 
+2026-10-13 23:57:31,794 INFO: [holo_..][epoch: 93, iter:  46,900, lr:(4.998e-05,)] [eta: 3:52:09, time (data): 0.263 (0.002)] l_pix: 8.9204e-03 l_gfl: 1.0824e-02 l_hf: 7.4552e-03 l_total: 1.1494e-02 
+2026-10-13 23:59:10,299 INFO: [holo_..][epoch: 93, iter:  47,000, lr:(4.998e-05,)] [eta: 3:50:21, time (data): 0.267 (0.002)] l_pix: 6.4355e-03 l_gfl: 1.2584e-02 l_hf: 5.6459e-03 l_total: 8.8231e-03 
+2026-10-14 00:00:49,935 INFO: [holo_..][epoch: 94, iter:  47,100, lr:(4.998e-05,)] [eta: 3:48:33, time (data): 0.266 (0.002)] l_pix: 8.1624e-03 l_gfl: 9.0482e-03 l_hf: 5.8486e-03 l_total: 1.0237e-02 
+2026-10-14 00:02:29,324 INFO: [holo_..][epoch: 94, iter:  47,200, lr:(4.998e-05,)] [eta: 3:46:44, time (data): 0.279 (0.002)] l_pix: 5.0981e-03 l_gfl: 8.3205e-03 l_hf: 4.2734e-03 l_total: 6.7848e-03 
+2026-10-14 00:04:06,982 INFO: [holo_..][epoch: 94, iter:  47,300, lr:(4.998e-05,)] [eta: 3:44:56, time (data): 0.264 (0.002)] l_pix: 8.1183e-03 l_gfl: 1.2387e-02 l_hf: 6.4063e-03 l_total: 1.0638e-02 
+2026-10-14 00:05:45,070 INFO: [holo_..][epoch: 94, iter:  47,400, lr:(4.998e-05,)] [eta: 3:43:07, time (data): 0.261 (0.002)] l_pix: 9.8727e-03 l_gfl: 1.1721e-02 l_hf: 7.4468e-03 l_total: 1.2534e-02 
+2026-10-14 00:07:24,023 INFO: [holo_..][epoch: 94, iter:  47,500, lr:(4.998e-05,)] [eta: 3:41:19, time (data): 0.263 (0.002)] l_pix: 8.3095e-03 l_gfl: 9.7053e-03 l_hf: 6.4481e-03 l_total: 1.0570e-02 
+2026-10-14 00:09:03,739 INFO: [holo_..][epoch: 95, iter:  47,600, lr:(4.998e-05,)] [eta: 3:39:31, time (data): 0.265 (0.002)] l_pix: 5.7599e-03 l_gfl: 9.0703e-03 l_hf: 4.8211e-03 l_total: 7.6312e-03 
+2026-10-14 00:10:43,161 INFO: [holo_..][epoch: 95, iter:  47,700, lr:(4.998e-05,)] [eta: 3:37:43, time (data): 0.268 (0.002)] l_pix: 6.3759e-03 l_gfl: 1.2548e-02 l_hf: 5.6641e-03 l_total: 8.7635e-03 
+2026-10-14 00:12:22,629 INFO: [holo_..][epoch: 95, iter:  47,800, lr:(4.998e-05,)] [eta: 3:35:55, time (data): 0.246 (0.002)] l_pix: 6.1740e-03 l_gfl: 9.1742e-03 l_hf: 4.8237e-03 l_total: 8.0562e-03 
+2026-10-14 00:13:59,639 INFO: [holo_..][epoch: 95, iter:  47,900, lr:(4.998e-05,)] [eta: 3:34:07, time (data): 0.265 (0.003)] l_pix: 7.8132e-03 l_gfl: 1.1315e-02 l_hf: 6.2140e-03 l_total: 1.0187e-02 
+2026-10-14 00:15:37,910 INFO: [holo_..][epoch: 95, iter:  48,000, lr:(4.998e-05,)] [eta: 3:32:19, time (data): 0.265 (0.002)] l_pix: 1.4552e-02 l_gfl: 1.5749e-02 l_hf: 1.0572e-02 l_total: 1.8241e-02 
+2026-10-14 00:17:17,134 INFO: [holo_..][epoch: 96, iter:  48,100, lr:(2.499e-05,)] [eta: 3:30:31, time (data): 0.269 (0.002)] l_pix: 7.1312e-03 l_gfl: 1.1273e-02 l_hf: 6.0714e-03 l_total: 9.4727e-03 
+2026-10-14 00:18:55,218 INFO: [holo_..][epoch: 96, iter:  48,200, lr:(2.499e-05,)] [eta: 3:28:43, time (data): 0.263 (0.002)] l_pix: 6.0902e-03 l_gfl: 9.4934e-03 l_hf: 4.9521e-03 l_total: 8.0299e-03 
+2026-10-14 00:20:34,533 INFO: [holo_..][epoch: 96, iter:  48,300, lr:(2.499e-05,)] [eta: 3:26:55, time (data): 0.269 (0.002)] l_pix: 9.4036e-03 l_gfl: 1.4035e-02 l_hf: 7.6859e-03 l_total: 1.2344e-02 
+2026-10-14 00:22:14,520 INFO: [holo_..][epoch: 96, iter:  48,400, lr:(2.499e-05,)] [eta: 3:25:07, time (data): 0.279 (0.002)] l_pix: 1.0972e-02 l_gfl: 1.3527e-02 l_hf: 8.6845e-03 l_total: 1.4062e-02 
+2026-10-14 00:23:50,509 INFO: [holo_..][epoch: 96, iter:  48,500, lr:(2.499e-05,)] [eta: 3:23:19, time (data): 0.255 (0.002)] l_pix: 6.1610e-03 l_gfl: 1.2562e-02 l_hf: 5.6075e-03 l_total: 8.5386e-03 
+2026-10-14 00:25:27,684 INFO: [holo_..][epoch: 97, iter:  48,600, lr:(2.499e-05,)] [eta: 3:21:30, time (data): 0.257 (0.002)] l_pix: 7.7943e-03 l_gfl: 9.5319e-03 l_hf: 6.1025e-03 l_total: 9.9680e-03 
+2026-10-14 00:27:04,985 INFO: [holo_..][epoch: 97, iter:  48,700, lr:(2.499e-05,)] [eta: 3:19:42, time (data): 0.258 (0.002)] l_pix: 8.0940e-03 l_gfl: 1.2550e-02 l_hf: 6.6186e-03 l_total: 1.0673e-02 
+2026-10-14 00:28:43,969 INFO: [holo_..][epoch: 97, iter:  48,800, lr:(2.499e-05,)] [eta: 3:17:55, time (data): 0.263 (0.002)] l_pix: 8.1125e-03 l_gfl: 9.2836e-03 l_hf: 5.7349e-03 l_total: 1.0188e-02 
+2026-10-14 00:30:22,287 INFO: [holo_..][epoch: 97, iter:  48,900, lr:(2.499e-05,)] [eta: 3:16:07, time (data): 0.262 (0.002)] l_pix: 6.2434e-03 l_gfl: 1.2405e-02 l_hf: 5.6455e-03 l_total: 8.6130e-03 
+2026-10-14 00:31:59,581 INFO: [holo_..][epoch: 97, iter:  49,000, lr:(2.499e-05,)] [eta: 3:14:19, time (data): 0.262 (0.002)] l_pix: 7.4162e-03 l_gfl: 1.1869e-02 l_hf: 6.0191e-03 l_total: 9.8070e-03 
+2026-10-14 00:33:38,334 INFO: [holo_..][epoch: 98, iter:  49,100, lr:(2.499e-05,)] [eta: 3:12:31, time (data): 0.266 (0.002)] l_pix: 7.9845e-03 l_gfl: 9.7053e-03 l_hf: 6.4855e-03 l_total: 1.0252e-02 
+2026-10-14 00:35:15,353 INFO: [holo_..][epoch: 98, iter:  49,200, lr:(2.499e-05,)] [eta: 3:10:43, time (data): 0.266 (0.002)] l_pix: 7.3628e-03 l_gfl: 7.3645e-03 l_hf: 4.6497e-03 l_total: 9.0292e-03 
+2026-10-14 00:36:52,931 INFO: [holo_..][epoch: 98, iter:  49,300, lr:(2.499e-05,)] [eta: 3:08:56, time (data): 0.265 (0.002)] l_pix: 5.9825e-03 l_gfl: 7.1160e-03 l_hf: 4.9644e-03 l_total: 7.6869e-03 
+2026-10-14 00:38:32,570 INFO: [holo_..][epoch: 98, iter:  49,400, lr:(2.499e-05,)] [eta: 3:07:08, time (data): 0.263 (0.002)] l_pix: 6.1573e-03 l_gfl: 6.5778e-03 l_hf: 4.2825e-03 l_total: 7.6716e-03 
+2026-10-14 00:40:11,700 INFO: [holo_..][epoch: 98, iter:  49,500, lr:(2.499e-05,)] [eta: 3:05:21, time (data): 0.263 (0.002)] l_pix: 8.6208e-03 l_gfl: 1.1076e-02 l_hf: 6.9941e-03 l_total: 1.1127e-02 
+2026-10-14 00:41:50,757 INFO: [holo_..][epoch: 99, iter:  49,600, lr:(2.499e-05,)] [eta: 3:03:34, time (data): 0.270 (0.002)] l_pix: 5.2767e-03 l_gfl: 5.6712e-03 l_hf: 4.1297e-03 l_total: 6.6697e-03 
+2026-10-14 00:43:29,444 INFO: [holo_..][epoch: 99, iter:  49,700, lr:(2.499e-05,)] [eta: 3:01:46, time (data): 0.300 (0.002)] l_pix: 6.0813e-03 l_gfl: 1.2418e-02 l_hf: 5.5449e-03 l_total: 8.4321e-03 
+2026-10-14 00:45:09,209 INFO: [holo_..][epoch: 99, iter:  49,800, lr:(2.499e-05,)] [eta: 2:59:59, time (data): 0.265 (0.002)] l_pix: 6.1164e-03 l_gfl: 1.2142e-02 l_hf: 5.5345e-03 l_total: 8.4375e-03 
+2026-10-14 00:46:47,763 INFO: [holo_..][epoch: 99, iter:  49,900, lr:(2.499e-05,)] [eta: 2:58:12, time (data): 0.264 (0.002)] l_pix: 9.3633e-03 l_gfl: 1.0352e-02 l_hf: 7.4752e-03 l_total: 1.1894e-02 
+2026-10-14 00:48:26,732 INFO: [holo_..][epoch: 99, iter:  50,000, lr:(2.499e-05,)] [eta: 2:56:24, time (data): 0.254 (0.002)] l_pix: 8.2283e-03 l_gfl: 1.2423e-02 l_hf: 6.3854e-03 l_total: 1.0748e-02 
+2026-10-14 00:48:26,732 INFO: Saving models and training states.
+2026-10-14 00:55:36,159 INFO: Validation HoloVal,		 # psnr: 34.8053	 # ssim: 0.9351	 # rmse: 0.0196	 # mae: 0.0118
+2026-10-14 00:55:36,525 INFO: New best checkpoint at iter 50000: PSNR=34.805251, SSIM=0.935126
+2026-10-14 00:57:12,583 INFO: [holo_..][epoch:100, iter:  50,100, lr:(2.499e-05,)] [eta: 2:56:01, time (data): 0.252 (0.002)] l_pix: 9.3100e-03 l_gfl: 1.3836e-02 l_hf: 7.9440e-03 l_total: 1.2282e-02 
+2026-10-14 00:58:50,184 INFO: [holo_..][epoch:100, iter:  50,200, lr:(2.499e-05,)] [eta: 2:54:13, time (data): 0.250 (0.002)] l_pix: 1.1734e-02 l_gfl: 1.4390e-02 l_hf: 9.2537e-03 l_total: 1.5024e-02 
+2026-10-14 01:00:25,878 INFO: [holo_..][epoch:100, iter:  50,300, lr:(2.499e-05,)] [eta: 2:52:24, time (data): 0.264 (0.003)] l_pix: 5.5874e-03 l_gfl: 8.8572e-03 l_hf: 4.6911e-03 l_total: 7.4114e-03 
+2026-10-14 01:02:03,809 INFO: [holo_..][epoch:100, iter:  50,400, lr:(2.499e-05,)] [eta: 2:50:36, time (data): 0.269 (0.002)] l_pix: 1.0600e-02 l_gfl: 1.2800e-02 l_hf: 9.2657e-03 l_total: 1.3733e-02 
+2026-10-14 01:03:41,920 INFO: [holo_..][epoch:100, iter:  50,500, lr:(2.499e-05,)] [eta: 2:48:48, time (data): 0.256 (0.002)] l_pix: 4.7638e-03 l_gfl: 7.7929e-03 l_hf: 3.9821e-03 l_total: 6.3395e-03 
+2026-10-14 01:05:20,337 INFO: [holo_..][epoch:101, iter:  50,600, lr:(2.499e-05,)] [eta: 2:46:59, time (data): 0.257 (0.002)] l_pix: 9.8932e-03 l_gfl: 1.1145e-02 l_hf: 7.3531e-03 l_total: 1.2478e-02 
+2026-10-14 01:06:59,081 INFO: [holo_..][epoch:101, iter:  50,700, lr:(2.499e-05,)] [eta: 2:45:11, time (data): 0.263 (0.002)] l_pix: 1.0364e-02 l_gfl: 1.3379e-02 l_hf: 8.3424e-03 l_total: 1.3371e-02 
+2026-10-14 01:08:37,616 INFO: [holo_..][epoch:101, iter:  50,800, lr:(2.499e-05,)] [eta: 2:43:23, time (data): 0.264 (0.003)] l_pix: 7.8505e-03 l_gfl: 1.2253e-02 l_hf: 6.6974e-03 l_total: 1.0415e-02 
+2026-10-14 01:10:13,948 INFO: [holo_..][epoch:101, iter:  50,900, lr:(2.499e-05,)] [eta: 2:41:35, time (data): 0.266 (0.003)] l_pix: 4.9869e-03 l_gfl: 8.1584e-03 l_hf: 4.1765e-03 l_total: 6.6381e-03 
+2026-10-14 01:11:52,256 INFO: [holo_..][epoch:101, iter:  51,000, lr:(2.499e-05,)] [eta: 2:39:47, time (data): 0.266 (0.002)] l_pix: 5.9968e-03 l_gfl: 1.2066e-02 l_hf: 5.4937e-03 l_total: 8.3021e-03 
+2026-10-14 01:13:30,381 INFO: [holo_..][epoch:102, iter:  51,100, lr:(2.499e-05,)] [eta: 2:37:59, time (data): 0.307 (0.002)] l_pix: 8.0668e-03 l_gfl: 9.3663e-03 l_hf: 6.0333e-03 l_total: 1.0210e-02 
+2026-10-14 01:15:07,906 INFO: [holo_..][epoch:102, iter:  51,200, lr:(2.499e-05,)] [eta: 2:36:11, time (data): 0.258 (0.003)] l_pix: 1.1777e-02 l_gfl: 1.4407e-02 l_hf: 9.9304e-03 l_total: 1.5204e-02 
+2026-10-14 01:16:43,518 INFO: [holo_..][epoch:102, iter:  51,300, lr:(2.499e-05,)] [eta: 2:34:23, time (data): 0.265 (0.002)] l_pix: 6.7679e-03 l_gfl: 1.0624e-02 l_hf: 5.6985e-03 l_total: 8.9700e-03 
+2026-10-14 01:18:19,316 INFO: [holo_..][epoch:102, iter:  51,400, lr:(2.499e-05,)] [eta: 2:32:34, time (data): 0.264 (0.003)] l_pix: 1.1968e-02 l_gfl: 1.5421e-02 l_hf: 1.0850e-02 l_total: 1.5680e-02 
+2026-10-14 01:19:55,390 INFO: [holo_..][epoch:102, iter:  51,500, lr:(2.499e-05,)] [eta: 2:30:46, time (data): 0.255 (0.002)] l_pix: 6.7686e-03 l_gfl: 1.0626e-02 l_hf: 5.7548e-03 l_total: 8.9822e-03 
+2026-10-14 01:21:34,375 INFO: [holo_..][epoch:103, iter:  51,600, lr:(2.499e-05,)] [eta: 2:28:58, time (data): 0.272 (0.003)] l_pix: 1.1733e-02 l_gfl: 1.3650e-02 l_hf: 9.7215e-03 l_total: 1.5042e-02 
+2026-10-14 01:23:12,769 INFO: [holo_..][epoch:103, iter:  51,700, lr:(2.499e-05,)] [eta: 2:27:11, time (data): 0.264 (0.002)] l_pix: 7.9048e-03 l_gfl: 1.0158e-02 l_hf: 6.4752e-03 l_total: 1.0216e-02 
+2026-10-14 01:24:51,779 INFO: [holo_..][epoch:103, iter:  51,800, lr:(2.499e-05,)] [eta: 2:25:23, time (data): 0.264 (0.002)] l_pix: 9.2957e-03 l_gfl: 1.3450e-02 l_hf: 7.6321e-03 l_total: 1.2167e-02 
+2026-10-14 01:26:29,300 INFO: [holo_..][epoch:103, iter:  51,900, lr:(2.499e-05,)] [eta: 2:23:35, time (data): 0.270 (0.002)] l_pix: 7.4298e-03 l_gfl: 1.1282e-02 l_hf: 6.2948e-03 l_total: 9.8170e-03 
+2026-10-14 01:28:08,240 INFO: [holo_..][epoch:103, iter:  52,000, lr:(2.499e-05,)] [eta: 2:21:48, time (data): 0.261 (0.002)] l_pix: 7.2002e-03 l_gfl: 1.1150e-02 l_hf: 6.0491e-03 l_total: 9.5250e-03 
+2026-10-14 01:29:46,454 INFO: [holo_..][epoch:104, iter:  52,100, lr:(2.499e-05,)] [eta: 2:20:00, time (data): 0.266 (0.002)] l_pix: 4.2156e-03 l_gfl: 4.5292e-03 l_hf: 3.1799e-03 l_total: 5.3045e-03 
+2026-10-14 01:31:26,341 INFO: [holo_..][epoch:104, iter:  52,200, lr:(2.499e-05,)] [eta: 2:18:13, time (data): 0.264 (0.002)] l_pix: 8.2613e-03 l_gfl: 1.1047e-02 l_hf: 5.5287e-03 l_total: 1.0472e-02 
+2026-10-14 01:33:06,097 INFO: [holo_..][epoch:104, iter:  52,300, lr:(2.499e-05,)] [eta: 2:16:26, time (data): 0.265 (0.002)] l_pix: 1.1420e-02 l_gfl: 1.4093e-02 l_hf: 9.7470e-03 l_total: 1.4779e-02 
+2026-10-14 01:34:44,705 INFO: [holo_..][epoch:104, iter:  52,400, lr:(2.499e-05,)] [eta: 2:14:38, time (data): 0.269 (0.002)] l_pix: 5.9856e-03 l_gfl: 1.2146e-02 l_hf: 5.4937e-03 l_total: 8.2989e-03 
+2026-10-14 01:36:21,104 INFO: [holo_..][epoch:104, iter:  52,500, lr:(2.499e-05,)] [eta: 2:12:50, time (data): 0.268 (0.002)] l_pix: 4.0872e-03 l_gfl: 4.7369e-03 l_hf: 3.2178e-03 l_total: 5.2045e-03 
+2026-10-14 01:37:59,117 INFO: [holo_..][epoch:105, iter:  52,600, lr:(2.499e-05,)] [eta: 2:11:03, time (data): 0.257 (0.002)] l_pix: 9.1517e-03 l_gfl: 1.3874e-02 l_hf: 8.1188e-03 l_total: 1.2163e-02 
+2026-10-14 01:39:35,364 INFO: [holo_..][epoch:105, iter:  52,700, lr:(2.499e-05,)] [eta: 2:09:15, time (data): 0.245 (0.002)] l_pix: 7.3311e-03 l_gfl: 8.6382e-03 l_hf: 5.7517e-03 l_total: 9.3452e-03 
+2026-10-14 01:41:10,635 INFO: [holo_..][epoch:105, iter:  52,800, lr:(2.499e-05,)] [eta: 2:07:28, time (data): 0.259 (0.002)] l_pix: 6.8022e-03 l_gfl: 7.4182e-03 l_hf: 4.7743e-03 l_total: 8.4989e-03 
+2026-10-14 01:42:48,201 INFO: [holo_..][epoch:105, iter:  52,900, lr:(2.499e-05,)] [eta: 2:05:40, time (data): 0.260 (0.002)] l_pix: 8.3405e-03 l_gfl: 1.0196e-02 l_hf: 5.2623e-03 l_total: 1.0413e-02 
+2026-10-14 01:44:24,224 INFO: [holo_..][epoch:105, iter:  53,000, lr:(2.499e-05,)] [eta: 2:03:53, time (data): 0.256 (0.002)] l_pix: 6.4076e-03 l_gfl: 8.0403e-03 l_hf: 4.9029e-03 l_total: 8.1922e-03 
+2026-10-14 01:46:02,710 INFO: [holo_..][epoch:106, iter:  53,100, lr:(2.499e-05,)] [eta: 2:02:05, time (data): 0.261 (0.002)] l_pix: 5.8801e-03 l_gfl: 6.8182e-03 l_hf: 4.6862e-03 l_total: 7.4992e-03 
+2026-10-14 01:47:41,764 INFO: [holo_..][epoch:106, iter:  53,200, lr:(2.499e-05,)] [eta: 2:00:18, time (data): 0.266 (0.002)] l_pix: 4.7993e-03 l_gfl: 7.8744e-03 l_hf: 4.0121e-03 l_total: 6.3891e-03 
+2026-10-14 01:49:18,274 INFO: [holo_..][epoch:106, iter:  53,300, lr:(2.499e-05,)] [eta: 1:58:31, time (data): 0.265 (0.003)] l_pix: 1.4499e-02 l_gfl: 1.8584e-02 l_hf: 1.3239e-02 l_total: 1.9006e-02 
+2026-10-14 01:50:57,166 INFO: [holo_..][epoch:106, iter:  53,400, lr:(2.499e-05,)] [eta: 1:56:44, time (data): 0.269 (0.002)] l_pix: 5.6658e-03 l_gfl: 9.2207e-03 l_hf: 4.8165e-03 l_total: 7.5512e-03 
+2026-10-14 01:52:35,709 INFO: [holo_..][epoch:106, iter:  53,500, lr:(2.499e-05,)] [eta: 1:54:57, time (data): 0.255 (0.002)] l_pix: 5.2397e-03 l_gfl: 5.7173e-03 l_hf: 3.7195e-03 l_total: 6.5553e-03 
+2026-10-14 01:54:13,571 INFO: [holo_..][epoch:107, iter:  53,600, lr:(2.499e-05,)] [eta: 1:53:10, time (data): 0.263 (0.002)] l_pix: 8.0995e-03 l_gfl: 1.2190e-02 l_hf: 7.0180e-03 l_total: 1.0722e-02 
+2026-10-14 01:55:51,007 INFO: [holo_..][epoch:107, iter:  53,700, lr:(2.499e-05,)] [eta: 1:51:22, time (data): 0.253 (0.003)] l_pix: 6.7786e-03 l_gfl: 1.0823e-02 l_hf: 5.8243e-03 l_total: 9.0258e-03 
+2026-10-14 01:57:28,218 INFO: [holo_..][epoch:107, iter:  53,800, lr:(2.499e-05,)] [eta: 1:49:35, time (data): 0.263 (0.002)] l_pix: 8.8624e-03 l_gfl: 1.3858e-02 l_hf: 7.6276e-03 l_total: 1.1774e-02 
+2026-10-14 01:59:05,929 INFO: [holo_..][epoch:107, iter:  53,900, lr:(2.499e-05,)] [eta: 1:47:48, time (data): 0.266 (0.002)] l_pix: 8.7814e-03 l_gfl: 9.4403e-03 l_hf: 6.2725e-03 l_total: 1.0980e-02 
+2026-10-14 02:00:42,230 INFO: [holo_..][epoch:107, iter:  54,000, lr:(2.499e-05,)] [eta: 1:46:01, time (data): 0.254 (0.002)] l_pix: 8.7240e-03 l_gfl: 1.3612e-02 l_hf: 7.5382e-03 l_total: 1.1593e-02 
+2026-10-14 02:02:20,712 INFO: [holo_..][epoch:108, iter:  54,100, lr:(1.249e-05,)] [eta: 1:44:14, time (data): 0.264 (0.002)] l_pix: 8.5085e-03 l_gfl: 1.2532e-02 l_hf: 7.0631e-03 l_total: 1.1174e-02 
+2026-10-14 02:03:58,858 INFO: [holo_..][epoch:108, iter:  54,200, lr:(1.249e-05,)] [eta: 1:42:27, time (data): 0.263 (0.002)] l_pix: 9.0776e-03 l_gfl: 1.3221e-02 l_hf: 7.2165e-03 l_total: 1.1843e-02 
+2026-10-14 02:05:37,068 INFO: [holo_..][epoch:108, iter:  54,300, lr:(1.249e-05,)] [eta: 1:40:41, time (data): 0.250 (0.002)] l_pix: 6.0918e-03 l_gfl: 7.2324e-03 l_hf: 4.9623e-03 l_total: 7.8075e-03 
+2026-10-14 02:07:12,174 INFO: [holo_..][epoch:108, iter:  54,400, lr:(1.249e-05,)] [eta: 1:38:53, time (data): 0.270 (0.002)] l_pix: 5.7719e-03 l_gfl: 9.2602e-03 l_hf: 4.8067e-03 l_total: 7.6593e-03 
+2026-10-14 02:08:49,774 INFO: [holo_..][epoch:108, iter:  54,500, lr:(1.249e-05,)] [eta: 1:37:07, time (data): 0.270 (0.002)] l_pix: 6.3690e-03 l_gfl: 9.3737e-03 l_hf: 4.8882e-03 l_total: 8.2840e-03 
+2026-10-14 02:10:28,700 INFO: [holo_..][epoch:109, iter:  54,600, lr:(1.249e-05,)] [eta: 1:35:20, time (data): 0.266 (0.002)] l_pix: 9.1365e-03 l_gfl: 1.1464e-02 l_hf: 7.0992e-03 l_total: 1.1703e-02 
+2026-10-14 02:12:05,999 INFO: [holo_..][epoch:109, iter:  54,700, lr:(1.249e-05,)] [eta: 1:33:33, time (data): 0.256 (0.002)] l_pix: 6.9707e-03 l_gfl: 1.1386e-02 l_hf: 6.0783e-03 l_total: 9.3250e-03 
+2026-10-14 02:13:44,173 INFO: [holo_..][epoch:109, iter:  54,800, lr:(1.249e-05,)] [eta: 1:31:47, time (data): 0.264 (0.002)] l_pix: 6.3252e-03 l_gfl: 1.0045e-02 l_hf: 5.5344e-03 l_total: 8.4365e-03 
+2026-10-14 02:15:23,502 INFO: [holo_..][epoch:109, iter:  54,900, lr:(1.249e-05,)] [eta: 1:30:00, time (data): 0.269 (0.002)] l_pix: 4.3864e-03 l_gfl: 4.7539e-03 l_hf: 3.4291e-03 l_total: 5.5476e-03 
+2026-10-14 02:17:01,751 INFO: [holo_..][epoch:109, iter:  55,000, lr:(1.249e-05,)] [eta: 1:28:13, time (data): 0.254 (0.002)] l_pix: 1.2431e-02 l_gfl: 1.4382e-02 l_hf: 9.6768e-03 l_total: 1.5805e-02 
+2026-10-14 02:17:01,751 INFO: Saving models and training states.
+2026-10-14 02:24:14,319 INFO: Validation HoloVal,		 # psnr: 34.8965	 # ssim: 0.9354	 # rmse: 0.0195	 # mae: 0.0117
+2026-10-14 02:24:14,551 INFO: New best checkpoint at iter 55000: PSNR=34.896540, SSIM=0.935386
+2026-10-14 02:25:50,917 INFO: [holo_..][epoch:110, iter:  55,100, lr:(1.249e-05,)] [eta: 1:27:05, time (data): 0.251 (0.002)] l_pix: 6.2014e-03 l_gfl: 7.3026e-03 l_hf: 4.7119e-03 l_total: 7.8740e-03 
+2026-10-14 02:27:28,621 INFO: [holo_..][epoch:110, iter:  55,200, lr:(1.249e-05,)] [eta: 1:25:18, time (data): 0.269 (0.003)] l_pix: 5.8892e-03 l_gfl: 9.2469e-03 l_hf: 4.8723e-03 l_total: 7.7884e-03 
+2026-10-14 02:29:06,824 INFO: [holo_..][epoch:110, iter:  55,300, lr:(1.249e-05,)] [eta: 1:23:30, time (data): 0.268 (0.003)] l_pix: 6.0456e-03 l_gfl: 1.2105e-02 l_hf: 5.5182e-03 l_total: 8.3597e-03 
+2026-10-14 02:30:44,872 INFO: [holo_..][epoch:110, iter:  55,400, lr:(1.249e-05,)] [eta: 1:21:43, time (data): 0.264 (0.002)] l_pix: 5.9270e-03 l_gfl: 1.2092e-02 l_hf: 5.4109e-03 l_total: 8.2185e-03 
+2026-10-14 02:32:21,335 INFO: [holo_..][epoch:110, iter:  55,500, lr:(1.249e-05,)] [eta: 1:19:56, time (data): 0.249 (0.002)] l_pix: 8.3001e-03 l_gfl: 1.0298e-02 l_hf: 6.7233e-03 l_total: 1.0675e-02 
+2026-10-14 02:33:56,666 INFO: [holo_..][epoch:111, iter:  55,600, lr:(1.249e-05,)] [eta: 1:18:08, time (data): 0.254 (0.002)] l_pix: 7.1186e-03 l_gfl: 1.1505e-02 l_hf: 6.1026e-03 l_total: 9.4896e-03 
+2026-10-14 02:35:32,506 INFO: [holo_..][epoch:111, iter:  55,700, lr:(1.249e-05,)] [eta: 1:16:21, time (data): 0.262 (0.002)] l_pix: 9.0826e-03 l_gfl: 1.0389e-02 l_hf: 6.6323e-03 l_total: 1.1448e-02 
+2026-10-14 02:37:09,590 INFO: [holo_..][epoch:111, iter:  55,800, lr:(1.249e-05,)] [eta: 1:14:33, time (data): 0.254 (0.002)] l_pix: 6.0183e-03 l_gfl: 1.2116e-02 l_hf: 5.4749e-03 l_total: 8.3249e-03 
+2026-10-14 02:38:45,959 INFO: [holo_..][epoch:111, iter:  55,900, lr:(1.249e-05,)] [eta: 1:12:46, time (data): 0.262 (0.002)] l_pix: 5.8431e-03 l_gfl: 1.1885e-02 l_hf: 5.3866e-03 l_total: 8.1089e-03 
+2026-10-14 02:40:23,900 INFO: [holo_..][epoch:111, iter:  56,000, lr:(1.249e-05,)] [eta: 1:10:59, time (data): 0.243 (0.001)] l_pix: 6.5423e-03 l_gfl: 1.0495e-02 l_hf: 5.7184e-03 l_total: 8.7354e-03 
+2026-10-14 02:41:59,963 INFO: [holo_..][epoch:112, iter:  56,100, lr:(1.249e-05,)] [eta: 1:09:12, time (data): 0.242 (0.002)] l_pix: 5.9864e-03 l_gfl: 1.2061e-02 l_hf: 5.4930e-03 l_total: 8.2912e-03 
+2026-10-14 02:43:32,772 INFO: [holo_..][epoch:112, iter:  56,200, lr:(1.249e-05,)] [eta: 1:07:24, time (data): 0.258 (0.002)] l_pix: 6.5406e-03 l_gfl: 9.9249e-03 l_hf: 5.2561e-03 l_total: 8.5843e-03 
+2026-10-14 02:45:10,205 INFO: [holo_..][epoch:112, iter:  56,300, lr:(1.249e-05,)] [eta: 1:05:37, time (data): 0.262 (0.002)] l_pix: 6.2909e-03 l_gfl: 1.0076e-02 l_hf: 5.5665e-03 l_total: 8.4118e-03 
+2026-10-14 02:46:48,197 INFO: [holo_..][epoch:112, iter:  56,400, lr:(1.249e-05,)] [eta: 1:03:50, time (data): 0.338 (0.002)] l_pix: 9.4321e-03 l_gfl: 1.1993e-02 l_hf: 7.7934e-03 l_total: 1.2190e-02 
+2026-10-14 02:48:26,073 INFO: [holo_..][epoch:112, iter:  56,500, lr:(1.249e-05,)] [eta: 1:02:03, time (data): 0.249 (0.002)] l_pix: 7.1350e-03 l_gfl: 1.1642e-02 l_hf: 5.9455e-03 l_total: 9.4883e-03 
+2026-10-14 02:50:03,210 INFO: [holo_..][epoch:113, iter:  56,600, lr:(1.249e-05,)] [eta: 1:00:16, time (data): 0.264 (0.002)] l_pix: 7.1923e-03 l_gfl: 8.4086e-03 l_hf: 5.4166e-03 l_total: 9.1165e-03 
+2026-10-14 02:51:41,455 INFO: [holo_..][epoch:113, iter:  56,700, lr:(1.249e-05,)] [eta: 0:58:29, time (data): 0.268 (0.002)] l_pix: 8.6714e-03 l_gfl: 9.8349e-03 l_hf: 6.5498e-03 l_total: 1.0965e-02 
+2026-10-14 02:53:19,437 INFO: [holo_..][epoch:113, iter:  56,800, lr:(1.249e-05,)] [eta: 0:56:42, time (data): 0.257 (0.002)] l_pix: 6.6174e-03 l_gfl: 1.0534e-02 l_hf: 5.7144e-03 l_total: 8.8137e-03 
+2026-10-14 02:54:55,436 INFO: [holo_..][epoch:113, iter:  56,900, lr:(1.249e-05,)] [eta: 0:54:56, time (data): 0.242 (0.002)] l_pix: 1.0174e-02 l_gfl: 1.2608e-02 l_hf: 8.2213e-03 l_total: 1.3079e-02 
+2026-10-14 02:56:31,155 INFO: [holo_..][epoch:113, iter:  57,000, lr:(1.249e-05,)] [eta: 0:53:09, time (data): 0.257 (0.002)] l_pix: 8.0960e-03 l_gfl: 9.8294e-03 l_hf: 6.5392e-03 l_total: 1.0387e-02 
+2026-10-14 02:58:09,322 INFO: [holo_..][epoch:114, iter:  57,100, lr:(6.247e-06,)] [eta: 0:51:22, time (data): 0.262 (0.002)] l_pix: 6.0144e-03 l_gfl: 9.1853e-03 l_hf: 4.7670e-03 l_total: 7.8863e-03 
+2026-10-14 02:59:46,972 INFO: [holo_..][epoch:114, iter:  57,200, lr:(6.247e-06,)] [eta: 0:49:35, time (data): 0.262 (0.002)] l_pix: 6.0315e-03 l_gfl: 1.2020e-02 l_hf: 5.5050e-03 l_total: 8.3345e-03 
+2026-10-14 03:01:22,483 INFO: [holo_..][epoch:114, iter:  57,300, lr:(6.247e-06,)] [eta: 0:47:48, time (data): 0.257 (0.002)] l_pix: 7.9247e-03 l_gfl: 1.0262e-02 l_hf: 6.4859e-03 l_total: 1.0248e-02 
+2026-10-14 03:02:58,972 INFO: [holo_..][epoch:114, iter:  57,400, lr:(6.247e-06,)] [eta: 0:46:02, time (data): 0.261 (0.002)] l_pix: 5.7422e-03 l_gfl: 1.1877e-02 l_hf: 5.3422e-03 l_total: 7.9984e-03 
+2026-10-14 03:04:35,326 INFO: [holo_..][epoch:114, iter:  57,500, lr:(6.247e-06,)] [eta: 0:44:15, time (data): 0.251 (0.002)] l_pix: 6.0345e-03 l_gfl: 9.6540e-03 l_hf: 5.1104e-03 l_total: 8.0219e-03 
+2026-10-14 03:06:10,899 INFO: [holo_..][epoch:115, iter:  57,600, lr:(6.247e-06,)] [eta: 0:42:28, time (data): 0.255 (0.002)] l_pix: 8.4593e-03 l_gfl: 9.3960e-03 l_hf: 6.5491e-03 l_total: 1.0709e-02 
+2026-10-14 03:07:48,188 INFO: [holo_..][epoch:115, iter:  57,700, lr:(6.247e-06,)] [eta: 0:40:42, time (data): 0.262 (0.002)] l_pix: 5.7676e-03 l_gfl: 8.9912e-03 l_hf: 5.0220e-03 l_total: 7.6712e-03 
+2026-10-14 03:09:22,915 INFO: [holo_..][epoch:115, iter:  57,800, lr:(6.247e-06,)] [eta: 0:38:55, time (data): 0.254 (0.002)] l_pix: 6.1547e-03 l_gfl: 7.5179e-03 l_hf: 4.8665e-03 l_total: 7.8798e-03 
+2026-10-14 03:11:00,931 INFO: [holo_..][epoch:115, iter:  57,900, lr:(6.247e-06,)] [eta: 0:37:08, time (data): 0.270 (0.002)] l_pix: 7.3284e-03 l_gfl: 9.2488e-03 l_hf: 6.1046e-03 l_total: 9.4742e-03 
+2026-10-14 03:12:36,258 INFO: [holo_..][epoch:115, iter:  58,000, lr:(6.247e-06,)] [eta: 0:35:22, time (data): 0.263 (0.002)] l_pix: 4.5934e-03 l_gfl: 7.8984e-03 l_hf: 4.0283e-03 l_total: 6.1889e-03 
+2026-10-14 03:14:14,848 INFO: [holo_..][epoch:116, iter:  58,100, lr:(6.247e-06,)] [eta: 0:33:35, time (data): 0.262 (0.002)] l_pix: 8.4767e-03 l_gfl: 9.8199e-03 l_hf: 7.1122e-03 l_total: 1.0881e-02 
+2026-10-14 03:15:50,941 INFO: [holo_..][epoch:116, iter:  58,200, lr:(6.247e-06,)] [eta: 0:31:49, time (data): 0.262 (0.002)] l_pix: 7.8610e-03 l_gfl: 1.1715e-02 l_hf: 6.7285e-03 l_total: 1.0378e-02 
+2026-10-14 03:17:27,228 INFO: [holo_..][epoch:116, iter:  58,300, lr:(6.247e-06,)] [eta: 0:30:03, time (data): 0.254 (0.002)] l_pix: 5.6722e-03 l_gfl: 1.1705e-02 l_hf: 5.3034e-03 l_total: 7.9034e-03 
+2026-10-14 03:19:02,424 INFO: [holo_..][epoch:116, iter:  58,400, lr:(6.247e-06,)] [eta: 0:28:16, time (data): 0.253 (0.002)] l_pix: 8.0043e-03 l_gfl: 9.9394e-03 l_hf: 6.3807e-03 l_total: 1.0274e-02 
+2026-10-14 03:20:38,104 INFO: [holo_..][epoch:116, iter:  58,500, lr:(6.247e-06,)] [eta: 0:26:30, time (data): 0.256 (0.002)] l_pix: 8.4273e-03 l_gfl: 1.2655e-02 l_hf: 7.1892e-03 l_total: 1.1131e-02 
+2026-10-14 03:22:13,341 INFO: [holo_..][epoch:117, iter:  58,600, lr:(6.247e-06,)] [eta: 0:24:43, time (data): 0.253 (0.002)] l_pix: 6.6031e-03 l_gfl: 8.2582e-03 l_hf: 5.3218e-03 l_total: 8.4933e-03 
+2026-10-14 03:23:49,212 INFO: [holo_..][epoch:117, iter:  58,700, lr:(6.247e-06,)] [eta: 0:22:57, time (data): 0.256 (0.002)] l_pix: 6.5602e-03 l_gfl: 1.0828e-02 l_hf: 5.7634e-03 l_total: 8.7957e-03 
+2026-10-14 03:25:23,710 INFO: [holo_..][epoch:117, iter:  58,800, lr:(6.247e-06,)] [eta: 0:21:11, time (data): 0.256 (0.002)] l_pix: 6.7701e-03 l_gfl: 7.7876e-03 l_hf: 5.2797e-03 l_total: 8.6048e-03 
+2026-10-14 03:26:59,459 INFO: [holo_..][epoch:117, iter:  58,900, lr:(6.247e-06,)] [eta: 0:19:25, time (data): 0.249 (0.002)] l_pix: 1.1705e-02 l_gfl: 1.3970e-02 l_hf: 1.0026e-02 l_total: 1.5107e-02 
+2026-10-14 03:28:33,085 INFO: [holo_..][epoch:117, iter:  59,000, lr:(6.247e-06,)] [eta: 0:17:38, time (data): 0.245 (0.002)] l_pix: 7.0192e-03 l_gfl: 1.1211e-02 l_hf: 6.1135e-03 l_total: 9.3630e-03 
+2026-10-14 03:30:09,668 INFO: [holo_..][epoch:118, iter:  59,100, lr:(6.247e-06,)] [eta: 0:15:52, time (data): 0.261 (0.002)] l_pix: 5.0212e-03 l_gfl: 5.6513e-03 l_hf: 4.0644e-03 l_total: 6.3992e-03 
+2026-10-14 03:31:45,297 INFO: [holo_..][epoch:118, iter:  59,200, lr:(6.247e-06,)] [eta: 0:14:06, time (data): 0.258 (0.002)] l_pix: 8.6903e-03 l_gfl: 9.9635e-03 l_hf: 6.6993e-03 l_total: 1.1026e-02 
+2026-10-14 03:33:20,274 INFO: [holo_..][epoch:118, iter:  59,300, lr:(6.247e-06,)] [eta: 0:12:20, time (data): 0.255 (0.003)] l_pix: 5.7337e-03 l_gfl: 9.5421e-03 l_hf: 4.7980e-03 l_total: 7.6475e-03 
+2026-10-14 03:34:54,232 INFO: [holo_..][epoch:118, iter:  59,400, lr:(6.247e-06,)] [eta: 0:10:34, time (data): 0.241 (0.002)] l_pix: 8.1752e-03 l_gfl: 1.0257e-02 l_hf: 6.5786e-03 l_total: 1.0517e-02 
+2026-10-14 03:36:27,879 INFO: [holo_..][epoch:118, iter:  59,500, lr:(6.247e-06,)] [eta: 0:08:48, time (data): 0.256 (0.001)] l_pix: 1.9565e-02 l_gfl: 2.5217e-02 l_hf: 1.7626e-02 l_total: 2.5612e-02 
+2026-10-14 03:38:05,582 INFO: [holo_..][epoch:119, iter:  59,600, lr:(6.247e-06,)] [eta: 0:07:02, time (data): 0.264 (0.002)] l_pix: 5.6510e-03 l_gfl: 1.1676e-02 l_hf: 5.2780e-03 l_total: 7.8742e-03 
+2026-10-14 03:39:42,254 INFO: [holo_..][epoch:119, iter:  59,700, lr:(6.247e-06,)] [eta: 0:05:16, time (data): 0.254 (0.002)] l_pix: 6.4095e-03 l_gfl: 1.0017e-02 l_hf: 5.5923e-03 l_total: 8.5297e-03 
+2026-10-14 03:41:17,021 INFO: [holo_..][epoch:119, iter:  59,800, lr:(6.247e-06,)] [eta: 0:03:30, time (data): 0.255 (0.002)] l_pix: 6.6649e-03 l_gfl: 7.2870e-03 l_hf: 4.9100e-03 l_total: 8.3756e-03 
+2026-10-14 03:42:52,690 INFO: [holo_..][epoch:119, iter:  59,900, lr:(6.247e-06,)] [eta: 0:01:44, time (data): 0.261 (0.002)] l_pix: 6.4763e-03 l_gfl: 9.8727e-03 l_hf: 5.1349e-03 l_total: 8.4906e-03 
+2026-10-14 03:44:29,078 INFO: [holo_..][epoch:119, iter:  60,000, lr:(6.247e-06,)] [eta: -1 day, 23:59:59, time (data): 0.249 (0.002)] l_pix: 1.2773e-02 l_gfl: 1.8111e-02 l_hf: 1.2208e-02 l_total: 1.7025e-02 
+2026-10-14 03:44:29,078 INFO: Saving models and training states.
+2026-10-14 03:51:27,297 INFO: Validation HoloVal,		 # psnr: 34.9497	 # ssim: 0.9355	 # rmse: 0.0194	 # mae: 0.0117
+2026-10-14 03:51:27,556 INFO: New best checkpoint at iter 60000: PSNR=34.949714, SSIM=0.935508
+2026-10-14 03:51:27,615 INFO: End of training. Time consumed: 17:45:11
+2026-10-14 03:51:27,615 INFO: Save the latest model.
+2026-10-14 03:59:33,367 INFO: Validation HoloVal,		 # psnr: 34.9390	 # ssim: 0.9353	 # rmse: 0.0194	 # mae: 0.0115
